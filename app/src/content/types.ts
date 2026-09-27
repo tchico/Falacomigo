@@ -28,6 +28,8 @@ export interface Beat {
   say: Line;
   /** Phrase the child should say, or null for a story beat. */
   expect: string | null;
+  /** What the child should say here, when it differs from the phrase text. */
+  model?: string;
   accept?: string[];
   keywords?: string[];
   recast?: string;

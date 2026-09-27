@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { ChildProfile, Unit } from '../content/types';
 import { buildScene } from '../engine/scene';
@@ -6,6 +6,8 @@ import { matchAttempt } from '../engine/match';
 import { applyAttempt, ladderOutcome, newTurn, parentOverride, type TurnState } from '../engine/turn';
 import { startRungFor, type Outcome, type PhraseProgress } from '../engine/ladder';
 import type { SpeechRecognizer } from '../speech/types';
+import { clipKey, phraseClipFile } from '../audio/clips';
+import { play, sayAsGui, sourceFor, stop } from '../audio/voice';
 import { StubRecognizer } from '../speech/stub';
 import { BigButton } from '../ui/BigButton';
 import { Gui } from '../ui/Gui';
@@ -49,7 +51,39 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
   const startRung = beat.phrase ? startRungFor(beat.phrase.startRung, child.age) : 1;
   const rung = beat.phrase ? progress[beat.phrase.id]?.rung ?? startRung : 1;
 
+  /** The model phrase in Dad's voice if he's recorded it, otherwise text-to-speech (FR-05). */
+  const playModel = () => {
+    if (!beat.phrase || !beat.modelText) return Promise.resolve();
+    const source = beat.ownModel
+      ? ({ kind: 'tts', text: beat.modelText } as const)
+      : sourceFor(clipKey(unit.id, phraseClipFile(beat.phrase, child)), beat.modelText);
+    return play(source);
+  };
+
+  // Gui says every line out loud, so the 6-year-old never needs to read (NFR-03).
+  // On the Echo rung the child hears the phrase straight after, to copy it.
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      await sayAsGui(beat.line);
+      if (!cancelled && beat.phrase && rung === 1) await playModel();
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // Only when a new beat starts.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
+
+  useEffect(() => () => void stop(), []);
+
+  const say = (text: string) => {
+    setFeedback(text);
+    void sayAsGui(text);
+  };
+
   const advance = () => {
+    void stop();
     setFeedback(null);
     setTurn(newTurn());
     if (index + 1 >= beats.length) onFinished();
@@ -60,11 +94,12 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
     if (!beat.phrase) return;
     onTurn({ beatId: beat.id, phraseId: beat.phrase.id, startRung, outcome: ladderOutcome(t.outcome), turnOutcome: t.outcome });
     // Gui always answers with the correct form (a recast), whether the child got it exactly or nearly (FR-10).
-    setFeedback(beat.recast ?? (t.outcome === 'got-it' ? 'Boa!' : beat.modelText) ?? 'Boa!');
+    say(beat.recast ?? (t.outcome === 'got-it' ? 'Boa!' : beat.modelText) ?? 'Boa!');
   };
 
   const speak = async () => {
     if (!beat.target || !beat.modelText || turn.done) return;
+    await stop();
     setListening(true);
     const heard = await recognizer.recognize({ locale: 'pt-PT', expectedText: beat.modelText, maxDurationMs: 6000 });
     setListening(false);
@@ -72,7 +107,12 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
     const next = applyAttempt(turn, { result, durationMs: heard.durationMs });
     setTurn(next);
     if (next.done) finishTurn(next);
-    else setFeedback(next.playModel ? `Ouve: ${beat.modelText}` : 'Hmm? Outra vez!');
+    else if (next.playModel) {
+      // After two tries, Gui plays the model and the next try with any real speech counts (FR-09).
+      setFeedback(`Ouve: ${beat.modelText}`);
+      await sayAsGui('Ouve!');
+      await playModel();
+    } else say('Hmm? Outra vez!');
   };
 
   const override = () => {
@@ -117,6 +157,11 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
               <Text style={styles.hintLabel}>DIZ ASSIM</Text>
               <Text style={styles.hintText}>{hintFor(beat.modelText ?? '', rung, turn.playModel)}</Text>
             </View>
+            {rung <= 3 || turn.playModel ? (
+              <Pressable accessibilityRole="button" accessibilityLabel="Listen" onPress={() => void playModel()} style={styles.listen}>
+                <Text style={styles.listenText}>🔊</Text>
+              </Pressable>
+            ) : null}
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Hold to talk"
@@ -167,6 +212,8 @@ const styles = StyleSheet.create({
   hint: { flex: 1, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, borderRadius: radius.lg, padding: 16 },
   hintLabel: { fontSize: 14, fontWeight: '800', color: colors.inkSoft, letterSpacing: 1 },
   hintText: { fontSize: 34, fontWeight: '800', color: colors.ink },
+  listen: { width: 84, height: 84, borderRadius: 42, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
+  listenText: { fontSize: 36 },
   mic: { width: 130, height: 130, borderRadius: 65, backgroundColor: colors.terracotta, borderWidth: 5, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   micText: { color: colors.white, fontSize: 24, fontWeight: '900' },
   dev: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, backgroundColor: '#FFF3CD', borderTopWidth: 2, borderColor: colors.ink },

@@ -8,6 +8,7 @@ import { localDay, nextMission, nextScene } from './src/engine/episode';
 import { COINS_PER_TURN, coinsForStars } from './src/engine/rewards';
 import { StubRecognizer } from './src/speech/stub';
 import { openStore } from './src/store/open';
+import { initVoice } from './src/audio/voice';
 import { toChildProfile, type Store, type StoredProfile } from './src/store/store';
 import { ProfilePicker } from './src/screens/ProfilePicker';
 import { SceneScreen, type TurnLog } from './src/screens/SceneScreen';
@@ -43,6 +44,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    void initVoice();
     openStore()
       .then(async (s) => {
         setStore(s);

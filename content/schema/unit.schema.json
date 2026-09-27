@@ -49,6 +49,7 @@
                 "ages": { "type": "array", "items": { "enum": [6, 8] } },
                 "say": { "type": "object", "required": ["speaker", "text"] },
                 "expect": { "type": ["string", "null"], "description": "Phrase id the child should say, or null for a story beat." },
+                "model": { "type": "string", "description": "What the child should say here, when it differs from the phrase text. Shown as the hint and spoken as the model." },
                 "accept": { "type": "array", "items": { "type": "string" }, "description": "Overrides the phrase's accepted versions for this beat." },
                 "keywords": { "type": "array", "items": { "type": "string" } },
                 "recast": { "type": "string" },

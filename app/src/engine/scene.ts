@@ -13,6 +13,8 @@ export interface PlayableBeat {
   phrase: Phrase | null;
   /** The phrase as the child should say it, e.g. "Chamo-me Ana." */
   modelText: string | null;
+  /** True when the beat has its own model line, so Dad's clip for the phrase doesn't fit it. */
+  ownModel: boolean;
   target: MatchTarget | null;
   recast: string | null;
   cliffhanger: boolean;
@@ -34,7 +36,8 @@ export function buildScene(unit: Unit, sceneId: string, child: ChildProfile): Pl
       line: f(b.say.text),
       lineEn: b.say.en ? f(b.say.en) : undefined,
       phrase,
-      modelText: phrase ? f(firstOption(phrase.text)) : null,
+      modelText: phrase ? f(b.model ?? firstOption(phrase.text)) : null,
+      ownModel: !!b.model,
       target: phrase
         ? { accept: (b.accept ?? phrase.accept).map(f), keywords: (b.keywords ?? phrase.keywords).map(f) }
         : null,

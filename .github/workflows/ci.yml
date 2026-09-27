@@ -24,6 +24,7 @@ jobs:
         run: |
           node tools/build-guide.mjs --check
           node tools/build-issues.mjs --check
+          node tools/build-audio.mjs --check
       - name: Typecheck
         run: npm run typecheck
       - name: Tests (engine + content packs)

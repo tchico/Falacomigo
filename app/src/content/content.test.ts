@@ -44,8 +44,7 @@ for (const unit of units) {
       for (const s of unit.scenes) {
         for (const beat of buildScene(unit, s.id, child)) {
           if (!beat.target || !beat.modelText) continue;
-          // Beats with their own accept list (e.g. "o pai") are checked against their first accepted version.
-          const said = s.beats.find((b) => b.id === beat.id)?.accept ? beat.target.accept[0] : beat.modelText;
+          const said = beat.modelText;
           const result = matchAttempt(said, beat.target, child.age as AgeBand);
           assert.equal(result, 'got-it', `${s.id}/${beat.id} for age ${child.age}: "${said}" gave ${result}`);
         }
