@@ -8,7 +8,9 @@ const child = { id: 'child1', name: 'Ana', ageWord: 'oito', sibling: 'irmão' };
 test('clips: per-child clips are filled in for the child', () => {
   assert.equal(phraseClipFile({ id: 'P03', audio: { dad: 'P03-{childId}.m4a' } }, child), 'P03-child1.m4a');
   assert.equal(phraseClipFile({ id: 'P01' }, child), 'P01.m4a');
-  assert.equal(missionClipFile('M2', 8), 'M2-8.m4a');
+  const say = { '6': 'Olá, pai! Chamo-me {name}.', '8': 'Bom dia, pai!' };
+  assert.equal(missionClipFile({ id: 'M2', say }, { id: 'child1', age: 8 }), 'M2-8.m4a');
+  assert.equal(missionClipFile({ id: 'M2', say }, { id: 'child2', age: 6 }), 'M2-child2.m4a');
 });
 
 test("clips: Dad's in-app recording wins, then the bundled clip, then text-to-speech", () => {

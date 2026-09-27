@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { StoredProfile } from '../store/store';
 import { avatarFor } from '../ui/avatars';
 import { Gui } from '../ui/Gui';
+import { HoldButton } from '../ui/HoldButton';
 import { colors, radius, TOUCH } from '../ui/theme';
 
 interface Props {
@@ -11,6 +12,8 @@ interface Props {
   onPick: (p: StoredProfile) => void;
   onParent: () => void;
 }
+
+export const PARENT_HOLD_MS = 3000;
 
 /** FR-01, FR-02: each child taps their own animal, one tap and no reading needed. */
 export function ProfilePicker({ profiles, details = {}, onPick, onParent }: Props) {
@@ -42,9 +45,10 @@ export function ProfilePicker({ profiles, details = {}, onPick, onParent }: Prop
         })}
         <Gui size={200} happy />
       </View>
-      <Pressable accessibilityRole="button" accessibilityLabel="Parent zone" onPress={onParent} style={styles.parent}>
+      {/* The parental gate (design doc §5): hold for 3 seconds. */}
+      <HoldButton holdMs={PARENT_HOLD_MS} onHeld={onParent} accessibilityLabel="Parent zone" style={styles.parent}>
         <Text style={styles.parentText}>🔒 Pai</Text>
-      </Pressable>
+      </HoldButton>
     </View>
   );
 }

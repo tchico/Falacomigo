@@ -30,7 +30,7 @@ export function MissionScreen({ unitId, mission, child, onApproved, onLater }: P
   const age = String(child.age) as '6' | '8';
   const phrase = fill(mission.say[age], child);
 
-  const playPhrase = () => play(sourceFor(clipKey(unitId, missionClipFile(mission.id, child.age)), phrase));
+  const playPhrase = () => play(sourceFor(clipKey(unitId, missionClipFile(mission, child)), phrase));
 
   useEffect(() => {
     void (async () => {

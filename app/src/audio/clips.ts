@@ -1,7 +1,7 @@
 // Where each model clip comes from (FR-05): Dad's recording made in the app, then a clip shipped in
 // content/audio, then a pt-PT text-to-speech voice. Pure logic, so it can be tested without a device.
 
-import type { Phrase } from '../content/types';
+import type { ChildProfile, Mission, Phrase } from '../content/types';
 import { fill, type TemplateVars } from '../engine/template';
 
 export type ClipSource =
@@ -17,8 +17,19 @@ export function phraseClipFile(phrase: Pick<Phrase, 'id' | 'audio'>, child: Temp
   return fill(phrase.audio?.dad ?? `${phrase.id}.m4a`, child);
 }
 
-/** Dad's clip for a mission card, per age band because the 6- and 8-year-old say different things. */
-export const missionClipFile = (missionId: string, age: number) => `${missionId}-${age}.m4a`;
+const PERSONAL = /\{(name|age|sibling)\}/;
+
+/** True when a line is filled in per child (their name, age or sibling), so Dad records it once per child. */
+export const isPersonal = (text: string) => PERSONAL.test(text);
+
+/**
+ * Dad's clip for a mission card. The 6- and 8-year-old say different things, so it's per age band,
+ * or per child when the line has their name in it ("M1-child1.m4a").
+ */
+export function missionClipFile(mission: Pick<Mission, 'id' | 'say'>, child: Pick<ChildProfile, 'id' | 'age'>): string {
+  const say = mission.say[String(child.age) as '6' | '8'];
+  return isPersonal(say) ? `${mission.id}-${child.id}.m4a` : `${mission.id}-${child.age}.m4a`;
+}
 
 export interface ClipLookup {
   /** URI of Dad's in-app recording for this key, or null. */

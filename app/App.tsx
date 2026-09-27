@@ -11,6 +11,7 @@ import { openStore } from './src/store/open';
 import { initVoice } from './src/audio/voice';
 import { toChildProfile, type Store, type StoredProfile } from './src/store/store';
 import { ProfilePicker } from './src/screens/ProfilePicker';
+import { ParentZone } from './src/parent/ParentZone';
 import { SceneScreen, type TurnLog } from './src/screens/SceneScreen';
 import { MissionScreen } from './src/screens/MissionScreen';
 import { colors } from './src/ui/theme';
@@ -18,6 +19,7 @@ import { colors } from './src/ui/theme';
 type Screen =
   | { name: 'loading' }
   | { name: 'pick' }
+  | { name: 'parent' }
   | { name: 'scene'; unitId: string; sceneId: string }
   | { name: 'mission'; unitId: string; mission: Mission; rowId: number }
   | { name: 'done' };
@@ -109,7 +111,11 @@ export default function App() {
         </View>
       )}
 
-      {screen.name === 'pick' && <ProfilePicker profiles={profiles} details={stops} onPick={pick} onParent={() => {}} />}
+      {screen.name === 'pick' && <ProfilePicker profiles={profiles} details={stops} onPick={pick} onParent={() => setScreen({ name: 'parent' })} />}
+
+      {screen.name === 'parent' && store && (
+        <ParentZone store={store} profiles={profiles} onProfilesChanged={() => void refreshProfiles(store)} onExit={() => void backToStart()} />
+      )}
 
       {screen.name === 'scene' && child && (
         <SceneScreen
