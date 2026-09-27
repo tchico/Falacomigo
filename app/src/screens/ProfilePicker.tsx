@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { sayAsGui } from '../audio/voice';
 import type { StoredProfile } from '../store/store';
 import { avatarFor } from '../ui/avatars';
 import { Gui } from '../ui/Gui';
@@ -17,6 +19,9 @@ export const PARENT_HOLD_MS = 3000;
 
 /** FR-01, FR-02: each child taps their own animal, one tap and no reading needed. */
 export function ProfilePicker({ profiles, details = {}, onPick, onParent }: Props) {
+  // Spoken, so a child who can't read yet knows what to do (NFR-03).
+  useEffect(() => void sayAsGui('Olá! Anda cá! Quem vai jogar?'), []);
+
   return (
     <View style={styles.screen}>
       <Text style={styles.brand}>Fala Comigo</Text>
@@ -43,7 +48,12 @@ export function ProfilePicker({ profiles, details = {}, onPick, onParent }: Prop
             </Pressable>
           );
         })}
-        <Gui size={200} happy />
+        <View style={styles.gui}>
+          <View style={styles.guiBubble}>
+            <Text style={styles.guiBubbleText}>Olá! Anda cá!</Text>
+          </View>
+          <Gui size={200} happy />
+        </View>
       </View>
       {/* The parental gate (design doc §5): hold for 3 seconds. */}
       <HoldButton holdMs={PARENT_HOLD_MS} onHeld={onParent} accessibilityLabel="Parent zone" style={styles.parent}>
@@ -69,6 +79,9 @@ const styles = StyleSheet.create({
     borderColor: colors.ink,
     borderRadius: radius.lg,
   },
+  gui: { alignItems: 'center', gap: 4 },
+  guiBubble: { backgroundColor: colors.white, borderWidth: 3, borderColor: colors.ink, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 8 },
+  guiBubbleText: { fontSize: 20, fontWeight: '900', color: colors.ink },
   avatar: { width: 120, height: 120, borderRadius: 60, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   emoji: { fontSize: 64 },
   name: { fontSize: 28, fontWeight: '800', color: colors.ink },

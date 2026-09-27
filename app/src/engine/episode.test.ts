@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { localDay, nextMission, nextScene } from './episode';
+import { daysBetween, greeting, localDay, nextMission, nextScene } from './episode';
 import type { Unit } from '../content/types';
 
 const unit = (id: string, scenes: string[]) => ({ id, scenes: scenes.map((s) => ({ id: s })) }) as unknown as Unit;
@@ -50,4 +50,11 @@ test('episode: bonus missions wait until the others have been given', () => {
   const u = { missions: [mission('M1', ['P01']), mission('M7', ['P01', 'P10'], true)] } as unknown as Unit;
   assert.equal(nextMission(u, [], 8, ['P01', 'P10']).id, 'M1');
   assert.equal(nextMission(u, ['M1'], 8, ['P01', 'P10']).id, 'M7');
+});
+
+test('greeting: first time, back soon, and back after a break with no penalty (FR-23)', () => {
+  assert.equal(greeting('Ana', null, '2026-10-05'), 'Olá, Ana! Eu sou o Gui!');
+  assert.equal(greeting('Ana', '2026-10-04', '2026-10-05'), 'Olá outra vez, Ana!');
+  assert.equal(greeting('Ana', '2026-09-20', '2026-10-05'), 'Ana! Tive saudades!');
+  assert.equal(daysBetween('2026-10-30', '2026-11-02'), 3);
 });

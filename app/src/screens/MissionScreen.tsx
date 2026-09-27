@@ -76,13 +76,13 @@ export function MissionScreen({ unitId, mission, child, onApproved, onLater }: P
           {stars === 0 ? (
             <View style={styles.buttons}>
               <BigButton
-                label="Vou agora!"
+                label="🏃 Vou agora!"
                 onPress={() => {
                   setGoing(true);
                   void sayAsGui('Vai! Eu espero aqui.');
                 }}
               />
-              <BigButton label="Mais tarde" variant="secondary" onPress={onLater} />
+              <BigButton label="⏰ Mais tarde" variant="secondary" onPress={onLater} />
             </View>
           ) : (
             <Text style={styles.earned}>

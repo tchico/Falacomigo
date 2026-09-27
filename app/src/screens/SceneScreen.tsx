@@ -12,6 +12,7 @@ import { play, sayAs, sayAsGui, sourceFor, stop } from '../audio/voice';
 import { StubRecognizer } from '../speech/stub';
 import { BigButton } from '../ui/BigButton';
 import { Gui } from '../ui/Gui';
+import { pictureFor } from '../ui/pictures';
 import { colors, radius } from '../ui/theme';
 
 export interface TurnLog {
@@ -197,6 +198,15 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
           <Text style={styles.line}>{turn.done && feedback ? feedback : beat.line}</Text>
           {child.age === 8 && beat.lineEn && !turn.done ? <Text style={styles.lineEn}>{beat.lineEn}</Text> : null}
           {!turn.done && feedback ? <Text style={styles.nudge}>{feedback}</Text> : null}
+          {pictureFor(beat.image).length ? (
+            <View style={styles.pictures} accessibilityElementsHidden>
+              {pictureFor(beat.image).map((e, i) => (
+                <View key={i} style={styles.picture}>
+                  <Text style={styles.pictureText}>{e}</Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
         </View>
       </View>
 
@@ -230,7 +240,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
             </View>
           </>
         ) : (
-          <BigButton label={index + 1 >= beats.length ? 'Fim!' : 'Continuar'} variant="blue" onPress={advance} />
+          <BigButton label={index + 1 >= beats.length ? 'Fim! ★' : 'Continuar ▶'} variant="blue" onPress={advance} />
         )}
       </View>
 
@@ -278,6 +288,9 @@ const styles = StyleSheet.create({
   characterFace: { width: 190, height: 190, borderRadius: 95, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   characterEmoji: { fontSize: 110 },
   characterName: { fontSize: 24, fontWeight: '900', color: colors.ink, backgroundColor: colors.white, borderWidth: 3, borderColor: colors.ink, borderRadius: 999, paddingHorizontal: 16, paddingVertical: 2, overflow: 'hidden' },
+  pictures: { flexDirection: 'row', gap: 12, marginTop: 8 },
+  picture: { width: 88, height: 88, borderRadius: 18, borderWidth: 3, borderColor: colors.ink, backgroundColor: colors.cream, alignItems: 'center', justifyContent: 'center' },
+  pictureText: { fontSize: 52 },
   listen: { width: 84, height: 84, borderRadius: 42, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   listenText: { fontSize: 36 },
   mic: { width: 130, height: 130, borderRadius: 65, backgroundColor: colors.terracotta, borderWidth: 5, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },

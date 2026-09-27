@@ -4,15 +4,17 @@ import { StatusBar } from 'expo-status-bar';
 import { getUnit, units } from './src/content';
 import type { ChildProfile, Mission } from './src/content/types';
 import type { PhraseProgress } from './src/engine/ladder';
-import { localDay, nextMission, nextScene } from './src/engine/episode';
+import { greeting, localDay, nextMission, nextScene } from './src/engine/episode';
 import { COINS_PER_TURN, coinsForStars } from './src/engine/rewards';
 import { createRecognizer } from './src/speech';
 import { openStore } from './src/store/open';
-import { initVoice } from './src/audio/voice';
+import { initVoice, sayAsGui } from './src/audio/voice';
 import { toChildProfile, type Store, type StoredProfile } from './src/store/store';
 import { ProfilePicker } from './src/screens/ProfilePicker';
 import { ParentZone } from './src/parent/ParentZone';
 import { SceneScreen, type TurnLog } from './src/screens/SceneScreen';
+import { WelcomeScreen } from './src/screens/WelcomeScreen';
+import { BigButton } from './src/ui/BigButton';
 import { MissionScreen } from './src/screens/MissionScreen';
 import { colors } from './src/ui/theme';
 
@@ -20,6 +22,7 @@ type Screen =
   | { name: 'loading' }
   | { name: 'pick' }
   | { name: 'parent' }
+  | { name: 'welcome'; text: string; unitId: string; sceneId: string }
   | { name: 'scene'; unitId: string; sceneId: string }
   | { name: 'mission'; unitId: string; mission: Mission; rowId: number }
   | { name: 'done' };
@@ -61,13 +64,13 @@ export default function App() {
   const pick = async (p: StoredProfile) => {
     if (!store) return;
     const c = toChildProfile(p);
-    const [prog, wallet, played] = await Promise.all([store.getProgress(c.id), store.getCoins(c.id), store.scenesPlayed(c.id)]);
+    const [prog, wallet, played, last] = await Promise.all([store.getProgress(c.id), store.getCoins(c.id), store.scenesPlayed(c.id), store.lastPlayedDay(c.id)]);
     setChild(c);
     setProgress(prog);
     setCoins(wallet);
     const next = nextScene(units, played);
     practised.current = [];
-    setScreen({ name: 'scene', unitId: next.unitId, sceneId: next.sceneId });
+    setScreen({ name: 'welcome', text: greeting(c.name, last, localDay()), unitId: next.unitId, sceneId: next.sceneId });
   };
 
   const onTurn = (unitId: string, sceneId: string) => (t: TurnLog) => {
@@ -89,6 +92,10 @@ export default function App() {
     const row = await store.createMission(child.id, unitId, mission.id);
     setScreen({ name: 'mission', unitId, mission, rowId: row.id });
   };
+
+  useEffect(() => {
+    if (screen.name === 'done') void sayAsGui('Até amanhã!');
+  }, [screen.name]);
 
   const backToStart = async () => {
     setChild(null);
@@ -117,6 +124,14 @@ export default function App() {
         <ParentZone store={store} profiles={profiles} onProfilesChanged={() => void refreshProfiles(store)} onExit={() => void backToStart()} />
       )}
 
+      {screen.name === 'welcome' && (
+        <WelcomeScreen
+          text={screen.text}
+          stopName={getUnit(screen.unitId).stop.name}
+          onStart={() => setScreen({ name: 'scene', unitId: screen.unitId, sceneId: screen.sceneId })}
+        />
+      )}
+
       {screen.name === 'scene' && child && (
         <SceneScreen
           key={`${child.id}/${screen.unitId}/${screen.sceneId}`}
@@ -142,7 +157,9 @@ export default function App() {
             }
             setScreen({ name: 'done' });
           }}
-          onLater={() => setScreen({ name: 'done' })}
+          onLater={() => {
+            setScreen({ name: 'done' });
+          }}
         />
       )}
 
@@ -150,9 +167,7 @@ export default function App() {
         <View style={styles.done}>
           <Text style={styles.doneTitle}>Até amanhã!</Text>
           <Text style={styles.doneText}>{coins} moedas</Text>
-          <Text style={styles.doneLink} onPress={() => void backToStart()}>
-            Voltar ao início
-          </Text>
+          <BigButton label="🏠 Voltar ao início" variant="secondary" onPress={() => void backToStart()} />
         </View>
       )}
     </SafeAreaView>
@@ -166,5 +181,4 @@ const styles = StyleSheet.create({
   done: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
   doneTitle: { fontSize: 56, fontWeight: '900', color: colors.blue },
   doneText: { fontSize: 22, fontWeight: '700', color: colors.ink },
-  doneLink: { fontSize: 22, fontWeight: '800', color: colors.terracotta, padding: 16 },
 });

@@ -51,3 +51,19 @@ export function nextMission(unit: Unit, givenMissionIds: string[], age: AgeBand,
   if (fresh.length) return pick(fresh);
   return unit.missions[givenMissionIds.length % unit.missions.length];
 }
+
+/** Whole days from `from` to `to` (both YYYY-MM-DD). */
+export function daysBetween(from: string, to: string): number {
+  return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000);
+}
+
+/**
+ * What Gui says when a child starts a session (FR-23). Missing days never costs anything:
+ * after a break Gui is just happy to see them.
+ */
+export function greeting(name: string, lastPlayed: string | null, today: string): string {
+  if (!lastPlayed) return `Olá, ${name}! Eu sou o Gui!`;
+  const away = daysBetween(lastPlayed, today);
+  if (away >= 2) return `${name}! Tive saudades!`;
+  return `Olá outra vez, ${name}!`;
+}

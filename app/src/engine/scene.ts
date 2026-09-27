@@ -17,6 +17,8 @@ export interface PlayableBeat {
   ownModel: boolean;
   target: MatchTarget | null;
   recast: string | null;
+  /** Picture name from the content, e.g. "food:bread-soup-fish". */
+  image?: string;
   cliffhanger: boolean;
 }
 
@@ -42,6 +44,7 @@ export function buildScene(unit: Unit, sceneId: string, child: ChildProfile): Pl
         ? { accept: (b.accept ?? phrase.accept).map(f), keywords: (b.keywords ?? phrase.keywords).map(f) }
         : null,
       recast: b.recast ? f(b.recast) : null,
+      image: b.image,
       cliffhanger: !!b.cliffhanger,
     };
   });
