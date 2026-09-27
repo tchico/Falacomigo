@@ -27,7 +27,8 @@ export function recordingList(units: Unit[], children: ChildProfile[]): Recordin
   for (const unit of units) {
     for (const p of unit.phrases) {
       const perChild = (p.audio?.dad ?? '').includes('{childId}') || isPersonal(p.text);
-      const who = perChild ? children.filter((c) => p.ages.includes(c.age)) : [children[0]];
+      // Scenes can give a phrase to either child, so personal clips are offered for everyone.
+      const who = perChild ? children : [children[0]];
       for (const c of who) {
         if (!c) continue;
         add({ key: clipKey(unit.id, phraseClipFile(p, c)), unitId: unit.id, text: fill(p.text, c), en: fillEn(p.en, c), forWho: perChild ? c.name : undefined });

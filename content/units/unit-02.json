@@ -1,0 +1,263 @@
+{
+  "$schema": "../schema/unit.schema.json",
+  "id": "unit-02",
+  "unit": 2,
+  "title": "A comida e a mesa",
+  "titleEn": "Food and the table",
+  "stop": {"id": "ferry", "name": "O ferry", "nameEn": "The ferry"},
+  "characters": {"ze": {"name": "Zé", "role": "o cozinheiro do ferry", "roleEn": "the ferry's cook", "emoji": "👨‍🍳", "color": "#F6D7B0"}},
+  "phrases": [
+    {
+      "id": "P13",
+      "text": "Tenho fome!",
+      "en": "I'm hungry!",
+      "accept": ["tenho fome", "eu tenho fome", "tenho muita fome", "tambem tenho fome", "sim tenho fome", "fome"],
+      "keywords": ["fome", "tenho"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": {"dad": "P13.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P14",
+      "text": "Tenho sede!",
+      "en": "I'm thirsty!",
+      "accept": ["tenho sede", "eu tenho sede", "tenho muita sede", "tambem tenho sede", "sim tenho sede", "sede"],
+      "keywords": ["sede", "tenho"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": {"dad": "P14.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P15",
+      "text": "Eu quero pão, por favor.",
+      "en": "I want bread, please.",
+      "accept": ["eu quero pao por favor", "quero pao por favor", "eu quero pao", "quero pao", "pao por favor", "eu queria pao por favor", "queria pao"],
+      "keywords": ["quero", "queria", "pao"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P15.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P16",
+      "text": "Posso ter água, por favor?",
+      "en": "Can I have water, please?",
+      "accept": ["posso ter agua por favor", "posso ter agua", "agua por favor", "quero agua por favor", "pode ser agua por favor", "posso beber agua", "eu queria agua"],
+      "keywords": ["posso", "agua"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P16.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P17",
+      "text": "Sim, por favor!",
+      "en": "Yes, please!",
+      "accept": ["sim por favor", "por favor", "quero por favor", "sim quero por favor", "sim obrigado", "sim obrigada"],
+      "keywords": ["favor", "sim"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": {"dad": "P17.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P18",
+      "text": "Está bom!",
+      "en": "It's good!",
+      "accept": ["esta bom", "esta muito bom", "esta delicioso", "esta otimo", "e bom", "que bom", "muito bom", "delicioso", "bom"],
+      "keywords": ["bom", "delicioso", "otimo"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": {"dad": "P18.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P19",
+      "text": "Eu gosto de peixe.",
+      "en": "I like fish.",
+      "accept": ["eu gosto de peixe", "gosto de peixe", "sim gosto", "gosto", "eu gosto", "sim eu gosto", "gosto muito", "nao gosto de peixe", "nao gosto"],
+      "keywords": ["gosto", "peixe"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P19.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P20",
+      "text": "Não gosto de sopa.",
+      "en": "I don't like soup.",
+      "accept": ["nao gosto de sopa", "eu nao gosto de sopa", "nao gosto", "nao gosto muito", "gosto de sopa", "eu gosto de sopa", "gosto", "sim gosto"],
+      "keywords": ["gosto", "sopa"],
+      "ages": [8],
+      "startRung": 2,
+      "audio": {"dad": "P20.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P21",
+      "text": "Mais, por favor!",
+      "en": "More, please!",
+      "accept": ["mais por favor", "quero mais", "quero mais por favor", "sim mais por favor", "posso ter mais", "mais"],
+      "keywords": ["mais", "favor"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": {"dad": "P21.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P22",
+      "text": "Já chega, obrigado. / Já chega, obrigada.",
+      "en": "That's enough, thank you.",
+      "accept": ["ja chega obrigado", "ja chega obrigada", "ja chega", "chega obrigado", "chega obrigada", "nao obrigado", "nao obrigada", "ja estou cheio", "ja estou cheia"],
+      "keywords": ["chega", "obrigado", "obrigada", "cheio", "cheia"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P22.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P23",
+      "text": "O que é isto?",
+      "en": "What's this?",
+      "accept": ["o que e isto", "que e isto", "o que e isso", "que e isso", "o que e aquilo", "ze o que e isto"],
+      "keywords": ["que", "isto", "isso"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P23.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P24",
+      "text": "Bom apetite!",
+      "en": "Enjoy your meal!",
+      "accept": ["bom apetite", "bom apetite gui", "bom apetite ze", "bom apetite pai", "apetite"],
+      "keywords": ["apetite"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P24.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P25",
+      "text": "Posso ajudar?",
+      "en": "Can I help?",
+      "accept": ["posso ajudar", "eu posso ajudar", "posso ajudar ze", "eu ajudo", "ajudo", "posso"],
+      "keywords": ["ajudar", "ajudo", "posso"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P25.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P26",
+      "text": "Acabei!",
+      "en": "I've finished!",
+      "accept": ["acabei", "ja acabei", "eu acabei", "eu ja acabei", "sim acabei", "ja comi tudo", "comi tudo"],
+      "keywords": ["acabei", "tudo"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P26.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P27",
+      "text": "Queres uma bolacha?",
+      "en": "Do you want a biscuit?",
+      "accept": ["queres uma bolacha", "queres bolacha", "gui queres uma bolacha", "queres uma bolacha gui", "queres"],
+      "keywords": ["queres", "bolacha"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P27.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P28",
+      "text": "Aqui está!",
+      "en": "Here you are!",
+      "accept": ["aqui esta", "aqui tens", "aqui esta o prato", "toma", "ta aqui", "esta aqui"],
+      "keywords": ["aqui", "toma"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P28.m4a", "ttsFallback": true}
+    }
+  ],
+  "vocab": [
+    {"pt": "o pão", "en": "bread"},
+    {"pt": "a água", "en": "water"},
+    {"pt": "o leite", "en": "milk"},
+    {"pt": "o sumo de laranja", "en": "orange juice"},
+    {"pt": "a sopa", "en": "soup"},
+    {"pt": "o peixe", "en": "fish"},
+    {"pt": "o arroz", "en": "rice"},
+    {"pt": "as batatas", "en": "potatoes"},
+    {"pt": "a maçã", "en": "apple"},
+    {"pt": "o queijo", "en": "cheese"},
+    {"pt": "o bolo", "en": "cake"},
+    {"pt": "o gelado", "en": "ice cream"},
+    {"pt": "a bolacha", "en": "biscuit"},
+    {"pt": "o prato", "en": "plate"},
+    {"pt": "o garfo", "en": "fork"},
+    {"pt": "a colher", "en": "spoon"},
+    {"pt": "o copo", "en": "glass"},
+    {"pt": "o pequeno-almoço", "en": "breakfast"},
+    {"pt": "o almoço", "en": "lunch"},
+    {"pt": "o jantar", "en": "dinner"}
+  ],
+  "warmup": ["P13", "P14", "P15", "P18", "P21"],
+  "scenes": [
+    {
+      "id": "S2.1",
+      "title": "Tenho fome!",
+      "titleEn": "I'm hungry!",
+      "setting": "ferry-kitchen",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "gui", "text": "Estamos no ferry! Ai… a minha barriga faz rrrr. E tu? Tens fome?", "en": "We're on the ferry! Oh… my tummy is rumbling. What about you? Are you hungry?"}, "expect": "P13", "recast": "Também tens fome? Vamos à cozinha!"},
+        {"id": "b2", "say": {"speaker": "ze", "text": "Olá! Eu sou o Zé, o cozinheiro. Aqui só come quem pede com educação!", "en": "Hello! I'm Zé, the cook. Here, only people who ask nicely get to eat!"}, "expect": null},
+        {"id": "b3", "say": {"speaker": "ze", "text": "O que queres comer? Temos pão, sopa e peixe.", "en": "What would you like to eat? We have bread, soup and fish."}, "expect": "P15", "image": "food:bread-soup-fish", "accept": ["eu quero pao por favor", "quero pao por favor", "eu quero pao", "quero pao", "pao por favor", "eu quero sopa por favor", "quero sopa por favor", "eu quero sopa", "quero sopa", "sopa por favor", "eu quero peixe por favor", "quero peixe por favor", "eu quero peixe", "quero peixe", "peixe por favor", "pao", "sopa", "peixe"], "keywords": ["quero", "pao", "sopa", "peixe"], "recast": "Muito bem pedido! Aqui está!"},
+        {"id": "b4", "say": {"speaker": "ze", "text": "E para beber? Água ou leite?", "en": "And to drink? Water or milk?"}, "expect": "P16", "image": "drink:water-milk", "accept": ["posso ter agua por favor", "posso ter leite por favor", "posso ter agua", "posso ter leite", "agua por favor", "leite por favor", "quero agua", "quero leite", "quero agua por favor", "quero leite por favor", "agua", "leite"], "keywords": ["posso", "agua", "leite"], "recast": "Claro! Aqui está."},
+        {"id": "b5", "say": {"speaker": "gui", "text": "Hmm! Prova! Isto está bom?", "en": "Mmm! Try it! Is it good?"}, "model": "Está bom!", "expect": "P18", "recast": "Está bom, está!"},
+        {"id": "b6", "ages": [8], "say": {"speaker": "ze", "text": "Queres mais?", "en": "Do you want more?"}, "expect": "P21", "recast": "Mais? Aqui tens!"},
+        {"id": "b7", "say": {"speaker": "gui", "text": "Olha! O Zé tem um gelado enorme ali atrás…", "en": "Look! Zé has a huge ice cream back there…"}, "expect": null, "cliffhanger": true}
+      ]
+    },
+    {
+      "id": "S2.2",
+      "title": "Gosto! Não gosto!",
+      "titleEn": "I like it! I don't like it!",
+      "setting": "ferry-dining-room",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "gui", "text": "Vamos comer! Espera… o que se diz antes de comer?", "en": "Let's eat! Wait… what do you say before you eat?"}, "expect": "P24", "recast": "Bom apetite! Vamos lá!"},
+        {"id": "b2", "say": {"speaker": "ze", "text": "Gostas de peixe?", "en": "Do you like fish?"}, "expect": "P19", "image": "food:fish", "recast": "A sério? Eu adoro peixe!"},
+        {"id": "b3", "ages": [8], "say": {"speaker": "ze", "text": "E sopa? Gostas de sopa?", "en": "And soup? Do you like soup?"}, "expect": "P20", "image": "food:soup", "recast": "A sério? Eu como sopa todos os dias!"},
+        {"id": "b4", "say": {"speaker": "gui", "text": "Ufa, que calor! Tenho tanta sede… e tu?", "en": "Phew, it's hot! I'm so thirsty… and you?"}, "expect": "P14", "recast": "Também tens sede? Toma, bebe água!"},
+        {"id": "b5", "ages": [8], "say": {"speaker": "gui", "text": "Olha esta coisa esquisita no prato! Pergunta ao Zé o que é!", "en": "Look at this strange thing on the plate! Ask Zé what it is!"}, "expect": "P23", "image": "food:octopus", "recast": "Isto? É polvo! Hehe, parece um monstro!"},
+        {"id": "b6", "say": {"speaker": "gui", "text": "Eu já comi tudo! E tu? Já acabaste?", "en": "I've eaten everything! And you? Have you finished?"}, "expect": "P26", "recast": "Acabaste? Muito bem!"},
+        {"id": "b7", "say": {"speaker": "gui", "text": "Olha pela janela… terra! Já se vê a praia!", "en": "Look out of the window… land! You can see the beach!"}, "expect": null, "cliffhanger": true}
+      ]
+    },
+    {
+      "id": "S2.3",
+      "title": "Ajudar o Zé",
+      "titleEn": "Helping Zé",
+      "setting": "ferry-kitchen-evening",
+      "beats": [
+        {"id": "b1", "ages": [8], "say": {"speaker": "ze", "text": "Ai, tanta louça para lavar! Quem me ajuda?", "en": "Oh, so many dishes to wash! Who'll help me?"}, "expect": "P25", "recast": "Podes! Obrigado!"},
+        {"id": "b1y", "ages": [6], "say": {"speaker": "gui", "text": "O Zé precisa de ajuda. Vamos ajudar!", "en": "Zé needs help. Let's help!"}, "expect": null},
+        {"id": "b2", "say": {"speaker": "ze", "text": "Dá-me o prato, por favor.", "en": "Pass me the plate, please."}, "expect": "P28", "image": "kitchen:plate", "recast": "Obrigado! Que simpatia!"},
+        {"id": "b3", "ages": [8], "say": {"speaker": "gui", "text": "Hmm… eu também quero uma bolacha. Oferece-me uma!", "en": "Hmm… I want a biscuit too. Offer me one!"}, "expect": "P27", "image": "food:biscuit", "recast": "Quero! Quero! Obrigado!"},
+        {"id": "b4", "say": {"speaker": "ze", "text": "Toma, são para ti. Queres uma bolacha?", "en": "Here, these are for you. Do you want a biscuit?"}, "expect": "P17", "image": "food:biscuit", "recast": "Aqui tens! Bom apetite!"},
+        {"id": "b5", "ages": [8], "say": {"speaker": "ze", "text": "Queres mais bolachas?", "en": "Do you want more biscuits?"}, "expect": "P22", "recast": "Já chega? Está bem! Ficam para amanhã."},
+        {"id": "b6", "say": {"speaker": "gui", "text": "Obrigado, Zé! O ferry está a chegar. Olha, meninos a jogar na praia!", "en": "Thank you, Zé! The ferry is arriving. Look, children playing on the beach!"}, "expect": null, "cliffhanger": true}
+      ]
+    }
+  ],
+  "missions": [
+    {"id": "M1", "day": 1, "card": {"text": "Diz ao pai que tens fome", "en": "Tell Dad you're hungry", "image": "m1-hungry.png"}, "say": {"6": "Pai, tenho fome!", "8": "Pai, tenho fome! Posso ter pão, por favor?"}, "targets": {"6": ["P13"], "8": ["P13", "P16"]}, "when": "Before a meal"},
+    {"id": "M2", "day": 2, "card": {"text": "Pede água ao pai", "en": "Ask Dad for water", "image": "m2-water.png"}, "say": {"6": "Água, por favor!", "8": "Posso ter água, por favor?"}, "targets": {"6": ["P16"], "8": ["P16"]}, "when": "At dinner"},
+    {"id": "M3", "day": 3, "card": {"text": "Diz ao pai do que gostas", "en": "Tell Dad what you like", "image": "m3-like.png"}, "say": {"6": "Eu gosto de gelado!", "8": "Eu gosto de … e não gosto de …"}, "targets": {"6": ["P19"], "8": ["P19", "P20"]}, "when": "Any time"},
+    {"id": "M4", "day": 4, "card": {"text": "Bom apetite, pai!", "en": "Enjoy your meal, Dad!", "image": "m4-table.png"}, "say": {"6": "Bom apetite, pai!", "8": "Bom apetite, pai! Está bom!"}, "targets": {"6": ["P24"], "8": ["P24", "P18"]}, "when": "At the start of a meal"},
+    {"id": "M5", "day": 5, "card": {"text": "Pede mais ao pai", "en": "Ask Dad for more", "image": "m5-more.png"}, "say": {"6": "Mais, por favor!", "8": "Pai, posso ter mais, por favor?"}, "targets": {"6": ["P21"], "8": ["P21", "P16"]}, "when": "At dinner"},
+    {"id": "M6", "day": 6, "siblings": true, "card": {"text": "Juntos! Ponham a mesa com o pai", "en": "Together! Set the table with Dad", "image": "m6-table.png"}, "say": {"6": "Aqui está!", "8": "Posso ajudar? Aqui está o garfo."}, "targets": {"6": ["P28"], "8": ["P25", "P28"]}, "when": "Before dinner, when both kids are around"},
+    {"id": "M7", "day": 7, "bonus": true, "card": {"text": "Diz à avó do que gostas de comer", "en": "Tell Granny what you like to eat", "image": "m7-call.png"}, "say": {"6": "Avó, eu gosto de sopa!", "8": "Olá, avó! Eu gosto de peixe. Está bom!"}, "targets": {"6": ["P19"], "8": ["P19", "P18"]}, "when": "Next call with Granny"}
+  ],
+  "schedule": {
+    "sessionsPerWeek": 2,
+    "sessions": [
+      {"session": 1, "scene": "S2.1"},
+      {"session": 2, "warmup": true, "review": true},
+      {"session": 3, "scene": "S2.2"},
+      {"session": 4, "warmup": true, "review": true},
+      {"session": 5, "scene": "S2.3"},
+      {"session": 6, "warmup": true, "review": true},
+      {"session": 7, "review": true, "replay": "S2.1"}
+    ],
+    "missionsPerDay": 1
+  }
+}

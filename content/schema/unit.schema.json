@@ -14,6 +14,21 @@
       "required": ["id", "name"],
       "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "nameEn": { "type": "string" } }
     },
+    "characters": {
+      "type": "object",
+      "description": "The unit's local characters, keyed by the speaker id used in beats. Gui is always there and isn't listed.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "emoji"],
+        "properties": {
+          "name": { "type": "string" },
+          "role": { "type": "string" },
+          "roleEn": { "type": "string" },
+          "emoji": { "type": "string", "description": "Stand-in picture until there's an illustration." },
+          "color": { "type": "string" }
+        }
+      }
+    },
     "phrases": {
       "type": "array",
       "items": {

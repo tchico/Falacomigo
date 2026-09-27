@@ -52,12 +52,29 @@ for (const unit of units) {
     }
   });
 
+  test(`${unit.id}: every speaker is Gui or one of the unit's characters`, () => {
+    for (const s of unit.scenes) for (const b of s.beats) {
+      assert.ok(b.say.speaker === 'gui' || unit.characters?.[b.say.speaker], `${s.id}/${b.id}: unknown speaker ${b.say.speaker}`);
+    }
+  });
+
   test(`${unit.id}: each child gets at least one speaking beat per scene`, () => {
     for (const child of children) for (const s of unit.scenes) {
       assert.ok(buildScene(unit, s.id, child).some((b) => b.phrase), `${s.id} for age ${child.age}`);
     }
   });
 }
+
+test('content: phrase ids are unique across units, so progress can be keyed by phrase', () => {
+  const all = units.flatMap((u) => u.phrases.map((p) => p.id));
+  assert.equal(new Set(all).size, all.length);
+});
+
+test('content: the MVP has Units 1 and 2 with about 30 phrases (FR-30)', () => {
+  assert.deepEqual(units.map((u) => u.id).slice(0, 2), ['unit-01', 'unit-02']);
+  const n = units.slice(0, 2).reduce((sum, u) => sum + u.phrases.length, 0);
+  assert.ok(n >= 25 && n <= 35, `${n} phrases`);
+});
 
 test('guide: 8 cards, each with a try-this-week line and valid references', () => {
   assert.equal(guide.cards.length, 8);

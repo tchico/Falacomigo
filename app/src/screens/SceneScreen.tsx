@@ -8,7 +8,7 @@ import { startRungFor, type Outcome, type PhraseProgress } from '../engine/ladde
 import type { Listening, RecognitionResult, SpeechRecognizer } from '../speech/types';
 import { MAX_LISTEN_MS } from '../speech/pcm';
 import { clipKey, phraseClipFile } from '../audio/clips';
-import { play, sayAsGui, sourceFor, stop } from '../audio/voice';
+import { play, sayAs, sayAsGui, sourceFor, stop } from '../audio/voice';
 import { StubRecognizer } from '../speech/stub';
 import { BigButton } from '../ui/BigButton';
 import { Gui } from '../ui/Gui';
@@ -69,7 +69,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      await sayAsGui(beat.line);
+      await sayAs(beat.speaker, beat.line);
       if (!cancelled && beat.phrase && rung === 1) await playModel();
     })();
     return () => {
@@ -81,10 +81,12 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
 
   useEffect(() => () => void stop(), []);
 
+  /** The recast and nudges come from whoever is talking in this beat. */
   const say = (text: string) => {
     setFeedback(text);
-    void sayAsGui(text);
+    void sayAs(beat.speaker, text);
   };
+  const character = beat.speaker === 'gui' ? null : unit.characters?.[beat.speaker];
 
   const advance = () => {
     void stop();
@@ -179,8 +181,17 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
 
       <View style={styles.stage}>
         {/* Hidden parent override (FR-12): long-press Gui. */}
-        <Pressable onLongPress={override} delayLongPress={1200} accessibilityLabel="Gui">
-          <Gui size={240} happy={turn.done} />
+        <Pressable onLongPress={override} delayLongPress={1200} accessibilityLabel={character?.name ?? 'Gui'}>
+          {character ? (
+            <View style={styles.character}>
+              <View style={[styles.characterFace, { backgroundColor: character.color ?? colors.white }]}>
+                <Text style={styles.characterEmoji}>{character.emoji}</Text>
+              </View>
+              <Text style={styles.characterName}>{character.name}</Text>
+            </View>
+          ) : (
+            <Gui size={240} happy={turn.done} />
+          )}
         </Pressable>
         <View style={styles.bubble}>
           <Text style={styles.line}>{turn.done && feedback ? feedback : beat.line}</Text>
@@ -263,6 +274,10 @@ const styles = StyleSheet.create({
   hint: { flex: 1, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, borderRadius: radius.lg, padding: 16 },
   hintLabel: { fontSize: 14, fontWeight: '800', color: colors.inkSoft, letterSpacing: 1 },
   hintText: { fontSize: 34, fontWeight: '800', color: colors.ink },
+  character: { width: 240, alignItems: 'center', gap: 8 },
+  characterFace: { width: 190, height: 190, borderRadius: 95, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
+  characterEmoji: { fontSize: 110 },
+  characterName: { fontSize: 24, fontWeight: '900', color: colors.ink, backgroundColor: colors.white, borderWidth: 3, borderColor: colors.ink, borderRadius: 999, paddingHorizontal: 16, paddingVertical: 2, overflow: 'hidden' },
   listen: { width: 84, height: 84, borderRadius: 42, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   listenText: { fontSize: 36 },
   mic: { width: 130, height: 130, borderRadius: 65, backgroundColor: colors.terracotta, borderWidth: 5, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },

@@ -100,3 +100,11 @@ export async function sayAsGui(text: string): Promise<void> {
   await stop();
   return speak(text, 1.3);
 }
+
+/** A local character's line: a lower, steadier voice than Gui's, so the kids can tell them apart. */
+export async function sayAs(speaker: string, text: string): Promise<void> {
+  if (speaker === 'gui') return sayAsGui(text);
+  await initVoice();
+  await stop();
+  return speak(text, 0.9);
+}
