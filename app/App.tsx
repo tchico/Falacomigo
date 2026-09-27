@@ -1,46 +1,91 @@
-import { useMemo, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { getUnit } from './src/content';
-import type { ChildProfile } from './src/content/types';
-import { ageWord } from './src/engine/template';
-import { newProgress, record, type PhraseProgress } from './src/engine/ladder';
+import { getUnit, units } from './src/content';
+import type { ChildProfile, Mission } from './src/content/types';
+import type { PhraseProgress } from './src/engine/ladder';
+import { localDay, nextMission, nextScene } from './src/engine/episode';
+import { COINS_PER_TURN, coinsForStars } from './src/engine/rewards';
 import { StubRecognizer } from './src/speech/stub';
+import { openStore } from './src/store/open';
+import { toChildProfile, type Store, type StoredProfile } from './src/store/store';
 import { ProfilePicker } from './src/screens/ProfilePicker';
 import { SceneScreen, type TurnLog } from './src/screens/SceneScreen';
 import { MissionScreen } from './src/screens/MissionScreen';
 import { colors } from './src/ui/theme';
 
-// Placeholder profiles until the parent zone can edit them (FR-01, FR-28).
-const PROFILES: ChildProfile[] = [
-  { id: 'child1', name: 'Ana', age: 8, ageWord: ageWord(8), sibling: 'irmão' },
-  { id: 'child2', name: 'Tomás', age: 6, ageWord: ageWord(6), sibling: 'irmã' },
-];
-
-type Screen = { name: 'pick' } | { name: 'scene'; sceneId: string } | { name: 'mission'; missionIndex: number } | { name: 'done' };
-
-const today = () => new Date().toISOString().slice(0, 10);
+type Screen =
+  | { name: 'loading' }
+  | { name: 'pick' }
+  | { name: 'scene'; unitId: string; sceneId: string }
+  | { name: 'mission'; unitId: string; mission: Mission; rowId: number }
+  | { name: 'done' };
 
 export default function App() {
-  const unit = useMemo(() => getUnit('unit-01'), []);
   const recognizer = useMemo(() => new StubRecognizer(), []);
+  const [store, setStore] = useState<Store | null>(null);
+  const [profiles, setProfiles] = useState<StoredProfile[]>([]);
+  const [stops, setStops] = useState<Record<string, string>>({});
   const [child, setChild] = useState<ChildProfile | null>(null);
-  const [screen, setScreen] = useState<Screen>({ name: 'pick' });
+  const [screen, setScreen] = useState<Screen>({ name: 'loading' });
   const [coins, setCoins] = useState(0);
-  // In memory for now; FR-13 / NFR-08 will persist this with expo-sqlite.
   const [progress, setProgress] = useState<Record<string, PhraseProgress>>({});
 
-  const onSceneFinished = (log: TurnLog[]) => {
-    setProgress((prev) => {
-      const next = { ...prev };
-      for (const t of log) {
-        const phrase = unit.phrases.find((p) => p.id === t.phraseId)!;
-        const current = next[t.phraseId] ?? newProgress(phrase.id, phrase.startRung);
-        next[t.phraseId] = record(current, t.success ? 'success' : t.outcome === 'nearly' ? 'nearly' : 'failure', today());
-      }
-      return next;
-    });
-    setScreen({ name: 'mission', missionIndex: 0 });
+  const refreshProfiles = useCallback(async (s: Store) => {
+    const ps = await s.listProfiles();
+    const labels: Record<string, string> = {};
+    for (const p of ps) {
+      const next = nextScene(units, await s.scenesPlayed(p.id));
+      labels[p.id] = `Paragem ${getUnit(next.unitId).unit}`;
+    }
+    setProfiles(ps);
+    setStops(labels);
+  }, []);
+
+  useEffect(() => {
+    openStore()
+      .then(async (s) => {
+        setStore(s);
+        await refreshProfiles(s);
+        setScreen({ name: 'pick' });
+      })
+      .catch((e) => console.error('Could not open the local store', e));
+  }, [refreshProfiles]);
+
+  const pick = async (p: StoredProfile) => {
+    if (!store) return;
+    const c = toChildProfile(p);
+    const [prog, wallet, played] = await Promise.all([store.getProgress(c.id), store.getCoins(c.id), store.scenesPlayed(c.id)]);
+    setChild(c);
+    setProgress(prog);
+    setCoins(wallet);
+    const next = nextScene(units, played);
+    setScreen({ name: 'scene', unitId: next.unitId, sceneId: next.sceneId });
+  };
+
+  const onTurn = (unitId: string, sceneId: string) => (t: TurnLog) => {
+    if (!store || !child) return;
+    setCoins((c) => c + COINS_PER_TURN);
+    store
+      .recordTurn({ childId: child.id, unitId, sceneId, beatId: t.beatId, phraseId: t.phraseId, startRung: t.startRung, outcome: t.outcome, day: localDay(), coins: COINS_PER_TURN })
+      .then((updated) => setProgress((prev) => ({ ...prev, [updated.phraseId]: updated })))
+      .catch((e) => console.error('Could not save the turn', e));
+  };
+
+  const onSceneFinished = async (unitId: string, sceneId: string) => {
+    if (!store || !child) return;
+    await store.finishScene(child.id, unitId, sceneId, localDay());
+    const unit = getUnit(unitId);
+    const given = await store.missionsGiven(child.id, unitId);
+    const mission = nextMission(unit, given.map((m) => m.missionId));
+    const row = await store.createMission(child.id, unitId, mission.id);
+    setScreen({ name: 'mission', unitId, mission, rowId: row.id });
+  };
+
+  const backToStart = async () => {
+    setChild(null);
+    setScreen({ name: 'pick' });
+    if (store) await refreshProfiles(store);
   };
 
   return (
@@ -52,33 +97,36 @@ export default function App() {
         </View>
       ) : null}
 
-      {screen.name === 'pick' && (
-        <ProfilePicker
-          profiles={PROFILES}
-          onPick={(p) => {
-            setChild(p);
-            setScreen({ name: 'scene', sceneId: unit.scenes[0].id });
-          }}
-        />
+      {screen.name === 'loading' && (
+        <View style={styles.done}>
+          <ActivityIndicator size="large" color={colors.blue} />
+        </View>
       )}
+
+      {screen.name === 'pick' && <ProfilePicker profiles={profiles} details={stops} onPick={pick} onParent={() => {}} />}
 
       {screen.name === 'scene' && child && (
         <SceneScreen
-          unit={unit}
+          key={`${child.id}/${screen.unitId}/${screen.sceneId}`}
+          unit={getUnit(screen.unitId)}
           sceneId={screen.sceneId}
           child={child}
           recognizer={recognizer}
-          onCoins={(n) => setCoins((c) => c + n)}
-          onFinished={onSceneFinished}
+          progress={progress}
+          onTurn={onTurn(screen.unitId, screen.sceneId)}
+          onFinished={() => void onSceneFinished(screen.unitId, screen.sceneId)}
         />
       )}
 
       {screen.name === 'mission' && child && (
         <MissionScreen
-          mission={unit.missions[screen.missionIndex]}
+          mission={screen.mission}
           child={child}
-          onDone={(_stars, earned) => {
-            setCoins((c) => c + earned);
+          onDone={async (stars) => {
+            if (store && stars > 0) {
+              await store.approveMission(screen.rowId, stars, coinsForStars(stars));
+              setCoins(await store.getCoins(child.id));
+            }
             setScreen({ name: 'done' });
           }}
         />
@@ -87,8 +135,8 @@ export default function App() {
       {screen.name === 'done' && (
         <View style={styles.done}>
           <Text style={styles.doneTitle}>Até amanhã!</Text>
-          <Text style={styles.doneText}>{Object.keys(progress).length} phrases practised · {coins} moedas</Text>
-          <Text style={styles.doneLink} onPress={() => { setChild(null); setScreen({ name: 'pick' }); }}>
+          <Text style={styles.doneText}>{coins} moedas</Text>
+          <Text style={styles.doneLink} onPress={() => void backToStart()}>
             Voltar ao início
           </Text>
         </View>

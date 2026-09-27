@@ -3,8 +3,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { normalize } from './normalize';
 import { matchAttempt, similarity } from './match';
-import { applyAttempt, newTurn, parentOverride } from './turn';
-import { dueForReview, newProgress, record } from './ladder';
+import { applyAttempt, ladderOutcome, newTurn, parentOverride } from './turn';
+import { dueForReview, newProgress, record, startRungFor } from './ladder';
+import { coinsForStars } from './rewards';
 
 test('normalize strips accents, punctuation and turns digits into words', () => {
   assert.equal(normalize('Olá, Gui!'), 'ola gui');
@@ -108,4 +109,23 @@ test('dueForReview returns up to 5 phrases, most overdue first', () => {
   const ps = ['a', 'b', 'c', 'd', 'e', 'f'].map((id, i) => ({ ...newProgress(id, 2), nextReview: `2026-10-0${i + 1}` }));
   const due = dueForReview(ps, '2026-10-09');
   assert.deepEqual(due.map((p) => p.phraseId), ['a', 'b', 'c', 'd', 'e']);
+});
+
+test('ladder: the 6-year-old starts a phrase one rung lower, never below 1', () => {
+  assert.equal(startRungFor(3, 8), 3);
+  assert.equal(startRungFor(3, 6), 2);
+  assert.equal(startRungFor(1, 6), 1);
+});
+
+test('turn outcomes map onto the ladder', () => {
+  assert.equal(ladderOutcome('got-it'), 'success');
+  assert.equal(ladderOutcome('parent-override'), 'success');
+  assert.equal(ladderOutcome('nearly'), 'nearly');
+  assert.equal(ladderOutcome('accepted-attempt'), 'failure');
+});
+
+test('coins: stars pay 20 each, clamped to 0–3 stars', () => {
+  assert.equal(coinsForStars(2), 40);
+  assert.equal(coinsForStars(5), 60);
+  assert.equal(coinsForStars(-1), 0);
 });

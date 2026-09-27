@@ -1,9 +1,10 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { ChildProfile, Unit } from '../content/types';
 import { buildScene } from '../engine/scene';
 import { matchAttempt } from '../engine/match';
-import { applyAttempt, countsAsSuccess, newTurn, parentOverride, type TurnState } from '../engine/turn';
+import { applyAttempt, ladderOutcome, newTurn, parentOverride, type TurnState } from '../engine/turn';
+import { startRungFor, type Outcome, type PhraseProgress } from '../engine/ladder';
 import type { SpeechRecognizer } from '../speech/types';
 import { StubRecognizer } from '../speech/stub';
 import { BigButton } from '../ui/BigButton';
@@ -13,8 +14,10 @@ import { colors, radius } from '../ui/theme';
 export interface TurnLog {
   beatId: string;
   phraseId: string;
-  success: boolean;
-  outcome: TurnState['outcome'];
+  startRung: number;
+  /** How the turn counts on the support ladder. */
+  outcome: Outcome;
+  turnOutcome: TurnState['outcome'];
 }
 
 interface Props {
@@ -22,39 +25,40 @@ interface Props {
   sceneId: string;
   child: ChildProfile;
   recognizer: SpeechRecognizer;
-  onCoins: (n: number) => void;
-  onFinished: (log: TurnLog[]) => void;
+  /** The child's ladder progress, to pick how much support each phrase gets. */
+  progress: Record<string, PhraseProgress>;
+  /** Called as soon as each spoken turn ends, so it can be saved straight away (NFR-08). */
+  onTurn: (t: TurnLog) => void;
+  onFinished: () => void;
 }
-
-const COINS_PER_TURN = 10; // FR-20
 
 /**
  * One scene, beat by beat (FR-03: speaking is the only way forward).
  * With the stub recogniser, a developer panel at the bottom stands in for the microphone.
  */
-export function SceneScreen({ unit, sceneId, child, recognizer, onCoins, onFinished }: Props) {
+export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn, onFinished }: Props) {
   const beats = useMemo(() => buildScene(unit, sceneId, child), [unit, sceneId, child]);
   const [index, setIndex] = useState(0);
   const [turn, setTurn] = useState<TurnState>(newTurn());
   const [listening, setListening] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [devText, setDevText] = useState('');
-  const log = useRef<TurnLog[]>([]);
 
   const beat = beats[index];
   const isStub = recognizer instanceof StubRecognizer;
+  const startRung = beat.phrase ? startRungFor(beat.phrase.startRung, child.age) : 1;
+  const rung = beat.phrase ? progress[beat.phrase.id]?.rung ?? startRung : 1;
 
   const advance = () => {
     setFeedback(null);
     setTurn(newTurn());
-    if (index + 1 >= beats.length) onFinished(log.current);
+    if (index + 1 >= beats.length) onFinished();
     else setIndex(index + 1);
   };
 
   const finishTurn = (t: TurnState) => {
     if (!beat.phrase) return;
-    log.current.push({ beatId: beat.id, phraseId: beat.phrase.id, success: countsAsSuccess(t.outcome), outcome: t.outcome });
-    onCoins(COINS_PER_TURN);
+    onTurn({ beatId: beat.id, phraseId: beat.phrase.id, startRung, outcome: ladderOutcome(t.outcome), turnOutcome: t.outcome });
     // Gui always answers with the correct form (a recast), whether the child got it exactly or nearly (FR-10).
     setFeedback(beat.recast ?? (t.outcome === 'got-it' ? 'Boa!' : beat.modelText) ?? 'Boa!');
   };
@@ -111,7 +115,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, onCoins, onFinis
           <>
             <View style={styles.hint}>
               <Text style={styles.hintLabel}>DIZ ASSIM</Text>
-              <Text style={styles.hintText}>{hintFor(beat.modelText ?? '', beat.phrase.startRung, turn.playModel)}</Text>
+              <Text style={styles.hintText}>{hintFor(beat.modelText ?? '', rung, turn.playModel)}</Text>
             </View>
             <Pressable
               accessibilityRole="button"

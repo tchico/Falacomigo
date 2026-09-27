@@ -2,6 +2,7 @@
 // After 2 failed attempts the model phrase plays, and the 3rd attempt is accepted if any speech is heard.
 
 import type { MatchResult } from './match';
+import type { Outcome } from './ladder';
 
 export interface TurnState {
   attempts: number;
@@ -43,4 +44,14 @@ export function parentOverride(turn: TurnState): TurnState {
 /** Did this turn count as the child successfully saying the phrase, for the learning engine? */
 export function countsAsSuccess(outcome: TurnState['outcome']): boolean {
   return outcome === 'got-it' || outcome === 'parent-override';
+}
+
+/**
+ * How a finished turn counts on the support ladder. A near miss is not a failure. Needing the model and a third try
+ * counts as a failure, so the phrase gets more support next time, but the child never sees it as one.
+ */
+export function ladderOutcome(outcome: TurnState['outcome']): Outcome {
+  if (countsAsSuccess(outcome)) return 'success';
+  if (outcome === 'nearly') return 'nearly';
+  return 'failure';
 }
