@@ -25,7 +25,13 @@
     },
     "plugins": [
       "expo-sqlite",
-      "expo-audio"
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Fala Comigo listens while you hold the microphone button, so Gui can hear your Portuguese.",
+          "enableBackgroundPlayback": false
+        }
+      ]
     ]
   }
 }

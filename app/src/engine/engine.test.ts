@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { normalize } from './normalize';
 import { matchAttempt, similarity } from './match';
-import { applyAttempt, ladderOutcome, newTurn, parentOverride } from './turn';
+import { applyAttempt, applyOfflineAttempt, ladderOutcome, newTurn, parentOverride } from './turn';
 import { dueForReview, newProgress, record, startRungFor } from './ladder';
 import { coinsForStars } from './rewards';
 
@@ -128,4 +128,13 @@ test('coins: stars pay 20 each, clamped to 0–3 stars', () => {
   assert.equal(coinsForStars(2), 40);
   assert.equal(coinsForStars(5), 60);
   assert.equal(coinsForStars(-1), 0);
+});
+
+test('turn: offline, a second of voice counts and a short sound does not (NFR-02)', () => {
+  let t = applyOfflineAttempt(newTurn(), 400);
+  assert.equal(t.done, false);
+  t = applyOfflineAttempt(t, 1100);
+  assert.equal(t.done, true);
+  assert.equal(t.outcome, 'offline-voice');
+  assert.equal(ladderOutcome('offline-voice'), 'nearly');
 });

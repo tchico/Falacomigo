@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { ChildProfile, Unit } from '../content/types';
 import { buildScene } from '../engine/scene';
 import { matchAttempt } from '../engine/match';
-import { applyAttempt, ladderOutcome, newTurn, parentOverride, type TurnState } from '../engine/turn';
+import { applyAttempt, applyOfflineAttempt, ladderOutcome, newTurn, parentOverride, type TurnState } from '../engine/turn';
 import { startRungFor, type Outcome, type PhraseProgress } from '../engine/ladder';
-import type { SpeechRecognizer } from '../speech/types';
+import type { Listening, RecognitionResult, SpeechRecognizer } from '../speech/types';
+import { MAX_LISTEN_MS } from '../speech/pcm';
 import { clipKey, phraseClipFile } from '../audio/clips';
 import { play, sayAsGui, sourceFor, stop } from '../audio/voice';
 import { StubRecognizer } from '../speech/stub';
@@ -42,7 +43,10 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
   const beats = useMemo(() => buildScene(unit, sceneId, child), [unit, sceneId, child]);
   const [index, setIndex] = useState(0);
   const [turn, setTurn] = useState<TurnState>(newTurn());
-  const [listening, setListening] = useState(false);
+  const [mic, setMic] = useState<'idle' | 'listening' | 'thinking'>('idle');
+  const [level, setLevel] = useState(0);
+  const listening = useRef<Listening | null>(null);
+  const holding = useRef(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [devText, setDevText] = useState('');
 
@@ -97,14 +101,45 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
     say(beat.recast ?? (t.outcome === 'got-it' ? 'Boa!' : beat.modelText) ?? 'Boa!');
   };
 
-  const speak = async () => {
-    if (!beat.target || !beat.modelText || turn.done) return;
+  /** Hold-to-talk (FR-06): listening starts when the button goes down and ends on release, a pause, or 6 seconds. */
+  const startListening = async () => {
+    holding.current = true;
+    if (!beat.target || !beat.modelText || turn.done || listening.current) return;
     await stop();
-    setListening(true);
-    const heard = await recognizer.recognize({ locale: 'pt-PT', expectedText: beat.modelText, maxDurationMs: 6000 });
-    setListening(false);
-    const result = matchAttempt(heard.transcript, beat.target, child.age);
-    const next = applyAttempt(turn, { result, durationMs: heard.durationMs });
+    if (!holding.current) {
+      // A quick tap, not a hold.
+      say('Segura e fala!');
+      return;
+    }
+    const l = recognizer.listen({ locale: 'pt-PT', expectedText: beat.modelText, maxDurationMs: MAX_LISTEN_MS }, setLevel);
+    listening.current = l;
+    setMic('listening');
+    let heard: RecognitionResult;
+    try {
+      heard = await l.result;
+    } catch (e) {
+      console.warn('Microphone unavailable', e);
+      heard = { transcript: '', voicedMs: 0 };
+    }
+    listening.current = null;
+    setMic('idle');
+    setLevel(0);
+    await onHeard(heard);
+  };
+
+  const releaseMic = () => {
+    holding.current = false;
+    if (listening.current) {
+      setMic('thinking');
+      listening.current.release();
+    }
+  };
+
+  const onHeard = async (heard: RecognitionResult) => {
+    if (!beat.target) return;
+    const next = heard.offline
+      ? applyOfflineAttempt(turn, heard.voicedMs)
+      : applyAttempt(turn, { result: matchAttempt(heard.transcript, beat.target, child.age), durationMs: heard.voicedMs });
     setTurn(next);
     if (next.done) finishTurn(next);
     else if (next.playModel) {
@@ -122,9 +157,13 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
     finishTurn(next);
   };
 
-  const simulate = (transcript: string) => {
+  const simulate = async (transcript: string) => {
+    if (!beat.modelText || turn.done) return;
     (recognizer as StubRecognizer).willHear(transcript);
-    void speak();
+    await stop();
+    const l = recognizer.listen({ locale: 'pt-PT', expectedText: beat.modelText, maxDurationMs: MAX_LISTEN_MS });
+    l.release();
+    await onHeard(await l.result);
   };
 
   return (
@@ -162,14 +201,22 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
                 <Text style={styles.listenText}>🔊</Text>
               </Pressable>
             ) : null}
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Hold to talk"
-              onPress={isStub ? undefined : speak}
-              style={[styles.mic, listening && { backgroundColor: colors.terracottaLight }]}
-            >
-              <Text style={styles.micText}>{listening ? 'A ouvir…' : 'Fala!'}</Text>
-            </Pressable>
+            <View style={styles.micWrap}>
+              {/* A calm ring that grows with the child's voice while listening: no flashing (NFR-09). */}
+              {mic === 'listening' ? <View style={[styles.micRing, { transform: [{ scale: 1 + Math.min(0.35, level * 4) }] }]} /> : null}
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Hold to talk"
+                accessibilityState={{ busy: mic !== 'idle' }}
+                disabled={isStub || mic === 'thinking'}
+                onPressIn={() => void startListening()}
+                onPressOut={releaseMic}
+                style={[styles.mic, mic === 'listening' && { backgroundColor: colors.terracottaLight }]}
+              >
+                <Text style={styles.micIcon}>🎤</Text>
+                <Text style={styles.micText}>{mic === 'listening' ? 'A ouvir…' : mic === 'thinking' ? '…' : 'Fala!'}</Text>
+              </Pressable>
+            </View>
           </>
         ) : (
           <BigButton label={index + 1 >= beats.length ? 'Fim!' : 'Continuar'} variant="blue" onPress={advance} />
@@ -179,10 +226,10 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
       {isStub && beat.phrase && !turn.done ? (
         <View style={styles.dev}>
           <Text style={styles.devLabel}>DEV · stub microphone</Text>
-          <BigButton label="Say it right" variant="secondary" onPress={() => simulate(beat.modelText ?? '')} />
-          <BigButton label="Nearly" variant="secondary" onPress={() => simulate(beat.target?.keywords.find((k) => !k.includes('{')) ?? '')} />
-          <BigButton label="Silence" variant="secondary" onPress={() => simulate('')} />
-          <TextInput value={devText} onChangeText={setDevText} placeholder="or type what was said" style={styles.devInput} onSubmitEditing={() => simulate(devText)} />
+          <BigButton label="Say it right" variant="secondary" onPress={() => void simulate(beat.modelText ?? '')} />
+          <BigButton label="Nearly" variant="secondary" onPress={() => void simulate(beat.target?.keywords.find((k) => !k.includes('{')) ?? '')} />
+          <BigButton label="Silence" variant="secondary" onPress={() => void simulate('')} />
+          <TextInput value={devText} onChangeText={setDevText} placeholder="or type what was said" style={styles.devInput} onSubmitEditing={() => void simulate(devText)} />
         </View>
       ) : null}
     </View>
@@ -215,7 +262,10 @@ const styles = StyleSheet.create({
   listen: { width: 84, height: 84, borderRadius: 42, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   listenText: { fontSize: 36 },
   mic: { width: 130, height: 130, borderRadius: 65, backgroundColor: colors.terracotta, borderWidth: 5, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
-  micText: { color: colors.white, fontSize: 24, fontWeight: '900' },
+  micWrap: { width: 150, height: 150, alignItems: 'center', justifyContent: 'center' },
+  micRing: { position: 'absolute', width: 150, height: 150, borderRadius: 75, backgroundColor: colors.terracottaLight, opacity: 0.35 },
+  micIcon: { fontSize: 34 },
+  micText: { color: colors.white, fontSize: 22, fontWeight: '900' },
   dev: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, backgroundColor: '#FFF3CD', borderTopWidth: 2, borderColor: colors.ink },
   devLabel: { fontSize: 12, fontWeight: '800', color: colors.ink },
   devInput: { flex: 1, minHeight: 48, borderWidth: 2, borderColor: colors.ink, borderRadius: 10, paddingHorizontal: 12, backgroundColor: colors.white },

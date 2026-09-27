@@ -6,7 +6,7 @@ import type { ChildProfile, Mission } from './src/content/types';
 import type { PhraseProgress } from './src/engine/ladder';
 import { localDay, nextMission, nextScene } from './src/engine/episode';
 import { COINS_PER_TURN, coinsForStars } from './src/engine/rewards';
-import { StubRecognizer } from './src/speech/stub';
+import { createRecognizer } from './src/speech';
 import { openStore } from './src/store/open';
 import { initVoice } from './src/audio/voice';
 import { toChildProfile, type Store, type StoredProfile } from './src/store/store';
@@ -23,7 +23,7 @@ type Screen =
   | { name: 'done' };
 
 export default function App() {
-  const recognizer = useMemo(() => new StubRecognizer(), []);
+  const recognizer = useMemo(() => createRecognizer(), []);
   const [store, setStore] = useState<Store | null>(null);
   const [profiles, setProfiles] = useState<StoredProfile[]>([]);
   const [stops, setStops] = useState<Record<string, string>>({});
