@@ -3,7 +3,7 @@
 
 import type { ChildProfile, Unit } from '../content/types';
 import { clipKey, isPersonal, missionClipFile, phraseClipFile } from '../audio/clips';
-import { fill } from '../engine/template';
+import { fill, fillEn } from '../engine/template';
 
 export interface RecordingSlot {
   key: string;
@@ -30,7 +30,7 @@ export function recordingList(units: Unit[], children: ChildProfile[]): Recordin
       const who = perChild ? children.filter((c) => p.ages.includes(c.age)) : [children[0]];
       for (const c of who) {
         if (!c) continue;
-        add({ key: clipKey(unit.id, phraseClipFile(p, c)), unitId: unit.id, text: fill(p.text, c), en: fill(p.en, c), forWho: perChild ? c.name : undefined });
+        add({ key: clipKey(unit.id, phraseClipFile(p, c)), unitId: unit.id, text: fill(p.text, c), en: fillEn(p.en, c), forWho: perChild ? c.name : undefined });
       }
     }
     for (const m of unit.missions) {

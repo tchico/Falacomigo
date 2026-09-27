@@ -113,13 +113,17 @@ export function ParentZone({ store, profiles, onProfilesChanged, onExit }: { sto
             <View style={styles.grid}>
               <Panel title="Missions to Dad" style={styles.cell}>
                 <Text style={ui.body}>{openMissions ? `${openMissions} waiting for your stars.` : 'Nothing waiting.'}</Text>
-                <SmallButton label="Give stars" onPress={() => setSection('missions')} disabled={!openMissions} />
+                <View style={{ alignItems: 'flex-start' }}>
+                  <SmallButton label="Give stars" onPress={() => setSection('missions')} disabled={!openMissions} />
+                </View>
               </Panel>
               <Panel title={`Your recordings · ${recorded} of ${slots.length}`} style={styles.cell}>
                 <View style={styles.track}>
                   <View style={[styles.fill, { width: `${slots.length ? Math.round((recorded / slots.length) * 100) : 0}%` }]} />
                 </View>
-                <SmallButton label="Record" kind="red" onPress={() => setSection('recordings')} />
+                <View style={{ alignItems: 'flex-start' }}>
+                  <SmallButton label="Record" kind="red" onPress={() => setSection('recordings')} />
+                </View>
               </Panel>
             </View>
           </ScrollView>

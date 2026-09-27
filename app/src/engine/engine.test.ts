@@ -6,6 +6,7 @@ import { matchAttempt, similarity } from './match';
 import { applyAttempt, applyOfflineAttempt, ladderOutcome, newTurn, parentOverride } from './turn';
 import { dueForReview, newProgress, record, startRungFor } from './ladder';
 import { coinsForStars } from './rewards';
+import { fillEn } from './template';
 
 test('normalize strips accents, punctuation and turns digits into words', () => {
   assert.equal(normalize('Olá, Gui!'), 'ola gui');
@@ -137,4 +138,9 @@ test('turn: offline, a second of voice counts and a short sound does not (NFR-02
   assert.equal(t.done, true);
   assert.equal(t.outcome, 'offline-voice');
   assert.equal(ladderOutcome('offline-voice'), 'nearly');
+});
+
+test('template: English lines get the age in digits', () => {
+  const vars = { id: 'c', name: 'Ana', ageWord: 'oito', sibling: 'irmão', age: 8 };
+  assert.equal(fillEn("I'm {age} years old.", vars), "I'm 8 years old.");
 });

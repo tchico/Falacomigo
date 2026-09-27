@@ -240,7 +240,11 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
 function hintFor(model: string, rung: number, playModel: boolean): string {
   if (playModel || rung <= 2) return model;
   const words = model.split(' ');
-  if (rung === 3) return `${words.slice(0, Math.max(1, words.length - 1)).join(' ')} …`;
+  if (rung === 3) {
+    // Fill the gap: the start of the phrase, with the end left for the child. A one-word phrase shows its first letters.
+    if (words.length === 1) return `${model.slice(0, Math.min(2, Math.ceil(model.length / 3)))}…`;
+    return `${words.slice(0, words.length - 1).join(' ')} …`;
+  }
   return '…';
 }
 

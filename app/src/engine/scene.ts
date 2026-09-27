@@ -1,7 +1,7 @@
 // Builds a playable scene for one child: filters beats by age and fills in their name, age and sibling.
 
 import type { AgeBand, Beat, ChildProfile, Phrase, Unit } from '../content/types';
-import { fill } from './template';
+import { fill, fillEn } from './template';
 import type { MatchTarget } from './match';
 
 export interface PlayableBeat {
@@ -34,7 +34,7 @@ export function buildScene(unit: Unit, sceneId: string, child: ChildProfile): Pl
       id: b.id,
       speaker: b.say.speaker,
       line: f(b.say.text),
-      lineEn: b.say.en ? f(b.say.en) : undefined,
+      lineEn: b.say.en ? fillEn(b.say.en, child) : undefined,
       phrase,
       modelText: phrase ? f(b.model ?? firstOption(phrase.text)) : null,
       ownModel: !!b.model,
