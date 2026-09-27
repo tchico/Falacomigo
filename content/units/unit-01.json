@@ -1,0 +1,216 @@
+{
+  "$schema": "../schema/unit.schema.json",
+  "id": "unit-01",
+  "unit": 1,
+  "title": "Olá! Eu e a minha família",
+  "titleEn": "Hello! Me and my family",
+  "stop": { "id": "garden", "name": "O jardim", "nameEn": "The back garden, Ireland" },
+  "phrases": [
+    {
+      "id": "P01",
+      "text": "Olá!",
+      "en": "Hello!",
+      "accept": ["ola", "ola gui", "oi", "oi gui", "ola pai"],
+      "keywords": ["ola", "oi"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": { "dad": "P01.m4a", "ttsFallback": true }
+    },
+    {
+      "id": "P02",
+      "text": "Bom dia! / Boa tarde! / Boa noite!",
+      "en": "Good morning! / Good afternoon! / Good night!",
+      "accept": ["bom dia", "boa tarde", "boa noite", "bom dia pai", "boa noite pai", "bom dia gui", "boa noite gui"],
+      "keywords": ["bom", "boa", "dia", "tarde", "noite"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": { "dad": "P02.m4a", "ttsFallback": true }
+    },
+    {
+      "id": "P03",
+      "text": "Chamo-me {name}.",
+      "en": "My name is {name}.",
+      "accept": ["chamo me {name}", "o meu nome e {name}", "meu nome e {name}", "eu sou o {name}", "eu sou a {name}", "sou o {name}", "sou a {name}", "eu chamo me {name}", "{name}"],
+      "keywords": ["chamo", "nome", "{name}"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": { "dad": "P03-{childId}.m4a", "ttsFallback": true }
+    },
+    {
+      "id": "P04",
+      "text": "Como te chamas?",
+      "en": "What's your name?",
+      "accept": ["como te chamas", "e tu como te chamas", "como e que te chamas", "qual e o teu nome", "e tu"],
+      "keywords": ["chamas", "nome"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": { "dad": "P04.m4a", "ttsFallback": true }
+    },
+    {
+      "id": "P05",
+      "text": "Tenho {age} anos.",
+      "en": "I'm {age} years old.",
+      "accept": ["tenho {age} anos", "eu tenho {age} anos", "{age} anos", "tenho {age}"],
+      "keywords": ["tenho", "anos", "{age}"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": { "dad": "P05-{childId}.m4a", "ttsFallback": true }
+    },
+    {
+      "id": "P06",
+      "text": "Quantos anos tens?",
+      "en": "How old are you?",
+      "accept": ["quantos anos tens", "e tu quantos anos tens", "quantos anos e que tens", "quantos anos tens pai"],
+      "keywords": ["quantos", "anos", "tens"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": { "dad": "P06.m4a", "ttsFallback": true }
+    },
+    {
+      "id": "P07",
+      "text": "Este é o meu irmão. / Esta é a minha irmã.",
+      "en": "This is my brother. / This is my sister.",
+      "accept": ["este e o meu irmao", "esta e a minha irma", "e o meu irmao", "e a minha irma", "este e o meu {sibling}", "esta e a minha {sibling}", "este e o {sibling}", "esta e a {sibling}", "o meu irmao", "a minha irma"],
+      "keywords": ["este", "esta", "meu", "minha", "irmao", "irma", "{sibling}"],
+      "ages": [8],
+      "startRung": 2,
+      "audio": { "dad": "P07-{childId}.m4a", "ttsFallback": true }
+    },
+    {
+      "id": "P08",
+      "text": "Eu moro na Irlanda.",
+      "en": "I live in Ireland.",
+      "accept": ["eu moro na irlanda", "moro na irlanda", "eu vivo na irlanda", "vivo na irlanda", "na irlanda", "irlanda"],
+      "keywords": ["moro", "vivo", "irlanda"],
+      "ages": [8],
+      "startRung": 2,
+      "audio": { "dad": "P08.m4a", "ttsFallback": true }
+    },
+    {
+      "id": "P09",
+      "text": "Obrigado! / Obrigada!",
+      "en": "Thank you!",
+      "accept": ["obrigado", "obrigada", "muito obrigado", "muito obrigada", "obrigado gui", "obrigada gui"],
+      "keywords": ["obrigado", "obrigada"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": { "dad": "P09.m4a", "ttsFallback": true }
+    },
+    {
+      "id": "P10",
+      "text": "Como estás? — Estou bem.",
+      "en": "How are you? — I'm fine.",
+      "accept": ["como estas", "como estas gui", "estou bem", "bem", "estou bem obrigado", "estou bem obrigada", "bem obrigado", "bem obrigada", "estou otimo", "estou otima", "mais ou menos"],
+      "keywords": ["como", "estas", "estou", "bem"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": { "dad": "P10.m4a", "ttsFallback": true }
+    },
+    {
+      "id": "P11",
+      "text": "Anda cá!",
+      "en": "Come here!",
+      "accept": ["anda ca", "anda ca gui", "vem ca", "vem ca gui", "anda", "anda gui"],
+      "keywords": ["anda", "vem", "ca"],
+      "ages": [8],
+      "startRung": 2,
+      "audio": { "dad": "P11.m4a", "ttsFallback": true }
+    },
+    {
+      "id": "P12",
+      "text": "Adeus! Até amanhã!",
+      "en": "Bye! See you tomorrow!",
+      "accept": ["adeus", "ate amanha", "adeus ate amanha", "ate logo", "xau", "tchau", "adeus gui"],
+      "keywords": ["adeus", "amanha", "logo", "xau", "tchau"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": { "dad": "P12.m4a", "ttsFallback": true }
+    }
+  ],
+  "vocab": [
+    { "pt": "o pai", "en": "dad" },
+    { "pt": "a mãe", "en": "mum" },
+    { "pt": "o irmão", "en": "brother" },
+    { "pt": "a irmã", "en": "sister" },
+    { "pt": "o bebé", "en": "baby" },
+    { "pt": "a avó", "en": "granny" },
+    { "pt": "o avô", "en": "grandad" },
+    { "pt": "o cão", "en": "dog" },
+    { "pt": "o gato", "en": "cat" },
+    { "pt": "seis", "en": "six" },
+    { "pt": "sete", "en": "seven" },
+    { "pt": "oito", "en": "eight" },
+    { "pt": "nove", "en": "nine" },
+    { "pt": "a gaivota", "en": "seagull" },
+    { "pt": "a casa", "en": "home" }
+  ],
+  "warmup": ["P01", "P02", "P03", "P05", "P10"],
+  "scenes": [
+    {
+      "id": "S1.1",
+      "title": "Quem és tu?",
+      "titleEn": "Who are you?",
+      "setting": "garden-trampoline",
+      "beats": [
+        { "id": "b1", "say": { "speaker": "gui", "text": "Ai, ai, ai… onde estou?", "en": "Ouch… where am I?" }, "expect": "P01", "recast": "Olá, olá!" },
+        { "id": "b2", "say": { "speaker": "gui", "text": "Olá! Como te chamas?", "en": "Hello! What's your name?" }, "expect": "P03", "recast": "Chamas-te {name}? Que nome bonito!" },
+        { "id": "b3", "say": { "speaker": "gui", "text": "Que nome bonito! Quantos anos tens?", "en": "What a lovely name! How old are you?" }, "expect": "P05", "recast": "Tens {age} anos? Já és grande!" },
+        { "id": "b4a", "ages": [8], "say": { "speaker": "gui", "text": "Eu tenho… hmm… cem anos! E tu, perguntas-me alguma coisa?", "en": "I'm… hmm… a hundred! Aren't you going to ask me something?" }, "expect": "P04", "recast": "Como me chamo? Chamo-me Gui!" },
+        { "id": "b4b", "ages": [6], "say": { "speaker": "gui", "text": "Eu tenho… hmm… cem anos! Chamo-me Gui. Diz: olá, Gui!", "en": "I'm… a hundred! My name is Gui. Say: hello, Gui!" }, "expect": "P01", "recast": "Olá! Sou o Gui!" },
+        { "id": "b5", "say": { "speaker": "gui", "text": "Brrr… tenho frio! Como estás tu?", "en": "Brrr… I'm cold! How are you?" }, "expect": "P10", "recast": "Estás bem? Que bom! Eu estou com frio!" },
+        { "id": "b6", "say": { "speaker": "gui", "text": "Olha! Quem são aqueles na janela?", "en": "Look! Who are those people in the window?" }, "expect": null, "cliffhanger": true }
+      ]
+    },
+    {
+      "id": "S1.2",
+      "title": "A família",
+      "titleEn": "The family",
+      "setting": "kitchen-window-photo",
+      "beats": [
+        { "id": "b1", "say": { "speaker": "gui", "text": "Quem é este?", "en": "Who's this?" }, "image": "photo:dad", "expect": "P07", "accept": ["este e o meu pai", "e o meu pai", "o meu pai", "o pai", "pai"], "keywords": ["pai"], "recast": "Ah, este é o teu pai!" },
+        { "id": "b2", "say": { "speaker": "gui", "text": "E esta? É uma gaivota?", "en": "And this one? Is she a seagull?" }, "image": "photo:mum", "expect": "P07", "accept": ["nao e a minha mae", "e a minha mae", "esta e a minha mae", "a minha mae", "nao a mae", "a mae", "mae", "nao"], "keywords": ["mae", "nao"], "recast": "Ahh, é a tua mãe! Desculpa!" },
+        { "id": "b3", "say": { "speaker": "gui", "text": "E quem é este aqui?", "en": "And who's this one here?" }, "image": "photo:sibling", "expect": "P07", "recast": "É o teu {sibling}!" },
+        { "id": "b4", "say": { "speaker": "gui", "text": "E este? Quem é?", "en": "And this one? Who is it?" }, "image": "photo:child", "expect": "P05", "accept": ["sou eu", "e eu", "sou eu tenho {age} anos", "sou eu e tenho {age} anos", "tenho {age} anos"], "keywords": ["eu", "{age}"], "recast": "És tu! Com {age} anos!" },
+        { "id": "b5", "say": { "speaker": "gui", "text": "E a tua avó? Onde está?", "en": "And your granny? Where is she?" }, "expect": null, "note": "Sets up Unit 7. Any answer is accepted." },
+        { "id": "b6", "say": { "speaker": "gui", "text": "Olha aquele postal… é Lisboa! A minha casa!", "en": "Look at that postcard… it's Lisbon! My home!" }, "expect": null, "cliffhanger": true }
+      ]
+    },
+    {
+      "id": "S1.3",
+      "title": "Onde estou?",
+      "titleEn": "Where am I?",
+      "setting": "garden-evening",
+      "beats": [
+        { "id": "b1", "say": { "speaker": "gui", "text": "Onde estou? Isto é Lisboa?", "en": "Where am I? Is this Lisbon?" }, "expect": "P08", "ages": [8], "recast": "Na Irlanda?! Tão longe!" },
+        { "id": "b1y", "ages": [6], "say": { "speaker": "gui", "text": "Onde estou? Isto é Lisboa?", "en": "Where am I? Is this Lisbon?" }, "expect": "P08", "accept": ["nao irlanda", "irlanda", "nao", "na irlanda"], "keywords": ["irlanda", "nao"], "recast": "Na Irlanda?! Tão longe!" },
+        { "id": "b2", "say": { "speaker": "gui", "text": "Ai… estou triste. Tenho saudades de casa.", "en": "Oh… I'm sad. I miss home." }, "expect": "P10", "accept": ["como estas", "como estas gui", "estas bem", "estas triste"], "keywords": ["como", "estas"], "recast": "Estou triste… mas tu és simpático!" },
+        { "id": "b3", "say": { "speaker": "gui", "text": "Ajudas-me a voltar para casa? A sério? Toma uma bolacha!", "en": "Will you help me get home? Really? Have a biscuit!" }, "expect": "P09", "recast": "De nada!" },
+        { "id": "b4", "say": { "speaker": "gui", "text": "Onde está o mapa? Chama-me!", "en": "Where's the map? Call me over!" }, "expect": "P11", "recast": "Já vou! Já vou!" },
+        { "id": "b5", "say": { "speaker": "gui", "text": "Olha! O caminho até Lisboa! Primeiro… o ferry!", "en": "Look! The way to Lisbon! First… the ferry!" }, "expect": null },
+        { "id": "b6", "say": { "speaker": "gui", "text": "Estou com sono… Boa noite!", "en": "I'm sleepy… Good night!" }, "expect": "P12", "accept": ["boa noite", "boa noite gui", "boa noite ate amanha", "ate amanha", "adeus ate amanha"], "keywords": ["noite", "amanha", "adeus"], "recast": "Boa noite! Até amanhã!", "unlocks": "unit-02" }
+      ]
+    }
+  ],
+  "missions": [
+    { "id": "M1", "day": 1, "card": { "text": "Diz olá ao pai como disseste ao Gui", "en": "Say hello to Dad like you did to Gui", "image": "m1-wave.png" }, "say": { "6": "Olá, pai! Chamo-me {name}.", "8": "Olá, pai! Chamo-me {name} e tenho {age} anos." }, "targets": { "6": ["P01", "P03"], "8": ["P01", "P03", "P05"] }, "when": "Straight after the session" },
+    { "id": "M2", "day": 2, "card": { "text": "Bom dia, pai!", "en": "Good morning, Dad!", "image": "m2-breakfast.png" }, "say": { "6": "Bom dia, pai!", "8": "Bom dia, pai! Como estás?" }, "targets": { "6": ["P02"], "8": ["P02", "P10"] }, "when": "Next morning at breakfast" },
+    { "id": "M3", "day": 3, "card": { "text": "Apresenta alguém ao pai", "en": "Introduce someone to Dad", "image": "m3-family.png" }, "say": { "6": "Esta é a mãe!", "8": "Este é o meu {sibling}. Tem … anos." }, "targets": { "6": ["P07"], "8": ["P07", "P05"] }, "when": "Any time with someone in the room" },
+    { "id": "M4", "day": 4, "card": { "text": "Pergunta ao pai quantos anos ele tem", "en": "Ask Dad how old he is", "image": "m4-age.png" }, "say": { "6": "Tenho {age} anos!", "8": "Quantos anos tens, pai?" }, "targets": { "6": ["P05"], "8": ["P06"] }, "when": "Any time" },
+    { "id": "M5", "day": 5, "card": { "text": "Boa noite, pai!", "en": "Good night, Dad!", "image": "m5-bed.png" }, "say": { "6": "Boa noite, pai!", "8": "Boa noite, pai! Até amanhã!" }, "targets": { "6": ["P02"], "8": ["P02", "P12"] }, "when": "Bedtime" },
+    { "id": "M6", "day": 6, "card": { "text": "Juntos! Apresentem-se ao pai", "en": "Together! Introduce each other to Dad", "image": "m6-together.png" }, "say": { "6": "Este é o meu {sibling}!", "8": "Esta é a minha {sibling}. Tem … anos." }, "targets": { "6": ["P07"], "8": ["P07", "P05"] }, "when": "When both kids are around", "siblings": true },
+    { "id": "M7", "day": 7, "bonus": true, "card": { "text": "Liga à avó!", "en": "Video call with Granny", "image": "m7-call.png" }, "say": { "6": "Olá, avó!", "8": "Olá, avó! Como estás? Eu estou bem." }, "targets": { "6": ["P01"], "8": ["P01", "P10"] }, "when": "Whenever a call is planned" }
+  ],
+  "schedule": {
+    "sessionsPerWeek": 2,
+    "sessions": [
+      { "session": 1, "scene": "S1.1" },
+      { "session": 2, "warmup": true, "review": true },
+      { "session": 3, "scene": "S1.2" },
+      { "session": 4, "warmup": true, "review": true },
+      { "session": 5, "scene": "S1.3" },
+      { "session": 6, "warmup": true, "review": true },
+      { "session": 7, "review": true, "replay": "S1.1" }
+    ],
+    "missionsPerDay": 1
+  }
+}

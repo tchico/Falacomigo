@@ -1,0 +1,29 @@
+name: Create issues from requirements
+
+# Run by hand from the Actions tab. Creates labels, milestones and one issue per requirement
+# from tools/issues.json. Anything that already exists is skipped, so it's safe to re-run
+# after adding requirements to docs/design.md.
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Only list what would be created'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node tools/create-issues.mjs ${{ inputs.dry_run && '--dry-run' || '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}

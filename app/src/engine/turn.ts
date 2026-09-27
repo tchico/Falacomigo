@@ -1,0 +1,46 @@
+// One spoken turn in a scene (FR-09, FR-10, FR-12).
+// After 2 failed attempts the model phrase plays, and the 3rd attempt is accepted if any speech is heard.
+
+import type { MatchResult } from './match';
+
+export interface TurnState {
+  attempts: number;
+  /** True once the game should play the model phrase before the next try. */
+  playModel: boolean;
+  done: boolean;
+  outcome: MatchResult | 'accepted-attempt' | 'parent-override' | null;
+}
+
+export const newTurn = (): TurnState => ({ attempts: 0, playModel: false, done: false, outcome: null });
+
+export interface Attempt {
+  result: MatchResult;
+  /** Length of the recording, used for the "anything at all" rule. */
+  durationMs: number;
+}
+
+export const MIN_SPEECH_MS = 1000;
+
+export function applyAttempt(turn: TurnState, attempt: Attempt): TurnState {
+  if (turn.done) return turn;
+  const attempts = turn.attempts + 1;
+
+  if (attempt.result === 'got-it' || attempt.result === 'nearly') {
+    return { attempts, playModel: false, done: true, outcome: attempt.result };
+  }
+  // Third try: any real speech counts, so no child gets stuck.
+  if (attempts >= 3 && attempt.durationMs >= MIN_SPEECH_MS) {
+    return { attempts, playModel: false, done: true, outcome: 'accepted-attempt' };
+  }
+  return { attempts, playModel: attempts >= 2, done: false, outcome: 'not-heard' };
+}
+
+/** Dad's hidden long-press: "I heard it". */
+export function parentOverride(turn: TurnState): TurnState {
+  return { ...turn, done: true, playModel: false, outcome: 'parent-override' };
+}
+
+/** Did this turn count as the child successfully saying the phrase, for the learning engine? */
+export function countsAsSuccess(outcome: TurnState['outcome']): boolean {
+  return outcome === 'got-it' || outcome === 'parent-override';
+}

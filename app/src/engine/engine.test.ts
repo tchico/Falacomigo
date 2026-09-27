@@ -1,0 +1,111 @@
+/// <reference types="node" />
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { normalize } from './normalize';
+import { matchAttempt, similarity } from './match';
+import { applyAttempt, newTurn, parentOverride } from './turn';
+import { dueForReview, newProgress, record } from './ladder';
+
+test('normalize strips accents, punctuation and turns digits into words', () => {
+  assert.equal(normalize('Olá, Gui!'), 'ola gui');
+  assert.equal(normalize('Chamo-me Ana.'), 'chamo me ana');
+  assert.equal(normalize('Tenho 8 anos'), 'tenho oito anos');
+  assert.equal(normalize('  Até   amanhã… '), 'ate amanha');
+});
+
+test('similarity is 1 for equal strings and lower for different ones', () => {
+  assert.equal(similarity('ola', 'ola'), 1);
+  assert.ok(similarity('obrigado', 'obrigada') > 0.8);
+  assert.ok(similarity('ola', 'adeus') < 0.3);
+});
+
+const water = { accept: ['quero agua', 'eu quero agua', 'quero a agua'], keywords: ['quero', 'agua'] };
+
+test('an exact or close answer is "got it"', () => {
+  assert.equal(matchAttempt('Quero água', water, 8), 'got-it');
+  assert.equal(matchAttempt('eu quero água por favor', water, 8), 'got-it');
+  assert.equal(matchAttempt('kero agua', water, 6), 'got-it');
+});
+
+test('a partial answer is "nearly"', () => {
+  assert.equal(matchAttempt('água', water, 8), 'nearly');
+});
+
+test('silence or something unrelated is "not heard"', () => {
+  assert.equal(matchAttempt('', water, 8), 'not-heard');
+  assert.equal(matchAttempt('banana', water, 8), 'not-heard');
+});
+
+test('the younger child gets a looser match', () => {
+  const t = { accept: ['chamo me ana'], keywords: ['chamo', 'ana'] };
+  assert.equal(matchAttempt('chama ana', t, 6), 'got-it');
+  assert.equal(matchAttempt('chama ana', t, 8), 'nearly');
+});
+
+test('turn: model plays after two misses, third attempt with speech is accepted', () => {
+  let t = newTurn();
+  t = applyAttempt(t, { result: 'not-heard', durationMs: 1200 });
+  assert.equal(t.playModel, false);
+  t = applyAttempt(t, { result: 'not-heard', durationMs: 1200 });
+  assert.equal(t.playModel, true);
+  assert.equal(t.done, false);
+  t = applyAttempt(t, { result: 'not-heard', durationMs: 1200 });
+  assert.equal(t.done, true);
+  assert.equal(t.outcome, 'accepted-attempt');
+});
+
+test('turn: a silent third attempt is not accepted', () => {
+  let t = newTurn();
+  for (let i = 0; i < 3; i++) t = applyAttempt(t, { result: 'not-heard', durationMs: 200 });
+  assert.equal(t.done, false);
+});
+
+test('turn: parent override ends the turn', () => {
+  const t = parentOverride(newTurn());
+  assert.equal(t.done, true);
+  assert.equal(t.outcome, 'parent-override');
+});
+
+test('ladder: two successes on different days move a phrase up a rung', () => {
+  let p = newProgress('P01', 2);
+  p = record(p, 'success', '2026-10-01');
+  p = record(p, 'success', '2026-10-01');
+  assert.equal(p.rung, 2, 'same day does not count twice');
+  p = record(p, 'success', '2026-10-03');
+  assert.equal(p.rung, 3);
+});
+
+test('ladder: two failures in a row move a phrase down a rung', () => {
+  let p = newProgress('P01', 3);
+  p = record(p, 'failure', '2026-10-01');
+  assert.equal(p.rung, 3);
+  p = record(p, 'failure', '2026-10-01');
+  assert.equal(p.rung, 2);
+});
+
+test('ladder: review intervals grow 1, 2, 4 days and reset after a failure', () => {
+  let p = newProgress('P01', 2);
+  p = record(p, 'success', '2026-10-01');
+  assert.equal(p.nextReview, '2026-10-02');
+  p = record(p, 'success', '2026-10-02');
+  assert.equal(p.nextReview, '2026-10-04');
+  p = record(p, 'success', '2026-10-04');
+  assert.equal(p.nextReview, '2026-10-08');
+  p = record(p, 'failure', '2026-10-08');
+  assert.equal(p.nextReview, '2026-10-09');
+});
+
+test('ladder: a phrase never goes below rung 1 or above rung 5', () => {
+  let p = newProgress('P01', 1);
+  p = record(record(p, 'failure', '2026-10-01'), 'failure', '2026-10-01');
+  assert.equal(p.rung, 1);
+  let q = newProgress('P02', 5);
+  q = record(record(q, 'success', '2026-10-01'), 'success', '2026-10-02');
+  assert.equal(q.rung, 5);
+});
+
+test('dueForReview returns up to 5 phrases, most overdue first', () => {
+  const ps = ['a', 'b', 'c', 'd', 'e', 'f'].map((id, i) => ({ ...newProgress(id, 2), nextReview: `2026-10-0${i + 1}` }));
+  const due = dueForReview(ps, '2026-10-09');
+  assert.deepEqual(due.map((p) => p.phraseId), ['a', 'b', 'c', 'd', 'e']);
+});

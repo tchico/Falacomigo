@@ -1,0 +1,704 @@
+{
+  "generatedFrom": "docs/design.md",
+  "milestones": [
+    {
+      "title": "MVP",
+      "description": "Phase 1: the Must requirements (design doc §7)."
+    },
+    {
+      "title": "Phase 2 — The full trip",
+      "description": "All 8 units, map and album, sibling modes, parent dashboard."
+    },
+    {
+      "title": "Phase 3 — Conversation",
+      "description": "Free conversation, toddler mode and extras."
+    }
+  ],
+  "labels": [
+    {
+      "name": "area: accessibility",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: content",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: cost",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: gameplay",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: learning",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: maintainability",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: mission-to-dad",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: offline",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: parent-guide",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: parent-zone",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: performance",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: privacy",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: profiles",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: reliability",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: rewards",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: siblings",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: speech",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: usability",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "area: wellbeing",
+      "color": "FBF4E6"
+    },
+    {
+      "name": "functional",
+      "color": "7CC4B8"
+    },
+    {
+      "name": "non-functional",
+      "color": "B9C3D1"
+    },
+    {
+      "name": "priority: could",
+      "color": "E6DFD2"
+    },
+    {
+      "name": "priority: must",
+      "color": "B84A1A"
+    },
+    {
+      "name": "priority: should",
+      "color": "F2B632"
+    },
+    {
+      "name": "requirement",
+      "color": "2456A6"
+    },
+    {
+      "name": "started",
+      "color": "2E8B88"
+    }
+  ],
+  "issues": [
+    {
+      "id": "FR-01",
+      "title": "FR-01 · Profiles: Each child has their own profile with a name, avatar and age band (6 or 8). Each profil…",
+      "body": "**FR-01** · Profiles · Priority: **Must**\n\n> Each child has their own profile with a name, avatar and age band (6 or 8). Each profile keeps its own progress.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-01",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: profiles"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-02",
+      "title": "FR-02 · Profiles: A child can pick their profile in 2 taps or fewer, using the avatar alone, without read…",
+      "body": "**FR-02** · Profiles · Priority: **Must**\n\n> A child can pick their profile in 2 taps or fewer, using the avatar alone, without reading.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-02",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: profiles"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-03",
+      "title": "FR-03 · Gameplay: Every scene needs spoken input to move forward. There is no way through by tapping alone.",
+      "body": "**FR-03** · Gameplay · Priority: **Must**\n\n> Every scene needs spoken input to move forward. There is no way through by tapping alone.\n\n**Already started:** Scene screen only moves forward after a spoken turn (app/src/screens/SceneScreen.tsx).\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-03",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: gameplay",
+        "started"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-04",
+      "title": "FR-04 · Gameplay: Scenes are loaded from content packs. Each defines its characters, target phrases, acce…",
+      "body": "**FR-04** · Gameplay · Priority: **Must**\n\n> Scenes are loaded from content packs. Each defines its characters, target phrases, accepted versions, starting rung, pictures and audio.\n\n**Already started:** Unit 1 content pack and loader (content/units/unit-01.json, app/src/content). Pictures and audio still to add.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-04",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: gameplay",
+        "started"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-05",
+      "title": "FR-05 · Gameplay: Every target phrase has a model audio clip: Dad's recording if there is one, otherwise…",
+      "body": "**FR-05** · Gameplay · Priority: **Must**\n\n> Every target phrase has a model audio clip: Dad's recording if there is one, otherwise a pt-PT text-to-speech voice.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-05",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: gameplay"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-06",
+      "title": "FR-06 · Speech: Hold-to-talk mic button that shows clearly when it's listening. Recordings stop automat…",
+      "body": "**FR-06** · Speech · Priority: **Must**\n\n> Hold-to-talk mic button that shows clearly when it's listening. Recordings stop automatically after 6 seconds or on silence.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-06",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: speech"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-07",
+      "title": "FR-07 · Speech: Audio is transcribed as pt-PT with the expected phrase as a hint. The result is Got it,…",
+      "body": "**FR-07** · Speech · Priority: **Must**\n\n> Audio is transcribed as pt-PT with the expected phrase as a hint. The result is Got it, Nearly or Didn't catch it.\n\n**Already started:** Three-way result and matcher done (app/src/engine/match.ts). Real pt-PT recogniser still to add; the app uses a stub.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-07",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: speech",
+        "started"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-08",
+      "title": "FR-08 · Speech: Fuzzy matching against the accepted versions, with a strictness setting per age band (l…",
+      "body": "**FR-08** · Speech · Priority: **Must**\n\n> Fuzzy matching against the accepted versions, with a strictness setting per age band (looser for the 6-year-old).\n\n**Already started:** Fuzzy matcher with per-age strictness done and tested (app/src/engine/match.ts).\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-08",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: speech",
+        "started"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-09",
+      "title": "FR-09 · Speech: After 2 failed attempts the model phrase plays, and the 3rd attempt is accepted if any…",
+      "body": "**FR-09** · Speech · Priority: **Must**\n\n> After 2 failed attempts the model phrase plays, and the 3rd attempt is accepted if any speech is heard.\n\n**Already started:** Turn rules done and tested (app/src/engine/turn.ts).\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-09",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: speech",
+        "started"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-10",
+      "title": "FR-10 · Speech: On a Nearly result, the character repeats the correct form naturally (a recast) and the…",
+      "body": "**FR-10** · Speech · Priority: **Should**\n\n> On a Nearly result, the character repeats the correct form naturally (a recast) and the game carries on.\n\n**Already started:** Gui shows the recast after each turn (SceneScreen). Needs audio.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-10",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: should",
+        "area: speech",
+        "started"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "FR-11",
+      "title": "FR-11 · Speech: \"Como se diz?\" button: the child says a word in English and gets it back in Portuguese…",
+      "body": "**FR-11** · Speech · Priority: **Should**\n\n> \"Como se diz?\" button: the child says a word in English and gets it back in Portuguese from the unit's word list. It counts once they repeat it.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-11",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: should",
+        "area: speech"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "FR-12",
+      "title": "FR-12 · Speech: Parent override: a hidden long-press marks the current turn as \"I heard it\".",
+      "body": "**FR-12** · Speech · Priority: **Must**\n\n> Parent override: a hidden long-press marks the current turn as \"I heard it\".\n\n**Already started:** Long-press on Gui marks \"I heard it\" (SceneScreen).\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-12",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: speech",
+        "started"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-13",
+      "title": "FR-13 · Learning: For each child and phrase, store the rung, successes, failures, last-seen date and next…",
+      "body": "**FR-13** · Learning · Priority: **Must**\n\n> For each child and phrase, store the rung, successes, failures, last-seen date and next review date.\n\n**Already started:** Progress model done (app/src/engine/ladder.ts). Not yet saved to the device.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-13",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: learning",
+        "started"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-14",
+      "title": "FR-14 · Learning: Move a phrase up a rung after 2 successes on different days, and down one after 2 failu…",
+      "body": "**FR-14** · Learning · Priority: **Must**\n\n> Move a phrase up a rung after 2 successes on different days, and down one after 2 failures in a row. Review intervals: 1, 2, 4, 8, 16 days.\n\n**Already started:** Ladder and review intervals done and tested (app/src/engine/ladder.ts).\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-14",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: learning",
+        "started"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-15",
+      "title": "FR-15 · Learning: The warm-up includes up to 5 phrases that are due for review.",
+      "body": "**FR-15** · Learning · Priority: **Should**\n\n> The warm-up includes up to 5 phrases that are due for review.\n\n**Already started:** dueForReview() done (app/src/engine/ladder.ts). Warm-up screen still to build.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-15",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: should",
+        "area: learning",
+        "started"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "FR-16",
+      "title": "FR-16 · Learning: Sessions aim for 10–15 minutes and end gently (Gui gets sleepy), with no hard lock-out.",
+      "body": "**FR-16** · Learning · Priority: **Should**\n\n> Sessions aim for 10–15 minutes and end gently (Gui gets sleepy), with no hard lock-out.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-16",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: should",
+        "area: learning"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "FR-17",
+      "title": "FR-17 · Mission to Dad: Each episode ends with a mission built from the phrases just practised. The card shows…",
+      "body": "**FR-17** · Mission to Dad · Priority: **Must**\n\n> Each episode ends with a mission built from the phrases just practised. The card shows a picture and the phrase, and plays Dad's audio.\n\n**Already started:** Mission card screen done (app/src/screens/MissionScreen.tsx). Needs Dad's audio.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-17",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: mission-to-dad",
+        "started"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-18",
+      "title": "FR-18 · Mission to Dad: The parent approves a mission with 1–3 stars, behind a parent-only gate (PIN or a hold…",
+      "body": "**FR-18** · Mission to Dad · Priority: **Must**\n\n> The parent approves a mission with 1–3 stars, behind a parent-only gate (PIN or a hold gesture).\n\n**Already started:** Long-press stars done (MissionScreen). PIN option still to add.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-18",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: mission-to-dad",
+        "started"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-19",
+      "title": "FR-19 · Mission to Dad: Missions can be left for later and stay open for up to 48 hours. Several can be waiting…",
+      "body": "**FR-19** · Mission to Dad · Priority: **Should**\n\n> Missions can be left for later and stay open for up to 48 hours. Several can be waiting at once.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-19",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: should",
+        "area: mission-to-dad"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "FR-20",
+      "title": "FR-20 · Rewards: Coins for every spoken turn, and bonus coins for Dad's stars.",
+      "body": "**FR-20** · Rewards · Priority: **Must**\n\n> Coins for every spoken turn, and bonus coins for Dad's stars.\n\n**Already started:** Coins per turn and per star done (in memory).\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-20",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: rewards",
+        "started"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-21",
+      "title": "FR-21 · Rewards: Postcard album. Filling a stop's postcards unlocks the next stop on the map.",
+      "body": "**FR-21** · Rewards · Priority: **Should**\n\n> Postcard album. Filling a stop's postcards unlocks the next stop on the map.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-21",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: should",
+        "area: rewards"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "FR-22",
+      "title": "FR-22 · Rewards: Gui's shop, where buying things is done by saying the item in Portuguese.",
+      "body": "**FR-22** · Rewards · Priority: **Could**\n\n> Gui's shop, where buying things is done by saying the item in Portuguese.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-22",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: could",
+        "area: rewards"
+      ],
+      "milestone": "Phase 3 — Conversation"
+    },
+    {
+      "id": "FR-23",
+      "title": "FR-23 · Rewards: No streak penalties and no lost progress for missed days.",
+      "body": "**FR-23** · Rewards · Priority: **Must**\n\n> No streak penalties and no lost progress for missed days.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-23",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: rewards"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-24",
+      "title": "FR-24 · Siblings: Pass-the-tablet \"describe and guess\" game for the two older kids.",
+      "body": "**FR-24** · Siblings · Priority: **Should**\n\n> Pass-the-tablet \"describe and guess\" game for the two older kids.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-24",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: should",
+        "area: siblings"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "FR-25",
+      "title": "FR-25 · Siblings: Build a story together, one spoken sentence each.",
+      "body": "**FR-25** · Siblings · Priority: **Could**\n\n> Build a story together, one spoken sentence each.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-25",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: could",
+        "area: siblings"
+      ],
+      "milestone": "Phase 3 — Conversation"
+    },
+    {
+      "id": "FR-26",
+      "title": "FR-26 · Parent zone: Record, play back and re-record Dad's voice for any phrase in the content.",
+      "body": "**FR-26** · Parent zone · Priority: **Must**\n\n> Record, play back and re-record Dad's voice for any phrase in the content.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-26",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: parent-zone"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-27",
+      "title": "FR-27 · Parent zone: Dashboard for each child: phrases per rung, spoken turns per day, missions done, phrase…",
+      "body": "**FR-27** · Parent zone · Priority: **Should**\n\n> Dashboard for each child: phrases per rung, spoken turns per day, missions done, phrases they're struggling with.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-27",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: should",
+        "area: parent-zone"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "FR-28",
+      "title": "FR-28 · Parent zone: Edit accepted versions, and add custom phrases and names (siblings, grandparents, their…",
+      "body": "**FR-28** · Parent zone · Priority: **Should**\n\n> Edit accepted versions, and add custom phrases and names (siblings, grandparents, their village).\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-28",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: should",
+        "area: parent-zone"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "FR-29",
+      "title": "FR-29 · Parent zone: Settings for each child: text on or off, session length, and the \"listen back\" recordin…",
+      "body": "**FR-29** · Parent zone · Priority: **Should**\n\n> Settings for each child: text on or off, session length, and the \"listen back\" recording option.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-29",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: should",
+        "area: parent-zone"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "FR-30",
+      "title": "FR-30 · Content: The MVP ships Units 1–2 with about 30 phrases. The full plan is 8 units.",
+      "body": "**FR-30** · Content · Priority: **Must**\n\n> The MVP ships Units 1–2 with about 30 phrases. The full plan is 8 units.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-30",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: content"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-31",
+      "title": "FR-31 · Content: Free conversation with a character, run by a language model with tight guardrails.",
+      "body": "**FR-31** · Content · Priority: **Could**\n\n> Free conversation with a character, run by a language model with tight guardrails.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-31",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: could",
+        "area: content"
+      ],
+      "milestone": "Phase 3 — Conversation"
+    },
+    {
+      "id": "FR-32",
+      "title": "FR-32 · Content: Toddler mode for the 2-year-old: listen, point and copy sounds.",
+      "body": "**FR-32** · Content · Priority: **Could**\n\n> Toddler mode for the 2-year-old: listen, point and copy sounds.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-32",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: could",
+        "area: content"
+      ],
+      "milestone": "Phase 3 — Conversation"
+    },
+    {
+      "id": "FR-33",
+      "title": "FR-33 · Parent guide: A Guide section in the parent zone with 8 short cards. Each card has a title, 100–200 w…",
+      "body": "**FR-33** · Parent guide · Priority: **Must**\n\n> A Guide section in the parent zone with 8 short cards. Each card has a title, 100–200 words and a \"Try this week\" action. It works offline.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-33",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: parent-guide"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-34",
+      "title": "FR-34 · Parent guide: A \"Tip of the week\" on the parent Overview screen that shows one card and moves to the…",
+      "body": "**FR-34** · Parent guide · Priority: **Should**\n\n> A \"Tip of the week\" on the parent Overview screen that shows one card and moves to the next each week.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-34",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: should",
+        "area: parent-guide"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "FR-35",
+      "title": "FR-35 · Parent guide: Each card shows numbered references. Tapping one opens the source in the browser, behin…",
+      "body": "**FR-35** · Parent guide · Priority: **Must**\n\n> Each card shows numbered references. Tapping one opens the source in the browser, behind the parental gate. Cards are labelled \"Research\" or \"Practical advice\".\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-35",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: must",
+        "area: parent-guide"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "FR-36",
+      "title": "FR-36 · Parent guide: Guide text and sources are stored as content files, like the units, so they can be edit…",
+      "body": "**FR-36** · Parent guide · Priority: **Should**\n\n> Guide text and sources are stored as content files, like the units, so they can be edited without changing code.\n\n**Already started:** content/guide.json is generated from docs/parent-guide.md (tools/build-guide.mjs).\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-36",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: should",
+        "area: parent-guide",
+        "started"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "FR-37",
+      "title": "FR-37 · Parent guide: The weekly plan in card 5 can be ticked off week by week, and appears next to the unpro…",
+      "body": "**FR-37** · Parent guide · Priority: **Could**\n\n> The weekly plan in card 5 can be ticked off week by week, and appears next to the unprompted-Portuguese counter.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-37",
+      "labels": [
+        "requirement",
+        "functional",
+        "priority: could",
+        "area: parent-guide"
+      ],
+      "milestone": "Phase 3 — Conversation"
+    },
+    {
+      "id": "NFR-01",
+      "title": "NFR-01 · Performance: Speech results come back within 2 seconds for 90% of turns on home Wi-Fi.",
+      "body": "**NFR-01** · Performance · Priority: **Must**\n\n> Speech results come back within 2 seconds for 90% of turns on home Wi-Fi.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement NFR-01",
+      "labels": [
+        "requirement",
+        "non-functional",
+        "priority: must",
+        "area: performance"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "NFR-02",
+      "title": "NFR-02 · Offline: Everything except speech recognition works offline. With no connection, speaking turns…",
+      "body": "**NFR-02** · Offline · Priority: **Must**\n\n> Everything except speech recognition works offline. With no connection, speaking turns fall back to \"any voice for 1 second or more counts\" plus the parent override.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement NFR-02",
+      "labels": [
+        "requirement",
+        "non-functional",
+        "priority: must",
+        "area: offline"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "NFR-03",
+      "title": "NFR-03 · Usability: A 6-year-old can play without reading: every instruction is spoken and shown with an icon.",
+      "body": "**NFR-03** · Usability · Priority: **Must**\n\n> A 6-year-old can play without reading: every instruction is spoken and shown with an icon.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement NFR-03",
+      "labels": [
+        "requirement",
+        "non-functional",
+        "priority: must",
+        "area: usability"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "NFR-04",
+      "title": "NFR-04 · Usability: Touch targets of at least 60 pt. Runs on current iPads and Android tablets in landscape.",
+      "body": "**NFR-04** · Usability · Priority: **Must**\n\n> Touch targets of at least 60 pt. Runs on current iPads and Android tablets in landscape.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement NFR-04",
+      "labels": [
+        "requirement",
+        "non-functional",
+        "priority: must",
+        "area: usability"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "NFR-05",
+      "title": "NFR-05 · Privacy: Audio isn't kept by the speech service or the proxy. No accounts, ads, tracking or in-a…",
+      "body": "**NFR-05** · Privacy · Priority: **Must**\n\n> Audio isn't kept by the speech service or the proxy. No accounts, ads, tracking or in-app purchases. Meets GDPR for children's data.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement NFR-05",
+      "labels": [
+        "requirement",
+        "non-functional",
+        "priority: must",
+        "area: privacy"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "NFR-06",
+      "title": "NFR-06 · Cost: Cloud costs stay under about €5 a month for two kids at 15 minutes a day. The proxy cap…",
+      "body": "**NFR-06** · Cost · Priority: **Should**\n\n> Cloud costs stay under about €5 a month for two kids at 15 minutes a day. The proxy caps daily usage.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement NFR-06",
+      "labels": [
+        "requirement",
+        "non-functional",
+        "priority: should",
+        "area: cost"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    },
+    {
+      "id": "NFR-07",
+      "title": "NFR-07 · Maintainability: Content (phrases, scenes, missions) is plain JSON plus audio files and can be changed w…",
+      "body": "**NFR-07** · Maintainability · Priority: **Must**\n\n> Content (phrases, scenes, missions) is plain JSON plus audio files and can be changed without code changes.\n\n**Already started:** Content is plain JSON outside the app code, validated by tests in CI.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement NFR-07",
+      "labels": [
+        "requirement",
+        "non-functional",
+        "priority: must",
+        "area: maintainability",
+        "started"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "NFR-08",
+      "title": "NFR-08 · Reliability: Progress is saved after every turn. Closing the app never loses more than the current t…",
+      "body": "**NFR-08** · Reliability · Priority: **Must**\n\n> Progress is saved after every turn. Closing the app never loses more than the current turn.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement NFR-08",
+      "labels": [
+        "requirement",
+        "non-functional",
+        "priority: must",
+        "area: reliability"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "NFR-09",
+      "title": "NFR-09 · Wellbeing: Calm visuals with no flashing, no countdown timers, and no loot boxes or other manipula…",
+      "body": "**NFR-09** · Wellbeing · Priority: **Must**\n\n> Calm visuals with no flashing, no countdown timers, and no loot boxes or other manipulative mechanics.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement NFR-09",
+      "labels": [
+        "requirement",
+        "non-functional",
+        "priority: must",
+        "area: wellbeing"
+      ],
+      "milestone": "MVP"
+    },
+    {
+      "id": "NFR-10",
+      "title": "NFR-10 · Accessibility: Separate volume controls for voice and music, and optional subtitles.",
+      "body": "**NFR-10** · Accessibility · Priority: **Should**\n\n> Separate volume controls for voice and music, and optional subtitles.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement NFR-10",
+      "labels": [
+        "requirement",
+        "non-functional",
+        "priority: should",
+        "area: accessibility"
+      ],
+      "milestone": "Phase 2 — The full trip"
+    }
+  ]
+}
