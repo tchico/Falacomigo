@@ -30,10 +30,24 @@ test('localDay uses the local calendar date', () => {
   assert.equal(localDay(new Date(2026, 0, 5, 23, 30)), '2026-01-05');
 });
 
+const mission = (id: string, targets: string[], bonus = false) => ({ id, bonus, targets: { '6': targets, '8': targets } });
+
 test('episode: missions go in order and then come round again', () => {
-  const u = { missions: [{ id: 'M1' }, { id: 'M2' }] } as unknown as Unit;
-  assert.equal(nextMission(u, []).id, 'M1');
-  assert.equal(nextMission(u, ['M1']).id, 'M2');
-  assert.equal(nextMission(u, ['M1', 'M2']).id, 'M1');
-  assert.equal(nextMission(u, ['M1', 'M2', 'M1']).id, 'M2');
+  const u = { missions: [mission('M1', []), mission('M2', [])] } as unknown as Unit;
+  assert.equal(nextMission(u, [], 8).id, 'M1');
+  assert.equal(nextMission(u, ['M1'], 8).id, 'M2');
+  assert.equal(nextMission(u, ['M1', 'M2'], 8).id, 'M1');
+  assert.equal(nextMission(u, ['M1', 'M2', 'M1'], 8).id, 'M2');
+});
+
+test('episode: the mission uses the phrases just practised (FR-17)', () => {
+  const u = { missions: [mission('M1', ['P01']), mission('M2', ['P02']), mission('M3', ['P07', 'P05'])] } as unknown as Unit;
+  assert.equal(nextMission(u, [], 8, ['P07']).id, 'M3');
+  assert.equal(nextMission(u, ['M3'], 8, ['P07']).id, 'M1', 'no overlap left, so the unit order decides');
+});
+
+test('episode: bonus missions wait until the others have been given', () => {
+  const u = { missions: [mission('M1', ['P01']), mission('M7', ['P01', 'P10'], true)] } as unknown as Unit;
+  assert.equal(nextMission(u, [], 8, ['P01', 'P10']).id, 'M1');
+  assert.equal(nextMission(u, ['M1'], 8, ['P01', 'P10']).id, 'M7');
 });

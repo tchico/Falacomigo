@@ -2,7 +2,7 @@
 // Scenes are played in order through each unit. A unit's scenes all played once opens the next unit.
 // Once everything has been played, the scene played least recently comes back as a replay.
 
-import type { Unit } from '../content/types';
+import type { AgeBand, Unit } from '../content/types';
 
 export interface PlayedScene {
   unitId: string;
@@ -36,10 +36,18 @@ export function localDay(d: Date = new Date()): string {
 }
 
 /**
- * The Mission to Dad that ends this episode (FR-17): the unit's missions in order, starting with the first one
- * this child hasn't had yet. Once all have been given they come round again.
+ * The Mission to Dad that ends this episode (FR-17): the one that uses the most phrases the child just practised,
+ * among those they haven't had yet, in the unit's order when it's a tie. Bonus missions only come once the others
+ * have all been given. When every mission has been given, they come round again.
  */
-export function nextMission(unit: Unit, givenMissionIds: string[]): Unit['missions'][number] {
-  const fresh = unit.missions.find((m) => !givenMissionIds.includes(m.id));
-  return fresh ?? unit.missions[givenMissionIds.length % unit.missions.length];
+export function nextMission(unit: Unit, givenMissionIds: string[], age: AgeBand, practised: string[] = []): Unit['missions'][number] {
+  const key = String(age) as '6' | '8';
+  const overlap = (m: Unit['missions'][number]) => m.targets[key].filter((id) => practised.includes(id)).length;
+  const pick = (ms: Unit['missions']) => ms.reduce((best, m) => (overlap(m) > overlap(best) ? m : best));
+
+  const fresh = unit.missions.filter((m) => !givenMissionIds.includes(m.id));
+  const regular = fresh.filter((m) => !m.bonus);
+  if (regular.length) return pick(regular);
+  if (fresh.length) return pick(fresh);
+  return unit.missions[givenMissionIds.length % unit.missions.length];
 }

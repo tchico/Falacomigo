@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { getUnit, units } from './src/content';
@@ -31,6 +31,8 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'loading' });
   const [coins, setCoins] = useState(0);
   const [progress, setProgress] = useState<Record<string, PhraseProgress>>({});
+  /** Phrases said in this episode, for picking the mission (FR-17). */
+  const practised = useRef<string[]>([]);
 
   const refreshProfiles = useCallback(async (s: Store) => {
     const ps = await s.listProfiles();
@@ -62,12 +64,14 @@ export default function App() {
     setProgress(prog);
     setCoins(wallet);
     const next = nextScene(units, played);
+    practised.current = [];
     setScreen({ name: 'scene', unitId: next.unitId, sceneId: next.sceneId });
   };
 
   const onTurn = (unitId: string, sceneId: string) => (t: TurnLog) => {
     if (!store || !child) return;
     setCoins((c) => c + COINS_PER_TURN);
+    practised.current.push(t.phraseId);
     store
       .recordTurn({ childId: child.id, unitId, sceneId, beatId: t.beatId, phraseId: t.phraseId, startRung: t.startRung, outcome: t.outcome, day: localDay(), coins: COINS_PER_TURN })
       .then((updated) => setProgress((prev) => ({ ...prev, [updated.phraseId]: updated })))
@@ -79,7 +83,7 @@ export default function App() {
     await store.finishScene(child.id, unitId, sceneId, localDay());
     const unit = getUnit(unitId);
     const given = await store.missionsGiven(child.id, unitId);
-    const mission = nextMission(unit, given.map((m) => m.missionId));
+    const mission = nextMission(unit, given.map((m) => m.missionId), child.age, practised.current);
     const row = await store.createMission(child.id, unitId, mission.id);
     setScreen({ name: 'mission', unitId, mission, rowId: row.id });
   };
@@ -122,15 +126,17 @@ export default function App() {
 
       {screen.name === 'mission' && child && (
         <MissionScreen
+          unitId={screen.unitId}
           mission={screen.mission}
           child={child}
-          onDone={async (stars) => {
-            if (store && stars > 0) {
+          onApproved={async (stars) => {
+            if (store) {
               await store.approveMission(screen.rowId, stars, coinsForStars(stars));
               setCoins(await store.getCoins(child.id));
             }
             setScreen({ name: 'done' });
           }}
+          onLater={() => setScreen({ name: 'done' })}
         />
       )}
 
