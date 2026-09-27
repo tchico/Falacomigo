@@ -1,35 +1,64 @@
+import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import type { ChildProfile } from '../content/types';
+import { sayAsGui } from '../audio/voice';
+import type { StoredProfile } from '../store/store';
+import { avatarFor } from '../ui/avatars';
 import { Gui } from '../ui/Gui';
-import { colors, radius } from '../ui/theme';
+import { HoldButton } from '../ui/HoldButton';
+import { colors, radius, TOUCH } from '../ui/theme';
 
-const AVATAR_COLORS = [colors.sun, '#7CC4B8'];
+interface Props {
+  profiles: StoredProfile[];
+  /** Small line under each name, e.g. "Paragem 1". */
+  details?: Record<string, string>;
+  onPick: (p: StoredProfile) => void;
+  onParent: () => void;
+}
 
-/** FR-01, FR-02: each child picks their own avatar, no reading needed. */
-export function ProfilePicker({ profiles, onPick }: { profiles: ChildProfile[]; onPick: (p: ChildProfile) => void }) {
+export const PARENT_HOLD_MS = 3000;
+
+/** FR-01, FR-02: each child taps their own animal, one tap and no reading needed. */
+export function ProfilePicker({ profiles, details = {}, onPick, onParent }: Props) {
+  // Spoken, so a child who can't read yet knows what to do (NFR-03).
+  useEffect(() => void sayAsGui('Olá! Anda cá! Quem vai jogar?'), []);
+
   return (
     <View style={styles.screen}>
       <Text style={styles.brand}>Fala Comigo</Text>
       <Text style={styles.title}>Quem vai jogar?</Text>
       <Text style={styles.subtitle}>Who's playing?</Text>
       <View style={styles.row}>
-        {profiles.map((p, i) => (
-          <Pressable
-            key={p.id}
-            accessibilityRole="button"
-            accessibilityLabel={`${p.name}, ${p.age}`}
-            onPress={() => onPick(p)}
-            style={({ pressed }) => [styles.card, pressed && { transform: [{ translateY: 4 }] }]}
-          >
-            <View style={[styles.avatar, { backgroundColor: AVATAR_COLORS[i % AVATAR_COLORS.length] }]}>
-              <Text style={styles.initial}>{p.name.slice(0, 1)}</Text>
-            </View>
-            <Text style={styles.name}>{p.name}</Text>
-            <Text style={styles.age}>{p.age} anos</Text>
-          </Pressable>
-        ))}
-        <Gui size={200} happy />
+        {profiles.map((p) => {
+          const avatar = avatarFor(p.avatar);
+          return (
+            <Pressable
+              key={p.id}
+              accessibilityRole="button"
+              accessibilityLabel={`${p.name}, ${p.age}`}
+              onPress={() => onPick(p)}
+              style={({ pressed }) => [styles.card, pressed && { transform: [{ translateY: 4 }] }]}
+            >
+              <View style={[styles.avatar, { backgroundColor: avatar.color }]}>
+                <Text style={styles.emoji}>{avatar.emoji}</Text>
+              </View>
+              <Text style={styles.name}>{p.name}</Text>
+              <Text style={styles.age}>
+                {p.age} anos{details[p.id] ? ` · ${details[p.id]}` : ''}
+              </Text>
+            </Pressable>
+          );
+        })}
+        <View style={styles.gui}>
+          <View style={styles.guiBubble}>
+            <Text style={styles.guiBubbleText}>Olá! Anda cá!</Text>
+          </View>
+          <Gui size={200} happy />
+        </View>
       </View>
+      {/* The parental gate (design doc §5): hold for 3 seconds. */}
+      <HoldButton holdMs={PARENT_HOLD_MS} onHeld={onParent} accessibilityLabel="Parent zone" style={styles.parent}>
+        <Text style={styles.parentText}>🔒 Pai</Text>
+      </HoldButton>
     </View>
   );
 }
@@ -50,8 +79,26 @@ const styles = StyleSheet.create({
     borderColor: colors.ink,
     borderRadius: radius.lg,
   },
+  gui: { alignItems: 'center', gap: 4 },
+  guiBubble: { backgroundColor: colors.white, borderWidth: 3, borderColor: colors.ink, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 8 },
+  guiBubbleText: { fontSize: 20, fontWeight: '900', color: colors.ink },
   avatar: { width: 120, height: 120, borderRadius: 60, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
-  initial: { fontSize: 56, fontWeight: '900', color: colors.ink },
+  emoji: { fontSize: 64 },
   name: { fontSize: 28, fontWeight: '800', color: colors.ink },
   age: { fontSize: 16, fontWeight: '800', color: colors.inkSoft },
+  parent: {
+    position: 'absolute',
+    right: 32,
+    bottom: 28,
+    minHeight: TOUCH,
+    minWidth: 110,
+    paddingHorizontal: 20,
+    borderRadius: radius.pill,
+    borderWidth: 3,
+    borderColor: colors.ink,
+    backgroundColor: colors.cream,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  parentText: { fontSize: 20, fontWeight: '800', color: colors.ink },
 });

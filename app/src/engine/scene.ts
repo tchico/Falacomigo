@@ -1,7 +1,7 @@
 // Builds a playable scene for one child: filters beats by age and fills in their name, age and sibling.
 
 import type { AgeBand, Beat, ChildProfile, Phrase, Unit } from '../content/types';
-import { fill } from './template';
+import { fill, fillEn } from './template';
 import type { MatchTarget } from './match';
 
 export interface PlayableBeat {
@@ -13,8 +13,12 @@ export interface PlayableBeat {
   phrase: Phrase | null;
   /** The phrase as the child should say it, e.g. "Chamo-me Ana." */
   modelText: string | null;
+  /** True when the beat has its own model line, so Dad's clip for the phrase doesn't fit it. */
+  ownModel: boolean;
   target: MatchTarget | null;
   recast: string | null;
+  /** Picture name from the content, e.g. "food:bread-soup-fish". */
+  image?: string;
   cliffhanger: boolean;
 }
 
@@ -32,13 +36,15 @@ export function buildScene(unit: Unit, sceneId: string, child: ChildProfile): Pl
       id: b.id,
       speaker: b.say.speaker,
       line: f(b.say.text),
-      lineEn: b.say.en ? f(b.say.en) : undefined,
+      lineEn: b.say.en ? fillEn(b.say.en, child) : undefined,
       phrase,
-      modelText: phrase ? f(firstOption(phrase.text)) : null,
+      modelText: phrase ? f(b.model ?? firstOption(phrase.text)) : null,
+      ownModel: !!b.model,
       target: phrase
         ? { accept: (b.accept ?? phrase.accept).map(f), keywords: (b.keywords ?? phrase.keywords).map(f) }
         : null,
       recast: b.recast ? f(b.recast) : null,
+      image: b.image,
       cliffhanger: !!b.cliffhanger,
     };
   });

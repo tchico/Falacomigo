@@ -1,4 +1,4 @@
-import type { RecognitionRequest, RecognitionResult, SpeechRecognizer } from './types';
+import type { Listening, RecognitionResult, SpeechRecognizer } from './types';
 
 /**
  * A stand-in recogniser for development. Whoever is testing picks what the "child" said
@@ -6,15 +6,20 @@ import type { RecognitionRequest, RecognitionResult, SpeechRecognizer } from './
  */
 export class StubRecognizer implements SpeechRecognizer {
   readonly name = 'stub';
-  private next: RecognitionResult = { transcript: '', durationMs: 0 };
+  private next: RecognitionResult = { transcript: '', voicedMs: 0 };
 
-  /** Set what the next recognise() call returns. */
-  willHear(transcript: string, durationMs = transcript ? 1500 : 300) {
-    this.next = { transcript, durationMs };
+  /** Set what the next listen() hears. */
+  willHear(transcript: string, voicedMs = transcript ? 1500 : 300) {
+    this.next = { transcript, voicedMs };
   }
 
-  async recognize(_request: RecognitionRequest): Promise<RecognitionResult> {
-    await new Promise((r) => setTimeout(r, 250));
-    return this.next;
+  listen(): Listening {
+    const heard = this.next;
+    let release!: () => void;
+    const released = new Promise<void>((r) => (release = r));
+    return {
+      release,
+      result: released.then(() => new Promise<RecognitionResult>((r) => setTimeout(() => r(heard), 250))),
+    };
   }
 }

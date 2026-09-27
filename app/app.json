@@ -22,6 +22,16 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-sqlite",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Fala Comigo listens while you hold the microphone button, so Gui can hear your Portuguese.",
+          "enableBackgroundPlayback": false
+        }
+      ]
+    ]
   }
 }

@@ -44,12 +44,17 @@ for (const unit of units) {
       for (const s of unit.scenes) {
         for (const beat of buildScene(unit, s.id, child)) {
           if (!beat.target || !beat.modelText) continue;
-          // Beats with their own accept list (e.g. "o pai") are checked against their first accepted version.
-          const said = s.beats.find((b) => b.id === beat.id)?.accept ? beat.target.accept[0] : beat.modelText;
+          const said = beat.modelText;
           const result = matchAttempt(said, beat.target, child.age as AgeBand);
           assert.equal(result, 'got-it', `${s.id}/${beat.id} for age ${child.age}: "${said}" gave ${result}`);
         }
       }
+    }
+  });
+
+  test(`${unit.id}: every speaker is Gui or one of the unit's characters`, () => {
+    for (const s of unit.scenes) for (const b of s.beats) {
+      assert.ok(b.say.speaker === 'gui' || unit.characters?.[b.say.speaker], `${s.id}/${b.id}: unknown speaker ${b.say.speaker}`);
     }
   });
 
@@ -59,6 +64,17 @@ for (const unit of units) {
     }
   });
 }
+
+test('content: phrase ids are unique across units, so progress can be keyed by phrase', () => {
+  const all = units.flatMap((u) => u.phrases.map((p) => p.id));
+  assert.equal(new Set(all).size, all.length);
+});
+
+test('content: the MVP has Units 1 and 2 with about 30 phrases (FR-30)', () => {
+  assert.deepEqual(units.map((u) => u.id).slice(0, 2), ['unit-01', 'unit-02']);
+  const n = units.slice(0, 2).reduce((sum, u) => sum + u.phrases.length, 0);
+  assert.ok(n >= 25 && n <= 35, `${n} phrases`);
+});
 
 test('guide: 8 cards, each with a try-this-week line and valid references', () => {
   assert.equal(guide.cards.length, 8);

@@ -28,6 +28,8 @@ export interface Beat {
   say: Line;
   /** Phrase the child should say, or null for a story beat. */
   expect: string | null;
+  /** What the child should say here, when it differs from the phrase text. */
+  model?: string;
   accept?: string[];
   keywords?: string[];
   recast?: string;
@@ -56,12 +58,23 @@ export interface Mission {
   when: string;
 }
 
+export interface Character {
+  name: string;
+  role?: string;
+  roleEn?: string;
+  /** Stand-in picture until there's an illustration. */
+  emoji: string;
+  color?: string;
+}
+
 export interface Unit {
   id: string;
   unit: number;
   title: string;
   titleEn?: string;
   stop: { id: string; name: string; nameEn?: string };
+  /** Local characters by speaker id. Gui ("gui") is always there and isn't listed. */
+  characters?: Record<string, Character>;
   phrases: Phrase[];
   vocab?: { pt: string; en: string }[];
   warmup?: string[];

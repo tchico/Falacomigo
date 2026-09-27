@@ -2,7 +2,7 @@
 // A phrase moves up one rung after 2 successes on different days, and down one after 2 failures in a row.
 // Review intervals grow 1, 2, 4, 8, 16 days with each success and reset after a failure.
 
-import type { Rung } from '../content/types';
+import type { AgeBand, Rung } from '../content/types';
 
 export const REVIEW_INTERVALS_DAYS = [1, 2, 4, 8, 16] as const;
 
@@ -34,6 +34,14 @@ export function newProgress(phraseId: string, startRung: number): PhraseProgress
     lastSeen: null,
     nextReview: null,
   };
+}
+
+/**
+ * Where a phrase starts for this child. Content gives the rung for the 8-year-old; the 6-year-old starts one lower
+ * (design doc §4: rungs 1–2 for the 6-year-old, 2–3 for the 8-year-old).
+ */
+export function startRungFor(startRung: number, age: AgeBand): Rung {
+  return clampRung(age === 6 ? startRung - 1 : startRung);
 }
 
 export function addDays(day: string, n: number): string {

@@ -4,7 +4,7 @@ Design document · exported from the living doc on 2026-09-27
 
 Fala Comigo ("Talk to me") is a tablet game that gets an 8- and a 6-year-old saying European Portuguese out loud. Talking is the only way forward in the game, and Dad, their native-speaking parent, is part of how it's played.
 
-Related documents: [Unit 1 content](unit-1.md) · [Parent guide](parent-guide.md)
+Related documents: [Unit 1 content](unit-1.md) · [Unit 2 content](unit-2.md) · [Parent guide](parent-guide.md)
 
 ## 1. Concept
 

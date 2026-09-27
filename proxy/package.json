@@ -1,0 +1,15 @@
+{
+  "name": "fala-comigo-speech-proxy",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "deploy": "npx wrangler@4 deploy"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3"
+  }
+}
