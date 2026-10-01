@@ -3,9 +3,9 @@
 
 import * as Speech from 'expo-speech';
 import { createAudioPlayer, setAudioModeAsync } from 'expo-audio';
-import { File, Paths } from 'expo-file-system';
 import { bundledClips } from '../content/audioClips';
 import { pickSource, type ClipSource } from './clips';
+import { recordingUri } from './recordings';
 
 let ptVoice: string | undefined;
 let ready: Promise<void> | null = null;
@@ -27,21 +27,7 @@ export function initVoice(): Promise<void> {
   return ready;
 }
 
-/** Dad's in-app recordings live in the app's documents folder, keyed like the bundled clips. */
-export function recordingFile(key: string): File {
-  return new File(Paths.document, 'recordings', ...key.split('/'));
-}
-
-const recordedUri = (key: string): string | null => {
-  try {
-    const f = recordingFile(key);
-    return f.exists ? f.uri : null;
-  } catch {
-    return null;
-  }
-};
-
-export const sourceFor = (key: string, text: string): ClipSource => pickSource(key, text, { recorded: recordedUri, bundled: bundledClips });
+export const sourceFor = (key: string, text: string): ClipSource => pickSource(key, text, { recorded: recordingUri, bundled: bundledClips });
 
 export async function stop(): Promise<void> {
   finishCurrent?.();
