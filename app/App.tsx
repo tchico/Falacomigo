@@ -9,6 +9,7 @@ import { COINS_PER_TURN, coinsForStars } from './src/engine/rewards';
 import { createRecognizer } from './src/speech';
 import { openStore } from './src/store/open';
 import { initVoice, sayAsGui } from './src/audio/voice';
+import { initRecordings } from './src/audio/recordings';
 import { toChildProfile, type Store, type StoredProfile } from './src/store/store';
 import { ProfilePicker } from './src/screens/ProfilePicker';
 import { ParentZone } from './src/parent/ParentZone';
@@ -52,7 +53,8 @@ export default function App() {
 
   useEffect(() => {
     void initVoice();
-    openStore()
+    Promise.all([openStore(), initRecordings()])
+      .then(([s]) => s)
       .then(async (s) => {
         setStore(s);
         await refreshProfiles(s);

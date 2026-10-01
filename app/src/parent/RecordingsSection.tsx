@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { RecordingPresets, requestRecordingPermissionsAsync, useAudioRecorder } from 'expo-audio';
 import type { ChildProfile, Unit } from '../content/types';
-import { deleteRecording, hasRecording, saveRecording } from '../audio/recordings';
-import { play, recordingFile, stop } from '../audio/voice';
+import { deleteRecording, hasRecording, recordingUri, saveRecording } from '../audio/recordings';
+import { play, stop } from '../audio/voice';
 import { colors } from '../ui/theme';
 import { recordingList } from './recordings';
 import { Panel, SmallButton, styles as ui } from './ui';
@@ -38,7 +38,7 @@ export function RecordingsSection({ units, kids }: { units: Unit[]; kids: ChildP
     try {
       await recorder.stop();
       if (recorder.uri) {
-        saveRecording(key, recorder.uri);
+        await saveRecording(key, recorder.uri);
         setDone((d) => new Set(d).add(key));
       }
     } catch (e) {
@@ -62,8 +62,8 @@ export function RecordingsSection({ units, kids }: { units: Unit[]; kids: ChildP
     autoStop.current = setTimeout(() => void finish(key), MAX_TAKE_MS);
   };
 
-  const remove = (key: string) => {
-    deleteRecording(key);
+  const remove = async (key: string) => {
+    await deleteRecording(key);
     setDone((d) => {
       const next = new Set(d);
       next.delete(key);
@@ -106,9 +106,12 @@ export function RecordingsSection({ units, kids }: { units: Unit[]; kids: ChildP
                 label="▶ Play"
                 kind="plain"
                 disabled={!has || isRecording}
-                onPress={() => void play({ kind: 'recording', uri: recordingFile(item.key).uri })}
+                onPress={() => {
+                  const uri = recordingUri(item.key);
+                  if (uri) void play({ kind: 'recording', uri });
+                }}
               />
-              <SmallButton label="Delete" kind="plain" disabled={!has || isRecording} onPress={() => remove(item.key)} accessibilityLabel={`Delete recording of ${item.text}`} />
+              <SmallButton label="Delete" kind="plain" disabled={!has || isRecording} onPress={() => void remove(item.key)} accessibilityLabel={`Delete recording of ${item.text}`} />
             </Panel>
           );
         }}
