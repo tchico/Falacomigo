@@ -26,8 +26,17 @@ export interface Deps {
   now: () => Date;
 }
 
+// Browsers (the web build used for testing) only allow the request if the proxy says so. The tablet app ignores these.
+// Any origin is allowed: the app key is what guards the proxy, and the daily cap limits any misuse.
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, X-App-Key',
+  'Access-Control-Max-Age': '86400',
+};
+
 const json = (status: number, body: unknown) =>
-  new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
+  new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', ...CORS } });
 
 function sameKey(a: string, b: string): boolean {
   if (!a || !b || a.length !== b.length) return false;
@@ -86,6 +95,7 @@ async function underDailyLimit(env: Env, day: string): Promise<boolean> {
 
 export async function handle(request: Request, env: Env, deps: Deps): Promise<Response> {
   const path = new URL(request.url).pathname;
+  if (request.method === 'OPTIONS' && path === '/recognize') return new Response(null, { status: 204, headers: CORS });
   if (request.method !== 'POST' || path !== '/recognize') return json(404, { error: 'not found' });
   if (!sameKey(request.headers.get('X-App-Key') ?? '', env.APP_KEY)) return json(401, { error: 'unauthorised' });
 

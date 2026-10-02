@@ -66,3 +66,19 @@ test('cloud: a slow proxy counts as offline', async () => {
   const r = new CloudRecognizer({ url: 'https://proxy', appKey: 'k', timeoutMs: 30 }, fakeMic([...Array(5)].map(loud).concat([...Array(12)].map(quiet))), fetchFn);
   assert.equal((await r.listen(request).result).offline, true);
 });
+
+test('cloud: the default fetch works when called detached, as browsers require', async () => {
+  const realFetch = globalThis.fetch;
+  let thisArg: unknown = 'unset';
+  globalThis.fetch = (function (this: unknown) {
+    thisArg = this;
+    return Promise.resolve(new Response(JSON.stringify({ transcript: 'ola' })));
+  }) as unknown as typeof fetch;
+  try {
+    const r = new CloudRecognizer({ url: 'https://proxy', appKey: 'k' }, fakeMic([...Array(5)].map(loud).concat([...Array(12)].map(quiet))));
+    assert.equal((await r.listen(request).result).transcript, 'ola');
+    assert.notEqual(thisArg, r, 'fetch must not be called with the recogniser as this');
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+});
