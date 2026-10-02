@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Animated, Easing, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { ChildProfile, Unit } from '../content/types';
 import { buildScene } from '../engine/scene';
 import { matchAttempt } from '../engine/match';
@@ -8,10 +8,15 @@ import { startRungFor, type Outcome, type PhraseProgress } from '../engine/ladde
 import type { Listening, RecognitionResult, SpeechRecognizer } from '../speech/types';
 import { MAX_LISTEN_MS } from '../speech/pcm';
 import { clipKey, phraseClipFile } from '../audio/clips';
-import { play, sayAs, sayAsGui, sourceFor, stop } from '../audio/voice';
+import { play, sayAs, sourceFor, stop } from '../audio/voice';
+import { COINS_PER_TURN } from '../engine/rewards';
 import { StubRecognizer } from '../speech/stub';
 import { BigButton } from '../ui/BigButton';
 import { Gui } from '../ui/Gui';
+import { BackButton } from '../ui/BackButton';
+import { Character } from '../ui/Character';
+import { placeFor, Scenery, Trampoline } from '../ui/Scenery';
+import { useNative } from '../ui/motion';
 import { pictureFor } from '../ui/pictures';
 import { colors, radius } from '../ui/theme';
 
@@ -34,13 +39,15 @@ interface Props {
   /** Called as soon as each spoken turn ends, so it can be saved straight away (NFR-08). */
   onTurn: (t: TurnLog) => void;
   onFinished: () => void;
+  /** Back to the profile screen. */
+  onExit: () => void;
 }
 
 /**
  * One scene, beat by beat (FR-03: speaking is the only way forward).
  * With the stub recogniser, a developer panel at the bottom stands in for the microphone.
  */
-export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn, onFinished }: Props) {
+export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn, onFinished, onExit }: Props) {
   const beats = useMemo(() => buildScene(unit, sceneId, child), [unit, sceneId, child]);
   const [index, setIndex] = useState(0);
   const [turn, setTurn] = useState<TurnState>(newTurn());
@@ -50,6 +57,26 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
   const holding = useRef(false);
   /** Development builds only: what the recogniser returned, to diagnose recognition problems. */
   const [devHeard, setDevHeard] = useState<string | null>(null);
+  /** Who is speaking right now, so their mouth moves. */
+  const [talker, setTalker] = useState<string | null>(null);
+  const talk = async (speaker: string, text: string) => {
+    setTalker(speaker);
+    try {
+      await sayAs(speaker, text);
+    } finally {
+      setTalker((t) => (t === speaker ? null : t));
+    }
+  };
+  const scene = unit.scenes.find((sc) => sc.id === sceneId);
+  const place = placeFor(scene?.setting);
+  // Each new line slides gently into the bubble.
+  const [lineIn] = useState(() => new Animated.Value(1));
+  useEffect(() => {
+    lineIn.setValue(0);
+    Animated.timing(lineIn, { toValue: 1, duration: 350, easing: Easing.out(Easing.quad), useNativeDriver: useNative }).start();
+  }, [index, lineIn]);
+  // "Boa! +10" pops in when a spoken turn ends.
+  const [reward] = useState(() => new Animated.Value(0));
   const [feedback, setFeedback] = useState<string | null>(null);
   const [devText, setDevText] = useState('');
 
@@ -72,7 +99,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      await sayAs(beat.speaker, beat.lineSpoken ?? beat.line);
+      await talk(beat.speaker, beat.lineSpoken ?? beat.line);
       if (!cancelled && beat.phrase && rung === 1) await playModel();
     })();
     return () => {
@@ -87,7 +114,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
   /** The recast and nudges come from whoever is talking in this beat. */
   const say = (text: string) => {
     setFeedback(text);
-    void sayAs(beat.speaker, text);
+    void talk(beat.speaker, text);
   };
   const character = beat.speaker === 'gui' ? null : unit.characters?.[beat.speaker];
 
@@ -102,6 +129,8 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
   const finishTurn = (t: TurnState) => {
     if (!beat.phrase) return;
     onTurn({ beatId: beat.id, phraseId: beat.phrase.id, startRung, outcome: ladderOutcome(t.outcome), turnOutcome: t.outcome });
+    reward.setValue(0);
+    Animated.spring(reward, { toValue: 1, friction: 5, tension: 120, useNativeDriver: useNative }).start();
     // Gui always answers with the correct form (a recast), whether the child got it exactly or nearly (FR-10).
     say(beat.recast ?? (t.outcome === 'got-it' ? 'Boa!' : beat.modelText) ?? 'Boa!');
   };
@@ -157,7 +186,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
     else if (next.playModel) {
       // After two tries, Gui plays the model and the next try with any real speech counts (FR-09).
       setFeedback(`Ouve: ${beat.modelText}`);
-      await sayAsGui('Ouve!');
+      await talk('gui', 'Ouve!');
       await playModel();
     } else say('Hmm? Outra vez!');
   };
@@ -180,8 +209,15 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
 
   return (
     <View style={styles.screen}>
+      <Scenery setting={scene?.setting} />
       <View style={styles.top}>
-        <Text style={styles.sceneTitle}>{unit.scenes.find((s) => s.id === sceneId)?.title}</Text>
+        <BackButton
+          onPress={() => {
+            void stop();
+            onExit();
+          }}
+        />
+        <Text style={[styles.sceneTitle, place.evening && place.kind === 'garden' ? { color: colors.white } : null]}>{scene?.title}</Text>
         <View style={styles.dots} accessibilityLabel={`Turn ${index + 1} of ${beats.length}`}>
           {beats.map((b, i) => (
             <View key={b.id} style={[styles.dot, i < index && { backgroundColor: colors.teal }, i === index && { backgroundColor: colors.terracottaLight }]} />
@@ -193,17 +229,15 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
         {/* Hidden parent override (FR-12): long-press Gui. */}
         <Pressable onLongPress={override} delayLongPress={1200} accessibilityLabel={character?.name ?? 'Gui'}>
           {character ? (
-            <View style={styles.character}>
-              <View style={[styles.characterFace, { backgroundColor: character.color ?? colors.white }]}>
-                <Text style={styles.characterEmoji}>{character.emoji}</Text>
-              </View>
-              <Text style={styles.characterName}>{character.name}</Text>
-            </View>
+            <Character info={character} talking={talker === beat.speaker} />
           ) : (
-            <Gui size={240} happy={turn.done} />
+            <View style={{ alignItems: 'center' }}>
+              <Gui size={240} happy={turn.done} talking={talker === 'gui'} />
+              {place.props.has('trampoline') ? <View style={{ marginTop: -36 }}><Trampoline width={260} /></View> : null}
+            </View>
           )}
         </Pressable>
-        <View style={styles.bubble}>
+        <Animated.View style={[styles.bubble, { opacity: lineIn, transform: [{ translateY: lineIn.interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) }] }]}>
           <Text style={styles.line}>{turn.done && feedback ? feedback : beat.line}</Text>
           {child.age === 8 && beat.lineEn && !turn.done ? <Text style={styles.lineEn}>{beat.lineEn}</Text> : null}
           {!turn.done && feedback ? <Text style={styles.nudge}>{feedback}</Text> : null}
@@ -217,7 +251,15 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
               ))}
             </View>
           ) : null}
-        </View>
+          {turn.done && beat.phrase ? (
+            <Animated.View style={[styles.reward, { transform: [{ scale: reward }] }]}>
+              <Text style={styles.rewardBoa}>Boa!</Text>
+              <View style={styles.rewardCoins}>
+                <Text style={styles.rewardCoinsText}>🪙 +{COINS_PER_TURN}</Text>
+              </View>
+            </Animated.View>
+          ) : null}
+        </Animated.View>
       </View>
 
       <View style={styles.bottom}>
@@ -280,21 +322,26 @@ function hintFor(model: string, rung: number, playModel: boolean): string {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.sky },
-  top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 32, paddingRight: 220, paddingTop: 24 },
+  screen: { flex: 1 },
+  top: { flexDirection: 'row', alignItems: 'center', gap: 20, paddingLeft: 24, paddingRight: 220, paddingTop: 20 },
   sceneTitle: { fontSize: 22, fontWeight: '800', color: colors.ink },
   dots: { flexDirection: 'row', gap: 10 },
   dot: { width: 20, height: 20, borderRadius: 10, borderWidth: 3, borderColor: colors.ink, backgroundColor: colors.white },
-  stage: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 32 },
-  bubble: { maxWidth: 520, padding: 24, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, borderRadius: radius.lg, gap: 8 },
+  // Characters stand on the ground at the bottom of the stage; the speech bubble stays centred beside them.
+  stage: { flex: 1, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', gap: 32, paddingBottom: 4 },
+  bubble: { alignSelf: 'center', maxWidth: 520, padding: 24, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, borderRadius: radius.lg, gap: 8 },
   line: { fontSize: 40, fontWeight: '800', color: colors.ink },
   lineEn: { fontSize: 18, fontWeight: '700', color: colors.inkSoft },
   devHeard: { fontSize: 13, fontWeight: '700', color: colors.inkSoft, fontFamily: 'monospace' },
   nudge: { fontSize: 22, fontWeight: '800', color: colors.terracotta },
-  bottom: { flexDirection: 'row', alignItems: 'center', gap: 24, paddingHorizontal: 32, paddingBottom: 24, backgroundColor: colors.grass, paddingTop: 20 },
+  bottom: { flexDirection: 'row', alignItems: 'center', gap: 24, paddingHorizontal: 32, paddingBottom: 24, paddingTop: 20 },
   hint: { flex: 1, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, borderRadius: radius.lg, padding: 16 },
   hintLabel: { fontSize: 14, fontWeight: '800', color: colors.inkSoft, letterSpacing: 1 },
   hintText: { fontSize: 34, fontWeight: '800', color: colors.ink },
+  reward: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 8 },
+  rewardBoa: { fontSize: 40, fontWeight: '900', color: colors.terracotta },
+  rewardCoins: { backgroundColor: colors.sun, borderWidth: 3, borderColor: colors.ink, borderRadius: 999, paddingHorizontal: 14, paddingVertical: 4, transform: [{ rotate: '-4deg' }] },
+  rewardCoinsText: { fontSize: 22, fontWeight: '900', color: colors.ink },
   character: { width: 240, alignItems: 'center', gap: 8 },
   characterFace: { width: 190, height: 190, borderRadius: 95, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   characterEmoji: { fontSize: 110 },

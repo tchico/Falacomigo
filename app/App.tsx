@@ -8,7 +8,7 @@ import { greeting, localDay, nextMission, nextScene } from './src/engine/episode
 import { COINS_PER_TURN, coinsForStars } from './src/engine/rewards';
 import { createRecognizer } from './src/speech';
 import { openStore } from './src/store/open';
-import { initVoice, sayAsGui } from './src/audio/voice';
+import { initVoice, sayAsGui, stop as stopVoice } from './src/audio/voice';
 import { initRecordings } from './src/audio/recordings';
 import { toChildProfile, type Store, type StoredProfile } from './src/store/store';
 import { ProfilePicker } from './src/screens/ProfilePicker';
@@ -16,6 +16,7 @@ import { ParentZone } from './src/parent/ParentZone';
 import { SceneScreen, type TurnLog } from './src/screens/SceneScreen';
 import { WelcomeScreen } from './src/screens/WelcomeScreen';
 import { BigButton } from './src/ui/BigButton';
+import { BackButton } from './src/ui/BackButton';
 import { MissionScreen } from './src/screens/MissionScreen';
 import { colors } from './src/ui/theme';
 
@@ -109,6 +110,7 @@ export default function App() {
   }, [screen.name]);
 
   const backToStart = async () => {
+    void stopVoice();
     setChild(null);
     setScreen({ name: 'pick' });
     if (store) await refreshProfiles(store);
@@ -122,6 +124,13 @@ export default function App() {
           <Text style={styles.coinsText}>{coins} moedas</Text>
         </View>
       ) : null}
+
+      {/* Back to "Quem vai jogar?" from the game screens; the scene draws its own in its top bar. */}
+      {(screen.name === 'welcome' || screen.name === 'mission' || screen.name === 'done') && (
+        <View style={styles.back}>
+          <BackButton onPress={() => void backToStart()} />
+        </View>
+      )}
 
       {screen.name === 'loading' && (
         <View style={styles.done}>
@@ -151,6 +160,7 @@ export default function App() {
         <WelcomeScreen
           text={screen.text}
           stopName={getUnit(screen.unitId).stop.name}
+          setting={getUnit(screen.unitId).scenes.find((sc) => sc.id === screen.sceneId)?.setting}
           onStart={() => setScreen({ name: 'scene', unitId: screen.unitId, sceneId: screen.sceneId })}
         />
       )}
@@ -165,6 +175,7 @@ export default function App() {
           progress={progress}
           onTurn={onTurn(screen.unitId, screen.sceneId)}
           onFinished={() => void onSceneFinished(screen.unitId, screen.sceneId)}
+          onExit={() => void backToStart()}
         />
       )}
 
@@ -199,6 +210,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
+  back: { position: 'absolute', left: 24, top: 20, zIndex: 10 },
   coins: { position: 'absolute', right: 24, top: 20, zIndex: 10, backgroundColor: colors.white, borderWidth: 3, borderColor: colors.ink, borderRadius: 999, paddingHorizontal: 18, paddingVertical: 6 },
   coinsText: { fontSize: 20, fontWeight: '800', color: colors.ink },
   done: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
