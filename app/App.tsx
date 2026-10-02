@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { getUnit, units } from './src/content';
 import type { ChildProfile, Mission } from './src/content/types';
@@ -21,6 +21,7 @@ import { colors } from './src/ui/theme';
 
 type Screen =
   | { name: 'loading' }
+  | { name: 'store-error' }
   | { name: 'pick' }
   | { name: 'parent' }
   | { name: 'welcome'; text: string; unitId: string; sceneId: string }
@@ -51,8 +52,8 @@ export default function App() {
     setStops(labels);
   }, []);
 
-  useEffect(() => {
-    void initVoice();
+  const start = useCallback(() => {
+    setScreen({ name: 'loading' });
     Promise.all([openStore(), initRecordings()])
       .then(([s]) => s)
       .then(async (s) => {
@@ -60,8 +61,16 @@ export default function App() {
         await refreshProfiles(s);
         setScreen({ name: 'pick' });
       })
-      .catch((e) => console.error('Could not open the local store', e));
+      .catch((e) => {
+        console.warn('Could not open the local store', e);
+        setScreen({ name: 'store-error' });
+      });
   }, [refreshProfiles]);
+
+  useEffect(() => {
+    void initVoice();
+    start();
+  }, [start]);
 
   const pick = async (p: StoredProfile) => {
     if (!store) return;
@@ -117,6 +126,18 @@ export default function App() {
       {screen.name === 'loading' && (
         <View style={styles.done}>
           <ActivityIndicator size="large" color={colors.blue} />
+        </View>
+      )}
+
+      {screen.name === 'store-error' && (
+        <View style={styles.done}>
+          <Text style={styles.doneTitle}>Ups!</Text>
+          {/* For the parent, so in English. In a browser this nearly always means a second tab. */}
+          <Text style={[styles.doneText, { maxWidth: 640, textAlign: 'center' }]}>
+            Fala Comigo couldn't open its saved progress. If it's open in another tab or window, close that one, then try again.
+          </Text>
+          {/* In a browser, expo-sqlite can't recover inside the same page after a failed open, so start the page again. */}
+          <BigButton label="↻ Tentar outra vez" onPress={Platform.OS === 'web' ? () => window.location.reload() : start} accessibilityLabel="Try again" />
         </View>
       )}
 
