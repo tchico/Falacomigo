@@ -62,7 +62,16 @@
               "properties": {
                 "id": { "type": "string" },
                 "ages": { "type": "array", "items": { "enum": [6, 8] } },
-                "say": { "type": "object", "required": ["speaker", "text"] },
+                "say": {
+                  "type": "object",
+                  "required": ["speaker", "text"],
+                  "properties": {
+                    "speaker": { "type": "string" },
+                    "text": { "type": "string" },
+                    "en": { "type": "string" },
+                    "spoken": { "type": "string", "description": "What the voice says, when the written line has sounds text-to-speech can't do. Sounds like Hmm and Brrr are handled automatically." }
+                  }
+                },
                 "expect": { "type": ["string", "null"], "description": "Phrase id the child should say, or null for a story beat." },
                 "model": { "type": "string", "description": "What the child should say here, when it differs from the phrase text. Shown as the hint and spoken as the model." },
                 "accept": { "type": "array", "items": { "type": "string" }, "description": "Overrides the phrase's accepted versions for this beat." },

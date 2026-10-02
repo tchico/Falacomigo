@@ -72,7 +72,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      await sayAs(beat.speaker, beat.line);
+      await sayAs(beat.speaker, beat.lineSpoken ?? beat.line);
       if (!cancelled && beat.phrase && rung === 1) await playModel();
     })();
     return () => {

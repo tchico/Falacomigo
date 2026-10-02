@@ -4,6 +4,7 @@
 - Content (phrases, scenes, missions, guide text) lives in `content/` as JSON, never hard-coded in the app. `content/guide.json` and `tools/issues.json` are generated: edit `docs/parent-guide.md` or `docs/design.md`, then run `node tools/build-guide.mjs` and `node tools/build-issues.mjs`. `app/src/content/audioClips.ts` is generated too: after adding clips to `content/audio/<unit>/`, run `node tools/build-audio.mjs`.
 - All Portuguese is **European Portuguese** (pt-PT): pequeno-almoço, autocarro, "tu" forms. Never Brazilian forms.
 - Accepted answers in content packs are written normalised: lower case, no accents or punctuation (`app/src/engine/normalize.ts`). The content tests enforce this.
+- Lines can have sounds like "Hmm…" and "Brrr…": the voice says "hum" and skips sound effects automatically (`app/src/audio/spoken.ts`). When a line still won't read aloud well, give it a `spoken` version in the content pack.
 - Keep the game generous: never tell a child they're wrong. Near misses get a recast, not a correction (design doc §3 and §5).
 - No accounts, ads, tracking or in-app purchases. Children's audio is not stored by default (NFR-05).
 - App-specific Expo guidance is in `app/AGENTS.md`. Before finishing: `cd app && npm run typecheck && npm test`.

@@ -8,6 +8,8 @@ export interface PlayableBeat {
   id: string;
   speaker: string;
   line: string;
+  /** What the voice should say for the line, when it differs from what's shown. */
+  lineSpoken?: string;
   lineEn?: string;
   /** null for story beats that just need a tap. */
   phrase: Phrase | null;
@@ -36,6 +38,7 @@ export function buildScene(unit: Unit, sceneId: string, child: ChildProfile): Pl
       id: b.id,
       speaker: b.say.speaker,
       line: f(b.say.text),
+      lineSpoken: b.say.spoken ? f(b.say.spoken) : undefined,
       lineEn: b.say.en ? fillEn(b.say.en, child) : undefined,
       phrase,
       modelText: phrase ? f(b.model ?? firstOption(phrase.text)) : null,

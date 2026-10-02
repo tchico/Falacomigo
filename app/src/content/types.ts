@@ -20,6 +20,8 @@ export interface Line {
   speaker: string;
   text: string;
   en?: string;
+  /** What the voice says, when the written line has sounds text-to-speech can't do ("a minha barriga faz rrrr"). */
+  spoken?: string;
 }
 
 export interface Beat {
