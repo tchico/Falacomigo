@@ -75,3 +75,13 @@ test('proxy: the reference text survives accents', () => {
   const assessment = JSON.parse(Buffer.from(req.headers.get('Pronunciation-Assessment')!, 'base64').toString('utf8'));
   assert.equal(assessment.ReferenceText, 'Até amanhã!');
 });
+
+test('proxy: answers the browser preflight and allows cross-site calls, for the web build', async () => {
+  const { deps } = azure(success);
+  const pre = await handle(new Request('https://proxy.example/recognize', { method: 'OPTIONS' }), env(), deps);
+  assert.equal(pre.status, 204);
+  assert.equal(pre.headers.get('Access-Control-Allow-Origin'), '*');
+  assert.match(pre.headers.get('Access-Control-Allow-Headers')!, /X-App-Key/);
+  const res = await handle(post(good), env(), deps);
+  assert.equal(res.headers.get('Access-Control-Allow-Origin'), '*');
+});

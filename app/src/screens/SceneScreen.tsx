@@ -48,6 +48,8 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
   const [level, setLevel] = useState(0);
   const listening = useRef<Listening | null>(null);
   const holding = useRef(false);
+  /** Development builds only: what the recogniser returned, to diagnose recognition problems. */
+  const [devHeard, setDevHeard] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [devText, setDevText] = useState('');
 
@@ -121,12 +123,19 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
     try {
       heard = await l.result;
     } catch (e) {
+      // The microphone didn't start (no permission, or none available). Don't count it as a try:
+      // say so plainly for the grown-up, and the parent override still works.
       console.warn('Microphone unavailable', e);
-      heard = { transcript: '', voicedMs: 0 };
+      listening.current = null;
+      setMic('idle');
+      setLevel(0);
+      setFeedback('🎤 O microfone não está a funcionar. (The microphone isn\'t working: check the permission.)');
+      return;
     }
     listening.current = null;
     setMic('idle');
     setLevel(0);
+    if (__DEV__) setDevHeard(`heard: "${heard.transcript}" · ${(heard.voicedMs / 1000).toFixed(1)} s of voice${heard.offline ? ' · OFFLINE (speech service not reached)' : ''}`);
     await onHeard(heard);
   };
 
@@ -198,6 +207,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
           <Text style={styles.line}>{turn.done && feedback ? feedback : beat.line}</Text>
           {child.age === 8 && beat.lineEn && !turn.done ? <Text style={styles.lineEn}>{beat.lineEn}</Text> : null}
           {!turn.done && feedback ? <Text style={styles.nudge}>{feedback}</Text> : null}
+          {__DEV__ && devHeard ? <Text style={styles.devHeard}>{devHeard}</Text> : null}
           {pictureFor(beat.image).length ? (
             <View style={styles.pictures} accessibilityElementsHidden>
               {pictureFor(beat.image).map((e, i) => (
@@ -279,6 +289,7 @@ const styles = StyleSheet.create({
   bubble: { maxWidth: 520, padding: 24, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, borderRadius: radius.lg, gap: 8 },
   line: { fontSize: 40, fontWeight: '800', color: colors.ink },
   lineEn: { fontSize: 18, fontWeight: '700', color: colors.inkSoft },
+  devHeard: { fontSize: 13, fontWeight: '700', color: colors.inkSoft, fontFamily: 'monospace' },
   nudge: { fontSize: 22, fontWeight: '800', color: colors.terracotta },
   bottom: { flexDirection: 'row', alignItems: 'center', gap: 24, paddingHorizontal: 32, paddingBottom: 24, backgroundColor: colors.grass, paddingTop: 20 },
   hint: { flex: 1, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, borderRadius: radius.lg, padding: 16 },

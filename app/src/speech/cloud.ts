@@ -28,7 +28,8 @@ export class CloudRecognizer implements SpeechRecognizer {
   constructor(
     private readonly config: ProxyConfig,
     private readonly mic: MicSource,
-    private readonly fetchFn: typeof fetch = fetch,
+    // Wrapped so fetch isn't called as a method of this object: browsers reject that ("Illegal invocation").
+    private readonly fetchFn: typeof fetch = (input, init) => fetch(input, init),
   ) {}
 
   listen(request: RecognitionRequest, onLevel?: (level: number) => void): Listening {
@@ -54,7 +55,8 @@ export class CloudRecognizer implements SpeechRecognizer {
       try {
         const transcript = await this.send(encodeWav(chunks), request);
         return { transcript, voicedMs };
-      } catch {
+      } catch (e) {
+        console.warn('Speech service not reached, using the offline fallback', e);
         return { transcript: '', voicedMs, offline: true };
       }
     })();
