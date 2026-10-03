@@ -1,0 +1,1144 @@
+{
+  "$schema": "./schema/sounds.schema.json",
+  "about": "Help with saying a word (pronunciation help): each word split into its syllables, then the same pieces as an English speaker would read them, with the stressed piece in capitals. Tips link a Portuguese sound to one in an English word the child knows; the first that matches is used.",
+  "words": {
+    "a": {
+      "pt": [
+        "a"
+      ],
+      "en": [
+        "uh"
+      ]
+    },
+    "acabei": {
+      "pt": [
+        "a",
+        "ca",
+        "bei"
+      ],
+      "en": [
+        "uh",
+        "kuh",
+        "BAY"
+      ]
+    },
+    "adeus": {
+      "pt": [
+        "a",
+        "deus"
+      ],
+      "en": [
+        "uh",
+        "DAY·oosh"
+      ]
+    },
+    "ajudar": {
+      "pt": [
+        "a",
+        "ju",
+        "dar"
+      ],
+      "en": [
+        "uh",
+        "zhoo",
+        "DAR"
+      ]
+    },
+    "almoço": {
+      "pt": [
+        "al",
+        "mo",
+        "ço"
+      ],
+      "en": [
+        "al",
+        "MOH",
+        "soo"
+      ]
+    },
+    "alto": {
+      "pt": [
+        "al",
+        "to"
+      ],
+      "en": [
+        "AL",
+        "too"
+      ]
+    },
+    "amanhã": {
+      "pt": [
+        "a",
+        "ma",
+        "nhã"
+      ],
+      "en": [
+        "ah",
+        "muh",
+        "NYANG"
+      ]
+    },
+    "anda": {
+      "pt": [
+        "an",
+        "da"
+      ],
+      "en": [
+        "AN",
+        "duh"
+      ]
+    },
+    "anos": {
+      "pt": [
+        "a",
+        "nos"
+      ],
+      "en": [
+        "AH",
+        "noosh"
+      ]
+    },
+    "apetite": {
+      "pt": [
+        "a",
+        "pe",
+        "ti",
+        "te"
+      ],
+      "en": [
+        "uh",
+        "puh",
+        "TEE",
+        "tuh"
+      ]
+    },
+    "aqui": {
+      "pt": [
+        "a",
+        "qui"
+      ],
+      "en": [
+        "uh",
+        "KEE"
+      ]
+    },
+    "arroz": {
+      "pt": [
+        "a",
+        "rroz"
+      ],
+      "en": [
+        "uh",
+        "RROSH"
+      ]
+    },
+    "as": {
+      "pt": [
+        "as"
+      ],
+      "en": [
+        "ush"
+      ]
+    },
+    "até": {
+      "pt": [
+        "a",
+        "té"
+      ],
+      "en": [
+        "uh",
+        "TEH"
+      ]
+    },
+    "avó": {
+      "pt": [
+        "a",
+        "vó"
+      ],
+      "en": [
+        "uh",
+        "VAW"
+      ]
+    },
+    "avô": {
+      "pt": [
+        "a",
+        "vô"
+      ],
+      "en": [
+        "uh",
+        "VOH"
+      ]
+    },
+    "batatas": {
+      "pt": [
+        "ba",
+        "ta",
+        "tas"
+      ],
+      "en": [
+        "buh",
+        "TAH",
+        "tush"
+      ]
+    },
+    "bebé": {
+      "pt": [
+        "be",
+        "bé"
+      ],
+      "en": [
+        "beh",
+        "BEH"
+      ]
+    },
+    "bem": {
+      "pt": [
+        "bem"
+      ],
+      "en": [
+        "BAYNG"
+      ]
+    },
+    "boa": {
+      "pt": [
+        "bo",
+        "a"
+      ],
+      "en": [
+        "BOH",
+        "uh"
+      ]
+    },
+    "bolacha": {
+      "pt": [
+        "bo",
+        "la",
+        "cha"
+      ],
+      "en": [
+        "boo",
+        "LAH",
+        "shuh"
+      ]
+    },
+    "bolo": {
+      "pt": [
+        "bo",
+        "lo"
+      ],
+      "en": [
+        "BOH",
+        "loo"
+      ]
+    },
+    "bom": {
+      "pt": [
+        "bom"
+      ],
+      "en": [
+        "BONG"
+      ]
+    },
+    "boné": {
+      "pt": [
+        "bo",
+        "né"
+      ],
+      "en": [
+        "baw",
+        "NEH"
+      ]
+    },
+    "cachecol": {
+      "pt": [
+        "ca",
+        "che",
+        "col"
+      ],
+      "en": [
+        "kuh",
+        "shuh",
+        "KOL"
+      ]
+    },
+    "casa": {
+      "pt": [
+        "ca",
+        "sa"
+      ],
+      "en": [
+        "KAH",
+        "zuh"
+      ]
+    },
+    "chamas": {
+      "pt": [
+        "cha",
+        "mas"
+      ],
+      "en": [
+        "SHAH",
+        "mush"
+      ]
+    },
+    "chamo-me": {
+      "pt": [
+        "cha",
+        "mo",
+        "me"
+      ],
+      "en": [
+        "SHAH",
+        "moo",
+        "muh"
+      ]
+    },
+    "chapéu": {
+      "pt": [
+        "cha",
+        "péu"
+      ],
+      "en": [
+        "shuh",
+        "PEH·oo"
+      ]
+    },
+    "chega": {
+      "pt": [
+        "che",
+        "ga"
+      ],
+      "en": [
+        "SHAY",
+        "guh"
+      ]
+    },
+    "colher": {
+      "pt": [
+        "co",
+        "lher"
+      ],
+      "en": [
+        "koo",
+        "LYEHR"
+      ]
+    },
+    "como": {
+      "pt": [
+        "co",
+        "mo"
+      ],
+      "en": [
+        "KOH",
+        "moo"
+      ]
+    },
+    "copo": {
+      "pt": [
+        "co",
+        "po"
+      ],
+      "en": [
+        "KAW",
+        "poo"
+      ]
+    },
+    "coroa": {
+      "pt": [
+        "co",
+        "ro",
+        "a"
+      ],
+      "en": [
+        "koo",
+        "ROH",
+        "uh"
+      ]
+    },
+    "cá": {
+      "pt": [
+        "cá"
+      ],
+      "en": [
+        "KAH"
+      ]
+    },
+    "cão": {
+      "pt": [
+        "cão"
+      ],
+      "en": [
+        "KOWNG"
+      ]
+    },
+    "de": {
+      "pt": [
+        "de"
+      ],
+      "en": [
+        "duh"
+      ]
+    },
+    "dia": {
+      "pt": [
+        "di",
+        "a"
+      ],
+      "en": [
+        "DEE",
+        "uh"
+      ]
+    },
+    "esta": {
+      "pt": [
+        "es",
+        "ta"
+      ],
+      "en": [
+        "ESH",
+        "tuh"
+      ]
+    },
+    "este": {
+      "pt": [
+        "es",
+        "te"
+      ],
+      "en": [
+        "ESH",
+        "tuh"
+      ]
+    },
+    "estou": {
+      "pt": [
+        "es",
+        "tou"
+      ],
+      "en": [
+        "ish",
+        "TOH"
+      ]
+    },
+    "está": {
+      "pt": [
+        "es",
+        "tá"
+      ],
+      "en": [
+        "ish",
+        "TAH"
+      ]
+    },
+    "estás": {
+      "pt": [
+        "es",
+        "tás"
+      ],
+      "en": [
+        "ish",
+        "TAHSH"
+      ]
+    },
+    "eu": {
+      "pt": [
+        "eu"
+      ],
+      "en": [
+        "EH·oo"
+      ]
+    },
+    "favor": {
+      "pt": [
+        "fa",
+        "vor"
+      ],
+      "en": [
+        "fuh",
+        "VOR"
+      ]
+    },
+    "flor": {
+      "pt": [
+        "flor"
+      ],
+      "en": [
+        "FLOR"
+      ]
+    },
+    "fome": {
+      "pt": [
+        "fo",
+        "me"
+      ],
+      "en": [
+        "FAW",
+        "muh"
+      ]
+    },
+    "gaivota": {
+      "pt": [
+        "gai",
+        "vo",
+        "ta"
+      ],
+      "en": [
+        "guy",
+        "VAW",
+        "tuh"
+      ]
+    },
+    "garfo": {
+      "pt": [
+        "gar",
+        "fo"
+      ],
+      "en": [
+        "GAR",
+        "foo"
+      ]
+    },
+    "gato": {
+      "pt": [
+        "ga",
+        "to"
+      ],
+      "en": [
+        "GAH",
+        "too"
+      ]
+    },
+    "gelado": {
+      "pt": [
+        "ge",
+        "la",
+        "do"
+      ],
+      "en": [
+        "zhuh",
+        "LAH",
+        "doo"
+      ]
+    },
+    "gosto": {
+      "pt": [
+        "gos",
+        "to"
+      ],
+      "en": [
+        "GAWSH",
+        "too"
+      ]
+    },
+    "gui": {
+      "pt": [
+        "gui"
+      ],
+      "en": [
+        "GHEE"
+      ]
+    },
+    "irlanda": {
+      "pt": [
+        "ir",
+        "lan",
+        "da"
+      ],
+      "en": [
+        "eer",
+        "LAN",
+        "duh"
+      ]
+    },
+    "irmã": {
+      "pt": [
+        "ir",
+        "mã"
+      ],
+      "en": [
+        "eer",
+        "MANG"
+      ]
+    },
+    "irmão": {
+      "pt": [
+        "ir",
+        "mão"
+      ],
+      "en": [
+        "eer",
+        "MOWNG"
+      ]
+    },
+    "isto": {
+      "pt": [
+        "is",
+        "to"
+      ],
+      "en": [
+        "EESH",
+        "too"
+      ]
+    },
+    "jantar": {
+      "pt": [
+        "jan",
+        "tar"
+      ],
+      "en": [
+        "zhan",
+        "TAR"
+      ]
+    },
+    "já": {
+      "pt": [
+        "já"
+      ],
+      "en": [
+        "ZHAH"
+      ]
+    },
+    "laranja": {
+      "pt": [
+        "la",
+        "ran",
+        "ja"
+      ],
+      "en": [
+        "luh",
+        "RAN",
+        "zhuh"
+      ]
+    },
+    "laço": {
+      "pt": [
+        "la",
+        "ço"
+      ],
+      "en": [
+        "LAH",
+        "soo"
+      ]
+    },
+    "leite": {
+      "pt": [
+        "lei",
+        "te"
+      ],
+      "en": [
+        "LAY",
+        "tuh"
+      ]
+    },
+    "mais": {
+      "pt": [
+        "mais"
+      ],
+      "en": [
+        "MYSH"
+      ]
+    },
+    "maçã": {
+      "pt": [
+        "ma",
+        "çã"
+      ],
+      "en": [
+        "muh",
+        "SANG"
+      ]
+    },
+    "meu": {
+      "pt": [
+        "meu"
+      ],
+      "en": [
+        "MAY·oo"
+      ]
+    },
+    "minha": {
+      "pt": [
+        "mi",
+        "nha"
+      ],
+      "en": [
+        "MEE",
+        "nyuh"
+      ]
+    },
+    "moro": {
+      "pt": [
+        "mo",
+        "ro"
+      ],
+      "en": [
+        "MAW",
+        "roo"
+      ]
+    },
+    "mãe": {
+      "pt": [
+        "mãe"
+      ],
+      "en": [
+        "MYNG"
+      ]
+    },
+    "na": {
+      "pt": [
+        "na"
+      ],
+      "en": [
+        "nuh"
+      ]
+    },
+    "noite": {
+      "pt": [
+        "noi",
+        "te"
+      ],
+      "en": [
+        "NOY",
+        "tuh"
+      ]
+    },
+    "nove": {
+      "pt": [
+        "no",
+        "ve"
+      ],
+      "en": [
+        "NAW",
+        "vuh"
+      ]
+    },
+    "não": {
+      "pt": [
+        "não"
+      ],
+      "en": [
+        "NOWNG"
+      ]
+    },
+    "o": {
+      "pt": [
+        "o"
+      ],
+      "en": [
+        "oo"
+      ]
+    },
+    "obrigada": {
+      "pt": [
+        "o",
+        "bri",
+        "ga",
+        "da"
+      ],
+      "en": [
+        "oh",
+        "bree",
+        "GAH",
+        "duh"
+      ]
+    },
+    "obrigado": {
+      "pt": [
+        "o",
+        "bri",
+        "ga",
+        "do"
+      ],
+      "en": [
+        "oh",
+        "bree",
+        "GAH",
+        "doo"
+      ]
+    },
+    "oito": {
+      "pt": [
+        "oi",
+        "to"
+      ],
+      "en": [
+        "OY",
+        "too"
+      ]
+    },
+    "olá": {
+      "pt": [
+        "o",
+        "lá"
+      ],
+      "en": [
+        "oh",
+        "LAH"
+      ]
+    },
+    "os": {
+      "pt": [
+        "os"
+      ],
+      "en": [
+        "oosh"
+      ]
+    },
+    "pai": {
+      "pt": [
+        "pai"
+      ],
+      "en": [
+        "PIE"
+      ]
+    },
+    "peixe": {
+      "pt": [
+        "pei",
+        "xe"
+      ],
+      "en": [
+        "PAY",
+        "shuh"
+      ]
+    },
+    "pequeno-almoço": {
+      "pt": [
+        "pe",
+        "que",
+        "no",
+        "al",
+        "mo",
+        "ço"
+      ],
+      "en": [
+        "puh",
+        "KAY",
+        "noo",
+        "al",
+        "MOH",
+        "soo"
+      ]
+    },
+    "por": {
+      "pt": [
+        "por"
+      ],
+      "en": [
+        "poor"
+      ]
+    },
+    "posso": {
+      "pt": [
+        "pos",
+        "so"
+      ],
+      "en": [
+        "PAW",
+        "soo"
+      ]
+    },
+    "prato": {
+      "pt": [
+        "pra",
+        "to"
+      ],
+      "en": [
+        "PRAH",
+        "too"
+      ]
+    },
+    "pão": {
+      "pt": [
+        "pão"
+      ],
+      "en": [
+        "POWNG"
+      ]
+    },
+    "quantos": {
+      "pt": [
+        "quan",
+        "tos"
+      ],
+      "en": [
+        "KWAN",
+        "toosh"
+      ]
+    },
+    "que": {
+      "pt": [
+        "que"
+      ],
+      "en": [
+        "kuh"
+      ]
+    },
+    "queijo": {
+      "pt": [
+        "quei",
+        "jo"
+      ],
+      "en": [
+        "KAY",
+        "zhoo"
+      ]
+    },
+    "queres": {
+      "pt": [
+        "que",
+        "res"
+      ],
+      "en": [
+        "KEH",
+        "rush"
+      ]
+    },
+    "quero": {
+      "pt": [
+        "que",
+        "ro"
+      ],
+      "en": [
+        "KEH",
+        "roo"
+      ]
+    },
+    "sede": {
+      "pt": [
+        "se",
+        "de"
+      ],
+      "en": [
+        "SAY",
+        "duh"
+      ]
+    },
+    "seis": {
+      "pt": [
+        "seis"
+      ],
+      "en": [
+        "SAYSH"
+      ]
+    },
+    "sete": {
+      "pt": [
+        "se",
+        "te"
+      ],
+      "en": [
+        "SEH",
+        "tuh"
+      ]
+    },
+    "sim": {
+      "pt": [
+        "sim"
+      ],
+      "en": [
+        "SEENG"
+      ]
+    },
+    "sol": {
+      "pt": [
+        "sol"
+      ],
+      "en": [
+        "SAWL"
+      ]
+    },
+    "sopa": {
+      "pt": [
+        "so",
+        "pa"
+      ],
+      "en": [
+        "SOH",
+        "puh"
+      ]
+    },
+    "sou": {
+      "pt": [
+        "sou"
+      ],
+      "en": [
+        "SOH"
+      ]
+    },
+    "sumo": {
+      "pt": [
+        "su",
+        "mo"
+      ],
+      "en": [
+        "SOO",
+        "moo"
+      ]
+    },
+    "tarde": {
+      "pt": [
+        "tar",
+        "de"
+      ],
+      "en": [
+        "TAR",
+        "duh"
+      ]
+    },
+    "te": {
+      "pt": [
+        "te"
+      ],
+      "en": [
+        "tuh"
+      ]
+    },
+    "tenho": {
+      "pt": [
+        "te",
+        "nho"
+      ],
+      "en": [
+        "TAY",
+        "nyoo"
+      ]
+    },
+    "tens": {
+      "pt": [
+        "tens"
+      ],
+      "en": [
+        "TAYNSH"
+      ]
+    },
+    "ter": {
+      "pt": [
+        "ter"
+      ],
+      "en": [
+        "TEHR"
+      ]
+    },
+    "uma": {
+      "pt": [
+        "u",
+        "ma"
+      ],
+      "en": [
+        "OO",
+        "muh"
+      ]
+    },
+    "vermelho": {
+      "pt": [
+        "ver",
+        "me",
+        "lho"
+      ],
+      "en": [
+        "vur",
+        "MAY",
+        "lyoo"
+      ]
+    },
+    "água": {
+      "pt": [
+        "á",
+        "gua"
+      ],
+      "en": [
+        "AH",
+        "gwuh"
+      ]
+    },
+    "é": {
+      "pt": [
+        "é"
+      ],
+      "en": [
+        "EH"
+      ]
+    },
+    "óculos": {
+      "pt": [
+        "ó",
+        "cu",
+        "los"
+      ],
+      "en": [
+        "AW",
+        "koo",
+        "loosh"
+      ]
+    }
+  },
+  "tips": [
+    {
+      "match": "ão|ãe|õe",
+      "tip": "Say “ow” like in “cow”, then hum it through your nose.",
+      "anchor": "cow",
+      "emoji": "🐄"
+    },
+    {
+      "match": "lh",
+      "tip": "“lh” is the “lli” in “million”.",
+      "anchor": "million",
+      "emoji": "💰"
+    },
+    {
+      "match": "nh",
+      "tip": "“nh” is the “ny” in “canyon”.",
+      "anchor": "canyon",
+      "emoji": "🏜️"
+    },
+    {
+      "match": "^r|rr",
+      "tip": "This “r” is a soft gargle at the back of your throat, like a sleepy lion.",
+      "anchor": "lion",
+      "emoji": "🦁"
+    },
+    {
+      "match": "ã|[aeiou][mn]$|[aeiou]ns$",
+      "tip": "Hum the end through your nose, like the “ng” in “sing”.",
+      "anchor": "sing",
+      "emoji": "🎵"
+    },
+    {
+      "match": "j|g[ei]",
+      "tip": "This sound is the “s” in “treasure”.",
+      "anchor": "treasure",
+      "emoji": "💎"
+    },
+    {
+      "match": "ch|x",
+      "tip": "“ch” says “sh”, like “shh!” for quiet.",
+      "anchor": "shh",
+      "emoji": "🤫"
+    },
+    {
+      "match": "s$|s[^aeiouáéíóúâêôãõ]",
+      "tip": "An “s” at the end says “sh”, like a sleepy snake.",
+      "anchor": "snake",
+      "emoji": "🐍"
+    },
+    {
+      "match": "ç",
+      "tip": "“ç” is just “s”, like in “sun”.",
+      "anchor": "sun",
+      "emoji": "☀️"
+    },
+    {
+      "match": "[^éê]e$",
+      "tip": "The “e” at the end is tiny, almost silent.",
+      "anchor": "tiny",
+      "emoji": "🤏"
+    },
+    {
+      "match": "[^ô]o$",
+      "tip": "An “o” at the end says “oo”, like in “zoo”.",
+      "anchor": "zoo",
+      "emoji": "🦓"
+    }
+  ]
+}

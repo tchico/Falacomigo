@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Gui's own lines outside the scenes: warm-up (FR-15), end of session (FR-16), album (FR-21), Como se diz (FR-11)",
   "type": "object",
-  "required": ["warmup", "session", "album", "comoSeDiz"],
+  "required": ["warmup", "session", "album", "comoSeDiz", "truque"],
   "properties": {
     "$schema": { "type": "string" },
     "warmup": { "type": "object", "additionalProperties": { "type": "string" } },
@@ -13,6 +13,7 @@
       "additionalProperties": { "type": ["string", "number"] }
     },
     "album": { "type": "object", "additionalProperties": { "type": "string" } },
-    "comoSeDiz": { "type": "object", "additionalProperties": { "type": "string" } }
+    "comoSeDiz": { "type": "object", "additionalProperties": { "type": "string" } },
+    "truque": { "type": "object", "additionalProperties": { "type": "string" } }
   }
 }

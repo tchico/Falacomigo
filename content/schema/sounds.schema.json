@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Help with saying a word: syllables, an English-style reading, and sound tips",
+  "type": "object",
+  "required": ["words", "tips"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "about": { "type": "string" },
+    "words": {
+      "type": "object",
+      "description": "Keyed by the word in lower case, with its accents.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["pt", "en"],
+        "additionalProperties": false,
+        "properties": {
+          "pt": { "type": "array", "items": { "type": "string" }, "description": "The word's syllables, as written." },
+          "en": { "type": "array", "items": { "type": "string" }, "description": "The same syllables as an English speaker would read them; the stressed one in capitals." }
+        }
+      }
+    },
+    "tips": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["match", "tip", "emoji"],
+        "additionalProperties": false,
+        "properties": {
+          "match": { "type": "string", "description": "A regular expression tried on the word, in order. The first match wins." },
+          "tip": { "type": "string" },
+          "anchor": { "type": "string", "description": "The English word the tip leans on." },
+          "emoji": { "type": "string" }
+        }
+      }
+    }
+  }
+}

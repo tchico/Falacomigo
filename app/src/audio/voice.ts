@@ -35,13 +35,13 @@ export async function stop(): Promise<void> {
   await Speech.stop().catch(() => {});
 }
 
-function speak(text: string, pitch: number): Promise<void> {
+function speak(text: string, pitch: number, rate = 0.9): Promise<void> {
   return new Promise((resolve) => {
     // The bubble keeps "Hmm…" and "Brrr…"; the voice gets something it can say (NFR-03).
     Speech.speak(forSpeech(text), {
       language: 'pt-PT',
       voice: ptVoice,
-      rate: 0.9,
+      rate,
       pitch,
       onDone: () => resolve(),
       onStopped: () => resolve(),
@@ -87,6 +87,13 @@ export async function sayAsGui(text: string): Promise<void> {
   await initVoice();
   await stop();
   return speak(text, 1.3);
+}
+
+/** Gui saying a word or part of one slowly, for the "Truque!" help and the 🐢 button. */
+export async function saySlowly(text: string): Promise<void> {
+  await initVoice();
+  await stop();
+  return speak(text, 1.3, 0.5);
 }
 
 /** A local character's line: a lower, steadier voice than Gui's, so the kids can tell them apart. */

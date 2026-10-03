@@ -144,6 +144,13 @@ function judge(words: string[], target: MatchTarget, age: AgeBand): Judged {
   return { result: 'not-heard', coverage, extras: 0 };
 }
 
+/** The words of `phrase` that weren't heard in `transcript` (normalised), best alignment first. For the "Truque!" help. */
+export function missedWords(phrase: string, transcript: string, age: AgeBand): string[] {
+  const heard = tokens(transcript);
+  if (!heard.length) return [];
+  return align(tokens(phrase), heard, age).misses;
+}
+
 export function matchAttempt(transcript: string, target: MatchTarget, age: AgeBand): MatchResult {
   return judge(tokens(transcript), target, age).result;
 }

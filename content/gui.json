@@ -36,5 +36,9 @@
     "unknown": "Essa ainda não sei! Diz outra.",
     "unknownEn": "I don't know that one yet. Try another word.",
     "back": "Voltar ▶"
+  },
+  "truque": {
+    "title": "Truque!",
+    "go": "Agora tu! ▶"
   }
 }
