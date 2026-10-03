@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Easing, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { ChildProfile, Unit } from '../content/types';
 import { buildScene } from '../engine/scene';
-import { matchAttempt } from '../engine/match';
+import { matchAnswer } from '../engine/match';
 import { applyAttempt, applyOfflineAttempt, ladderOutcome, newTurn, parentOverride, type TurnState } from '../engine/turn';
 import { startRungFor, type Outcome, type PhraseProgress } from '../engine/ladder';
 import type { Listening, RecognitionResult, SpeechRecognizer } from '../speech/types';
@@ -81,6 +81,8 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
   // "Boa! +10" pops in when a spoken turn ends.
   const [reward] = useState(() => new Animated.Value(0));
   const [feedback, setFeedback] = useState<string | null>(null);
+  /** The character's reply to the answer the child gave last (open questions have several, FR-10). */
+  const reply = useRef<string | null>(null);
   const [devText, setDevText] = useState('');
 
   const beat = beats[index];
@@ -125,6 +127,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
     void stop();
     setFeedback(null);
     setTurn(newTurn());
+    reply.current = null;
     if (index + 1 >= beats.length) onFinished();
     else setIndex(index + 1);
   };
@@ -135,7 +138,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
     reward.setValue(0);
     Animated.spring(reward, { toValue: 1, friction: 5, tension: 120, useNativeDriver: useNative }).start();
     // Gui always answers with the correct form (a recast), whether the child got it exactly or nearly (FR-10).
-    say(beat.recast ?? (t.outcome === 'got-it' ? 'Boa!' : beat.modelText) ?? 'Boa!');
+    say(reply.current ?? beat.recast ?? (t.outcome === 'got-it' ? 'Boa!' : beat.modelText) ?? 'Boa!');
   };
 
   /** Hold-to-talk (FR-06): listening starts when the button goes down and ends on release, a pause, or 6 seconds. */
@@ -181,9 +184,13 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
 
   const onHeard = async (heard: RecognitionResult) => {
     if (!beat.target) return;
-    const next = heard.offline
-      ? applyOfflineAttempt(turn, heard.voicedMs)
-      : applyAttempt(turn, { result: matchAttempt(heard.transcript, beat.target, child.age), durationMs: heard.voicedMs });
+    let next: TurnState;
+    if (heard.offline) next = applyOfflineAttempt(turn, heard.voicedMs);
+    else {
+      const { result, answer } = matchAnswer(heard.transcript, beat.answers, child.age);
+      reply.current = answer.recast;
+      next = applyAttempt(turn, { result, durationMs: heard.voicedMs });
+    }
     setTurn(next);
     if (next.done) finishTurn(next);
     else if (next.playModel) {

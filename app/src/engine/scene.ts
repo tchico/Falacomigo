@@ -19,9 +19,16 @@ export interface PlayableBeat {
   ownModel: boolean;
   target: MatchTarget | null;
   recast: string | null;
+  /** Every answer the beat takes, the expected one first, each with the character's reply. Empty for story beats. */
+  answers: BeatAnswer[];
   /** Picture name from the content, e.g. "food:bread-soup-fish". */
   image?: string;
   cliffhanger: boolean;
+}
+
+export interface BeatAnswer {
+  target: MatchTarget;
+  recast: string | null;
 }
 
 const forAge = (beat: Beat, age: AgeBand) => !beat.ages || beat.ages.includes(age);
@@ -34,6 +41,8 @@ export function buildScene(unit: Unit, sceneId: string, child: ChildProfile): Pl
   return scene.beats.filter((b) => forAge(b, child.age)).map((b) => {
     const phrase = b.expect ? unit.phrases.find((p) => p.id === b.expect) ?? null : null;
     if (b.expect && !phrase) throw new Error(`Beat ${sceneId}/${b.id} expects unknown phrase ${b.expect}`);
+    const target = phrase ? { accept: (b.accept ?? phrase.accept).map(f), keywords: (b.keywords ?? phrase.keywords).map(f) } : null;
+    const recast = b.recast ? f(b.recast) : null;
     return {
       id: b.id,
       speaker: b.say.speaker,
@@ -43,10 +52,11 @@ export function buildScene(unit: Unit, sceneId: string, child: ChildProfile): Pl
       phrase,
       modelText: phrase ? f(b.model ?? firstOption(phrase.text)) : null,
       ownModel: !!b.model,
-      target: phrase
-        ? { accept: (b.accept ?? phrase.accept).map(f), keywords: (b.keywords ?? phrase.keywords).map(f) }
-        : null,
-      recast: b.recast ? f(b.recast) : null,
+      target,
+      recast,
+      answers: target
+        ? [{ target, recast }, ...(b.answers ?? []).map((a) => ({ target: { accept: a.accept.map(f), keywords: [] }, recast: f(a.recast) }))]
+        : [],
       image: b.image,
       cliffhanger: !!b.cliffhanger,
     };

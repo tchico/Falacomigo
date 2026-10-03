@@ -22,7 +22,7 @@ test('spoken: ordinary lines are untouched', () => {
 
 test('spoken: no content line is left with letters a voice would spell out', () => {
   for (const u of units) for (const s of u.scenes) for (const b of s.beats) {
-    for (const t of [b.say.spoken ?? b.say.text, b.recast ?? '']) {
+    for (const t of [b.say.spoken ?? b.say.text, b.recast ?? '', ...(b.answers ?? []).map((a) => a.recast)]) {
       assert.doesNotMatch(forSpeech(t), /\b(hm{2,}|b?r{3,}|z{3,})\b/i, `${u.id} ${s.id}/${b.id}: "${t}"`);
     }
   }

@@ -35,6 +35,11 @@ export interface Beat {
   accept?: string[];
   keywords?: string[];
   recast?: string;
+  /**
+   * Other real answers to an open question ("Como estás?" → "Estou mal"), each with the character's own reply,
+   * so Gui never answers "Que bom!" to a child who said they're sad.
+   */
+  answers?: { accept: string[]; recast: string }[];
   image?: string;
   cliffhanger?: boolean;
   unlocks?: string;

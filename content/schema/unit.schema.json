@@ -77,6 +77,18 @@
                 "accept": { "type": "array", "items": { "type": "string" }, "description": "Overrides the phrase's accepted versions for this beat." },
                 "keywords": { "type": "array", "items": { "type": "string" } },
                 "recast": { "type": "string" },
+                "answers": {
+                  "type": "array",
+                  "description": "Other real answers to an open question, each with the character's own reply. Accepted versions are normalised.",
+                  "items": {
+                    "type": "object",
+                    "required": ["accept", "recast"],
+                    "properties": {
+                      "accept": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+                      "recast": { "type": "string" }
+                    }
+                  }
+                },
                 "image": { "type": "string" },
                 "cliffhanger": { "type": "boolean" },
                 "unlocks": { "type": "string" },
