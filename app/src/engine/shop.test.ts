@@ -4,8 +4,8 @@ import assert from 'node:assert/strict';
 import { shop } from '../content';
 import { coinsShort, wearFor } from './shop';
 
-test('shop: the outfit becomes pictures for Gui, ignoring unknown or mismatched items', () => {
-  assert.deepEqual(wearFor({ head: 'crown', eyes: 'sunglasses' }, shop.items), { head: '👑', eyes: '🕶️' });
+test('shop: the outfit becomes what Gui wears, ignoring unknown or mismatched items', () => {
+  assert.deepEqual(wearFor({ head: 'crown', eyes: 'sunglasses' }, shop.items), { head: 'crown', eyes: 'sunglasses' });
   assert.deepEqual(wearFor({ head: 'no-such-item', neck: 'crown' }, shop.items), {});
 });
 
