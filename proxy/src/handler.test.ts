@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { azureRequest, handle, parseAzure, type Env } from './handler';
+import { azureRequest, checkReply, handle, parseAzure, type Env } from './handler';
 
 const wavB64 = Buffer.from('RIFF....WAVEfmt ').toString('base64');
 
@@ -84,4 +84,62 @@ test('proxy: answers the browser preflight and allows cross-site calls, for the 
   assert.match(pre.headers.get('Access-Control-Allow-Headers')!, /X-App-Key/);
   const res = await handle(post(good), env(), deps);
   assert.equal(res.headers.get('Access-Control-Allow-Origin'), '*');
+});
+
+// Gui's smart replies (/reply)
+
+const ask = { question: 'Brrr… tenho frio! Como estás tu?', expected: 'Estou bem!', heard: 'Estou cansado', age: 8 };
+const gemini = (out: unknown, finishReason = 'STOP') => ({ candidates: [{ content: { parts: [{ text: JSON.stringify(out) }] }, finishReason }] });
+
+test('reply: off unless a Gemini key is set, and the app key is still checked', async () => {
+  const { calls, deps } = azure({});
+  assert.equal((await handle(post(ask, 'secret', '/reply'), env(), deps)).status, 501);
+  assert.equal((await handle(post(ask, 'nope', '/reply'), env({ GEMINI_API_KEY: 'g' }), deps)).status, 401);
+  assert.equal(calls.length, 0);
+});
+
+test('reply: sends only the text to Gemini, with Gui\'s instructions and strict safety, and returns the checked reply', async () => {
+  const { calls, deps } = azure(gemini({ understood: true, reply: 'Estás cansado? Eu também! Estou cansado.' }));
+  const res = await handle(post(ask, 'secret', '/reply'), env({ GEMINI_API_KEY: 'g', GEMINI_MODEL: 'gemini-test' }), deps);
+  assert.equal(res.status, 200);
+  assert.deepEqual(await res.json(), { understood: true, reply: 'Estás cansado? Eu também! Estou cansado.' });
+  const req = calls[0];
+  assert.match(req.url, /models\/gemini-test:generateContent$/);
+  assert.equal(req.headers.get('x-goog-api-key'), 'g');
+  const sent = await req.json();
+  assert.match(sent.systemInstruction.parts[0].text, /European Portuguese/);
+  assert.deepEqual(JSON.parse(sent.contents[0].parts[0].text), ask);
+  assert.ok(sent.safetySettings.every((s: { threshold: string }) => s.threshold === 'BLOCK_LOW_AND_ABOVE'));
+});
+
+test('reply: rejects bad input before calling the model', async () => {
+  const { calls, deps } = azure({});
+  const e = env({ GEMINI_API_KEY: 'g' });
+  assert.equal((await handle(post({ ...ask, heard: '' }, 'secret', '/reply'), e, deps)).status, 400);
+  assert.equal((await handle(post({ ...ask, heard: 'x'.repeat(300) }, 'secret', '/reply'), e, deps)).status, 400);
+  assert.equal((await handle(post({ ...ask, age: 30 }, 'secret', '/reply'), e, deps)).status, 400);
+  assert.equal(calls.length, 0);
+});
+
+test('reply: anything odd from the model comes back as not understood', () => {
+  const none = { understood: false, reply: '' };
+  assert.deepEqual(checkReply(gemini({ understood: false, reply: '' })), none);
+  assert.deepEqual(checkReply(gemini({ understood: true, reply: 'Olá' }, 'SAFETY')), none);
+  assert.deepEqual(checkReply({ candidates: [] }), none);
+  assert.deepEqual(checkReply({ candidates: [{ content: { parts: [{ text: 'not json' }] } }] }), none);
+  // Too long, a link or emoji, or Brazilian Portuguese.
+  assert.deepEqual(checkReply(gemini({ understood: true, reply: 'muito '.repeat(20) })), none);
+  assert.deepEqual(checkReply(gemini({ understood: true, reply: 'Vê em https://exemplo.pt' })), none);
+  assert.deepEqual(checkReply(gemini({ understood: true, reply: 'Que bom! 😀' })), none);
+  assert.deepEqual(checkReply(gemini({ understood: true, reply: 'E você, está bem?' })), none);
+  assert.deepEqual(checkReply(gemini({ understood: true, reply: 'Que bom, {nome}! Eu também.' })), { understood: true, reply: 'Que bom, {nome}! Eu também.' });
+});
+
+test('reply: has its own daily cap', async () => {
+  const usage = kv();
+  const { deps } = azure(gemini({ understood: true, reply: 'Que bom!' }));
+  const e = env({ GEMINI_API_KEY: 'g', USAGE: usage });
+  usage.store.set('reply:2026-10-01', '300');
+  assert.equal((await handle(post(ask, 'secret', '/reply'), e, deps)).status, 429);
+  assert.equal(usage.store.get('usage:2026-10-01'), undefined);
 });

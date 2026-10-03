@@ -114,3 +114,11 @@ test('store: Gui wears one item per slot, per child', async () => {
   assert.deepEqual(await store.getOutfit('child1'), { head: 'crown' });
   assert.deepEqual(await store.getOutfit('child2'), {});
 });
+
+test('store: settings start unset, and can be changed', async () => {
+  const { store } = await freshStore();
+  assert.equal(await store.getSetting('smart-replies'), null);
+  await store.setSetting('smart-replies', 'on');
+  await store.setSetting('smart-replies', 'off');
+  assert.equal(await store.getSetting('smart-replies'), 'off');
+});

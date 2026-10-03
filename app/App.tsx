@@ -6,11 +6,11 @@ import type { ChildProfile, Mission } from './src/content/types';
 import type { PhraseProgress } from './src/engine/ladder';
 import { greeting, localDay, nextMission, nextScene } from './src/engine/episode';
 import { COINS_PER_TURN, coinsForStars } from './src/engine/rewards';
-import { createRecognizer } from './src/speech';
+import { createRecognizer, createSmartReplies } from './src/speech';
 import { openStore } from './src/store/open';
 import { initVoice, sayAsGui, stop as stopVoice } from './src/audio/voice';
 import { initRecordings } from './src/audio/recordings';
-import { toChildProfile, type Store, type StoredProfile } from './src/store/store';
+import { SMART_REPLIES, toChildProfile, type Store, type StoredProfile } from './src/store/store';
 import { ProfilePicker } from './src/screens/ProfilePicker';
 import { ParentZone } from './src/parent/ParentZone';
 import { SceneScreen, type TurnLog } from './src/screens/SceneScreen';
@@ -36,6 +36,9 @@ type Screen =
 
 export default function App() {
   const recognizer = useMemo(() => createRecognizer(), []);
+  const smartReplies = useMemo(() => createSmartReplies(), []);
+  /** Dad's switch for Gui's smart replies, in the parent zone. Off by default. */
+  const [smartOn, setSmartOn] = useState(false);
   const [store, setStore] = useState<Store | null>(null);
   const [profiles, setProfiles] = useState<StoredProfile[]>([]);
   const [stops, setStops] = useState<Record<string, string>>({});
@@ -58,6 +61,7 @@ export default function App() {
     }
     setProfiles(ps);
     setStops(labels);
+    setSmartOn((await s.getSetting(SMART_REPLIES)) === 'on');
   }, []);
 
   const start = useCallback(() => {
@@ -167,7 +171,7 @@ export default function App() {
       {screen.name === 'pick' && <ProfilePicker profiles={profiles} details={stops} onPick={pick} onParent={() => setScreen({ name: 'parent' })} />}
 
       {screen.name === 'parent' && store && (
-        <ParentZone store={store} profiles={profiles} onProfilesChanged={() => void refreshProfiles(store)} onExit={() => void backToStart()} />
+        <ParentZone store={store} profiles={profiles} smartRepliesAvailable={!!smartReplies} onProfilesChanged={() => void refreshProfiles(store)} onExit={() => void backToStart()} />
       )}
 
       {screen.name === 'welcome' && (
@@ -193,6 +197,7 @@ export default function App() {
           onFinished={() => void onSceneFinished(screen.unitId, screen.sceneId)}
           onExit={() => void backToStart()}
           wear={wear}
+          smartReplies={smartOn ? smartReplies : null}
         />
       )}
 

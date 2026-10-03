@@ -21,6 +21,18 @@ checks the app's key, caps daily use, and returns what the child said.
 Returns `{ "transcript": "Olá, Gui.", "scores": { "accuracy": 90, "completeness": 100, "pronunciation": 88 } }`.
 The transcript is empty when nothing was recognised. Errors: 401 wrong key, 413 audio too long, 429 daily cap, 502 speech service error.
 
+`POST /reply` (optional, Gui's smart replies) with the same header and JSON body:
+
+```json
+{ "question": "Brrr… tenho frio! Como estás tu?", "expected": "Estou bem!", "heard": "Estou cansado", "age": 8 }
+```
+
+Returns `{ "understood": true, "reply": "Estás cansado? Eu também! Vamos descansar." }`, or `{ "understood": false, "reply": "" }`.
+A Gemini model judges whether what the child said is sensible Portuguese that answers the question, and writes Gui's
+next line. The proxy throws the reply away (not understood) unless it is short, plain text, and has no Brazilian forms.
+Only text is sent, never audio; the app replaces the child's name with `{nome}` first. It has its own cap of 300 a day.
+Errors: 501 when `GEMINI_API_KEY` isn't set (the app then keeps to its script), 400 bad input, 429 daily cap, 502 model error.
+
 ## Setup
 
 1. Create an Azure Speech resource (a region in Europe, e.g. West Europe) and copy one of its keys.
@@ -35,7 +47,16 @@ The transcript is empty when nothing was recognised. Errors: 401 wrong key, 413 
 
    Change `AZURE_SPEECH_REGION` in `wrangler.toml` if your resource isn't in West Europe.
 3. Optional daily cap: `npx wrangler@4 kv namespace create USAGE` and paste the id into `wrangler.toml`.
-4. In `app/`, copy `.env.example` to `.env.local` and fill in the worker URL and the same `APP_KEY`.
+4. Optional, Gui's smart replies: create a key in Google AI Studio on a **paid** (billing-enabled) project, since
+   Google may use free-tier requests to improve its products and these are children's words. Then:
+
+   ```bash
+   npx wrangler@4 secret put GEMINI_API_KEY
+   ```
+
+   Check `GEMINI_MODEL` in `wrangler.toml` is a current Flash model, deploy again, and turn on "Gui's smart replies" in
+   the app's parent zone. At a few hundred short requests a day this costs cents a month.
+5. In `app/`, copy `.env.example` to `.env.local` and fill in the worker URL and the same `APP_KEY`.
 
 ## Tests
 

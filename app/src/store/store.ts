@@ -127,6 +127,11 @@ const MIGRATIONS: string[] = [
      item_id TEXT NOT NULL,
      PRIMARY KEY (child_id, slot)
    );`,
+  // Family settings chosen in the parent zone, e.g. Gui's smart replies.
+  `CREATE TABLE settings (
+     key TEXT PRIMARY KEY,
+     value TEXT NOT NULL
+   );`,
 ];
 
 interface ProgressRow {
@@ -152,6 +157,9 @@ const fromRow = (r: ProgressRow): PhraseProgress => ({
   lastSeen: r.last_seen,
   nextReview: r.next_review,
 });
+
+/** Setting key for Gui's smart replies: 'on' or 'off' (off when unset). */
+export const SMART_REPLIES = 'smart-replies';
 
 export class Store {
   constructor(private readonly db: SqlDb, private readonly now: () => number = Date.now) {}
@@ -254,6 +262,17 @@ export class Store {
   }
 
   // Coins (FR-20)
+
+  // Settings (parent zone)
+
+  async getSetting(key: string): Promise<string | null> {
+    const row = await this.db.getFirstAsync<{ value: string }>('SELECT value FROM settings WHERE key = ?', [key]);
+    return row?.value ?? null;
+  }
+
+  async setSetting(key: string, value: string): Promise<void> {
+    await this.db.runAsync('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value', [key, value]);
+  }
 
   async getCoins(childId: string): Promise<number> {
     const r = await this.db.getFirstAsync<{ coins: number }>('SELECT coins FROM profiles WHERE id = ?', [childId]);

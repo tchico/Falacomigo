@@ -3,6 +3,7 @@ import { Animated, Easing, Pressable, StyleSheet, Text, TextInput, View } from '
 import type { ChildProfile, Unit } from '../content/types';
 import { buildScene } from '../engine/scene';
 import { matchAnswer } from '../engine/match';
+import type { SmartReplies } from '../speech/smartReply';
 import { applyAttempt, applyOfflineAttempt, ladderOutcome, newTurn, parentOverride, type TurnState } from '../engine/turn';
 import { startRungFor, type Outcome, type PhraseProgress } from '../engine/ladder';
 import type { Listening, RecognitionResult, SpeechRecognizer } from '../speech/types';
@@ -44,13 +45,15 @@ interface Props {
   onExit: () => void;
   /** What Gui is wearing from his shop. */
   wear?: Wear;
+  /** Smart replies for off-script answers, when Dad has turned them on. */
+  smartReplies?: SmartReplies | null;
 }
 
 /**
  * One scene, beat by beat (FR-03: speaking is the only way forward).
  * With the stub recogniser, a developer panel at the bottom stands in for the microphone.
  */
-export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn, onFinished, onExit, wear }: Props) {
+export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn, onFinished, onExit, wear, smartReplies }: Props) {
   const beats = useMemo(() => buildScene(unit, sceneId, child), [unit, sceneId, child]);
   const [index, setIndex] = useState(0);
   const [turn, setTurn] = useState<TurnState>(newTurn());
@@ -187,8 +190,20 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
     let next: TurnState;
     if (heard.offline) next = applyOfflineAttempt(turn, heard.voicedMs);
     else {
-      const { result, answer } = matchAnswer(heard.transcript, beat.answers, child.age);
-      reply.current = answer.recast;
+      const matched = matchAnswer(heard.transcript, beat.answers, child.age);
+      let result = matched.result;
+      reply.current = matched.answer.recast;
+      // Something real the script doesn't cover ("Estou cansado"): Gui may answer it with a smart reply. It counts
+      // as a near miss, so the phrase still gets practised; if the reply doesn't come, the script carries on.
+      if (result !== 'got-it' && beat.freeReply && smartReplies && heard.transcript.trim() && beat.modelText) {
+        setMic('thinking');
+        const smart = await smartReplies.ask({ question: beat.line, expected: beat.modelText, heard: heard.transcript, age: child.age }, child.name);
+        setMic('idle');
+        if (smart) {
+          result = 'nearly';
+          reply.current = smart;
+        }
+      }
       next = applyAttempt(turn, { result, durationMs: heard.voicedMs });
     }
     setTurn(next);

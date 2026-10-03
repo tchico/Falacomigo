@@ -40,6 +40,8 @@ export interface Beat {
    * so Gui never answers "Que bom!" to a child who said they're sad.
    */
   answers?: { accept: string[]; recast: string }[];
+  /** When the child says something real the script doesn't cover, Gui may answer with a smart reply (if Dad turned them on). */
+  freeReply?: boolean;
   image?: string;
   cliffhanger?: boolean;
   unlocks?: string;

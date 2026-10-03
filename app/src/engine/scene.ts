@@ -21,6 +21,8 @@ export interface PlayableBeat {
   recast: string | null;
   /** Every answer the beat takes, the expected one first, each with the character's reply. Empty for story beats. */
   answers: BeatAnswer[];
+  /** Off-script answers may get a smart reply (see speech/smartReply.ts). */
+  freeReply: boolean;
   /** Picture name from the content, e.g. "food:bread-soup-fish". */
   image?: string;
   cliffhanger: boolean;
@@ -57,6 +59,7 @@ export function buildScene(unit: Unit, sceneId: string, child: ChildProfile): Pl
       answers: target
         ? [{ target, recast }, ...(b.answers ?? []).map((a) => ({ target: { accept: a.accept.map(f), keywords: [] }, recast: f(a.recast) }))]
         : [],
+      freeReply: !!b.freeReply,
       image: b.image,
       cliffhanger: !!b.cliffhanger,
     };
