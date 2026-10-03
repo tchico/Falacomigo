@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Animated, Easing, StyleSheet, View } from 'react-native';
+import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
 import { colors } from './theme';
 import { useLoop, useNative, useReducedMotion } from './motion';
 import { EyeWear, HeadWear, Scarf, ScarfTail } from './GuiWear';
@@ -8,6 +8,8 @@ interface Props {
   size?: number;
   /** Wings up, eyes smiling and a little hop: the child just got it. */
   happy?: boolean;
+  /** Eyes closed and a few z's: the session has run its time (FR-16). */
+  sleepy?: boolean;
   /** Beak moves while he's speaking. */
   talking?: boolean;
   /** What he's wearing from his shop (FR-22): item ids by slot. */
@@ -19,7 +21,7 @@ interface Props {
  * while he talks and hops when the child gets it right. All slow and gentle (NFR-09).
  * Replace with the real illustration (SVG or Lottie) later.
  */
-export function Gui({ size = 180, happy = false, talking = false, wear = {} }: Props) {
+export function Gui({ size = 180, happy = false, sleepy = false, talking = false, wear = {} }: Props) {
   const s = size / 180;
   const reduced = useReducedMotion();
   const breathe = useLoop(2600, !reduced);
@@ -69,7 +71,10 @@ export function Gui({ size = 180, happy = false, talking = false, wear = {} }: P
         <View style={[styles.head, { left: 88 * s, top: 20 * s, width: 70 * s, height: 70 * s, borderRadius: 35 * s, borderWidth: 4 * s }]} />
         <View style={[styles.cheek, { left: 112 * s, top: 56 * s, width: 12 * s, height: 9 * s, borderRadius: 5 * s }]} />
         <Scarf id={wear.neck} s={s} />
-        {happy ? (
+        {sleepy && !happy ? (
+          // Sleepy eye: closed, a little arch the other way up.
+          <View style={[styles.sleepyEye, { left: 126 * s, top: 42 * s, width: 16 * s, height: 8 * s, borderBottomLeftRadius: 8 * s, borderBottomRightRadius: 8 * s, borderWidth: 3 * s }]} />
+        ) : happy ? (
           // Smiling eye: a little arch.
           <View style={[styles.happyEye, { left: 126 * s, top: 40 * s, width: 16 * s, height: 10 * s, borderTopLeftRadius: 8 * s, borderTopRightRadius: 8 * s, borderWidth: 3 * s }]} />
         ) : (
@@ -82,6 +87,12 @@ export function Gui({ size = 180, happy = false, talking = false, wear = {} }: P
         <EyeWear id={wear.eyes} s={s} />
         <HeadWear id={wear.head} s={s} />
       </Animated.View>
+      {sleepy ? (
+        <Animated.View style={{ position: 'absolute', left: 150 * s, top: -6 * s, opacity: breathe.interpolate({ inputRange: [0, 1], outputRange: [0.5, 1] }) }} accessibilityElementsHidden>
+          <Text style={[styles.zzz, { fontSize: 20 * s }]}>z</Text>
+          <Text style={[styles.zzz, { fontSize: 28 * s, marginLeft: 12 * s, marginTop: -14 * s }]}>Z</Text>
+        </Animated.View>
+      ) : null}
       <View style={[styles.leg, { left: 62 * s, top: 160 * s, width: 6 * s, height: 18 * s }]} />
       <View style={[styles.leg, { left: 96 * s, top: 160 * s, width: 6 * s, height: 18 * s }]} />
     </View>
@@ -94,6 +105,8 @@ const styles = StyleSheet.create({
   head: { position: 'absolute', backgroundColor: colors.white, borderColor: colors.ink },
   cheek: { position: 'absolute', backgroundColor: '#F4B9A8' },
   eye: { position: 'absolute', backgroundColor: colors.ink },
+  sleepyEye: { position: 'absolute', borderColor: colors.ink, borderTopWidth: 0, backgroundColor: 'transparent' },
+  zzz: { fontWeight: '900', color: colors.blue },
   happyEye: { position: 'absolute', borderColor: colors.ink, borderBottomWidth: 0, backgroundColor: 'transparent' },
   beak: {
     position: 'absolute',

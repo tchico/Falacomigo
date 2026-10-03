@@ -175,7 +175,7 @@ These are suggestions to test during the prototype, not final decisions.
 | Part | Suggested option | Alternatives | Notes |
 | --- | --- | --- | --- |
 | App framework | React Native with Expo (iOS and Android tablets) | Flutter; native Swift for iPad only | Expo works well with AI coding assistants and runs on both platforms |
-| Speech recognition | Azure Speech, pt-PT, with pronunciation assessment | Google Cloud Speech-to-Text pt-PT; Apple's on-device recogniser on iPad | Azure's pronunciation assessment [lists pt-PT as supported](https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/ai-services/speech-service/includes/language-support/pronunciation-assessment.md) and scores at word level. Accuracy on children's voices must be tested with the kids. |
+| Speech recognition | Azure Speech, pt-PT, plain recognition (pronunciation assessment's reference text made it hear the expected phrase, so it's off) | Google Cloud Speech-to-Text pt-PT; Apple's on-device recogniser on iPad | Azure's pronunciation assessment [lists pt-PT as supported](https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/ai-services/speech-service/includes/language-support/pronunciation-assessment.md) and scores at word level. Accuracy on children's voices must be tested with the kids. |
 | Model voices | Dad's own recordings for the core phrases | Neural pt-PT text-to-speech voices for everything else | Dad's voice matters more than polish |
 | Proxy | One serverless function (e.g. Cloudflare Workers, Azure Functions) | A tiny Node server | Holds the keys and adds usage limits |
 | Local store | SQLite (expo-sqlite) | AsyncStorage for the first prototype | |

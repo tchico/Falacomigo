@@ -2,7 +2,8 @@
 // through the proxy to a pt-PT recogniser (design doc §5). The stub stands in for it during development.
 
 export interface RecognitionRequest {
-  locale: 'pt-PT';
+  /** pt-PT for everything the child says in Portuguese; en-GB only for the English word in "Como se diz?" (FR-11). */
+  locale: 'pt-PT' | 'en-GB';
   /** The phrase we expect, passed to the recogniser as a hint. */
   expectedText: string;
   /** Listening stops after this long, or on silence (FR-06). */

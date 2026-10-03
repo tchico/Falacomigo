@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { guide, shop, units } from './index';
 import { normalize } from '../engine/normalize';
 import { buildScene } from '../engine/scene';
-import { matchAttempt } from '../engine/match';
+import { matchAnswer, matchAttempt } from '../engine/match';
 import type { AgeBand, ChildProfile } from './types';
 
 const children: ChildProfile[] = [
@@ -24,7 +24,7 @@ for (const unit of units) {
     for (const p of unit.phrases) {
       for (const a of p.accept) assert.equal(normalize(a), a, `${p.id}: "${a}" should be written as "${normalize(a)}"`);
     }
-    for (const s of unit.scenes) for (const b of s.beats) for (const a of b.accept ?? []) {
+    for (const s of unit.scenes) for (const b of s.beats) for (const a of [...(b.accept ?? []), ...(b.answers ?? []).flatMap((x) => x.accept)]) {
       assert.equal(normalize(a), a, `${s.id}/${b.id}: "${a}" should be written as "${normalize(a)}"`);
     }
   });
@@ -47,6 +47,22 @@ for (const unit of units) {
           const said = beat.modelText;
           const result = matchAttempt(said, beat.target, child.age as AgeBand);
           assert.equal(result, 'got-it', `${s.id}/${beat.id} for age ${child.age}: "${said}" gave ${result}`);
+        }
+      }
+    }
+  });
+
+  test(`${unit.id}: every other answer to an open question gets its own reply, not the expected answer's`, () => {
+    for (const child of children) {
+      for (const s of unit.scenes) {
+        for (const beat of buildScene(unit, s.id, child)) {
+          for (const answer of beat.answers.slice(1)) {
+            for (const said of answer.target.accept) {
+              const got = matchAnswer(said, beat.answers, child.age as AgeBand);
+              assert.equal(got.result, 'got-it', `${s.id}/${beat.id}: "${said}" gave ${got.result}`);
+              assert.equal(got.answer.recast, answer.recast, `${s.id}/${beat.id}: "${said}" got the reply "${got.answer.recast}"`);
+            }
+          }
         }
       }
     }

@@ -34,4 +34,9 @@ enabled = true
 [vars]
 AZURE_SPEECH_REGION = "northeurope"
 DAILY_LIMIT = "400"
+<<<<<<< HEAD
 
+=======
+# Model for Gui's smart replies (POST /reply). Only used once GEMINI_API_KEY is set. Use a current Flash model.
+GEMINI_MODEL = "gemini-2.5-flash"
+>>>>>>> da656c64c9a8b14335b26096ebf2eae579565efc

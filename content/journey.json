@@ -1,0 +1,13 @@
+{
+  "$schema": "./schema/journey.schema.json",
+  "stops": [
+    { "id": "garden", "name": "O jardim", "nameEn": "The back garden, Ireland", "emoji": "🏡" },
+    { "id": "ferry", "name": "O ferry", "nameEn": "The ferry", "emoji": "⛴️" },
+    { "id": "beach", "name": "A praia", "nameEn": "A beach in Galicia", "emoji": "🏖️" },
+    { "id": "porto", "name": "O Porto", "nameEn": "Porto", "emoji": "🌉" },
+    { "id": "coimbra", "name": "Coimbra", "nameEn": "Coimbra", "emoji": "🩺" },
+    { "id": "train", "name": "O comboio", "nameEn": "A train south", "emoji": "🚆" },
+    { "id": "village", "name": "A aldeia", "nameEn": "The grandparents' village", "emoji": "👵" },
+    { "id": "lisboa", "name": "Lisboa", "nameEn": "Lisbon", "emoji": "🏰" }
+  ]
+}

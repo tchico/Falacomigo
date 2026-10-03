@@ -4,11 +4,12 @@ import { sayAsGui, stop } from '../audio/voice';
 import { BigButton } from '../ui/BigButton';
 import { Gui } from '../ui/Gui';
 import { Scenery } from '../ui/Scenery';
+import { guiLines } from '../content';
 import type { Wear } from '../engine/shop';
 import { colors, radius } from '../ui/theme';
 
 /** Gui says hello before the episode. After a break he just missed them: no streaks, nothing lost (FR-23). */
-export function WelcomeScreen({ text, stopName, setting, wear, onStart, onShop }: { text: string; stopName: string; setting?: string; wear?: Wear; onStart: () => void; onShop: () => void }) {
+export function WelcomeScreen({ text, stopName, setting, wear, onStart, onShop, onAlbum }: { text: string; stopName: string; setting?: string; wear?: Wear; onStart: () => void; onShop: () => void; onAlbum: () => void }) {
   const [talking, setTalking] = useState(false);
   useEffect(() => {
     setTalking(true);
@@ -28,6 +29,7 @@ export function WelcomeScreen({ text, stopName, setting, wear, onStart, onShop }
       </View>
       <View style={styles.buttons}>
         <BigButton label="Vamos! ▶" onPress={onStart} accessibilityLabel="Start" />
+        <BigButton label={guiLines.album.button} variant="blue" onPress={onAlbum} accessibilityLabel="Postcard album" />
         <BigButton label="🛍️ Loja do Gui" variant="secondary" onPress={onShop} accessibilityLabel="Gui's shop" />
       </View>
     </View>

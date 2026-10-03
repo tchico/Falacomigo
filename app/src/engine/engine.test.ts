@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { normalize } from './normalize';
-import { matchAttempt, similarity } from './match';
+import { matchAnswer, matchAttempt, similarity } from './match';
 import { applyAttempt, applyOfflineAttempt, ladderOutcome, newTurn, parentOverride } from './turn';
 import { dueForReview, newProgress, record, startRungFor } from './ladder';
 import { coinsForStars } from './rewards';
@@ -71,6 +71,26 @@ test('the whole sentence must be said: a different word in it is "nearly", not "
   const cake = { accept: ['quero um bolo'], keywords: ['bolo'] };
   assert.equal(matchAttempt('quero o bolo', cake, 8), 'nearly');
   assert.equal(matchAttempt('quero o bolo', cake, 6), 'got-it');
+});
+
+test('an extra "não" turns the answer around, so it is not the expected answer', () => {
+  const fine = { accept: ['estou bem', 'bem'], keywords: ['estou', 'bem'] };
+  assert.equal(matchAttempt('estou bem', fine, 8), 'got-it');
+  assert.equal(matchAttempt('não estou bem', fine, 8), 'nearly');
+  assert.equal(matchAttempt('estou mal', fine, 6), 'nearly');
+});
+
+test('open questions: the reply follows the answer the child gave', () => {
+  const answers = [
+    { target: { accept: ['estou bem', 'bem'], keywords: ['estou', 'bem'] }, recast: 'Que bom!' },
+    { target: { accept: ['estou mal', 'mal', 'nao estou bem', 'estou triste'], keywords: [] }, recast: 'Oh, não!' },
+  ];
+  for (const band of [6, 8] as const) {
+    assert.deepEqual(matchAnswer('Estou bem, obrigado!', answers, band).answer.recast, 'Que bom!');
+    assert.deepEqual(matchAnswer('estou mal', answers, band), { result: 'got-it', answer: answers[1] });
+    assert.deepEqual(matchAnswer('não estou bem', answers, band), { result: 'got-it', answer: answers[1] });
+    assert.deepEqual(matchAnswer('hoje estou muito triste', answers, band).answer.recast, 'Oh, não!');
+  }
 });
 
 test('turn: model plays after two misses, third attempt with speech is accepted', () => {

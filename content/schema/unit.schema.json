@@ -77,6 +77,19 @@
                 "accept": { "type": "array", "items": { "type": "string" }, "description": "Overrides the phrase's accepted versions for this beat." },
                 "keywords": { "type": "array", "items": { "type": "string" } },
                 "recast": { "type": "string" },
+                "answers": {
+                  "type": "array",
+                  "description": "Other real answers to an open question, each with the character's own reply. Accepted versions are normalised.",
+                  "items": {
+                    "type": "object",
+                    "required": ["accept", "recast"],
+                    "properties": {
+                      "accept": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+                      "recast": { "type": "string" }
+                    }
+                  }
+                },
+                "freeReply": { "type": "boolean", "description": "Off-script answers may get a smart reply from Gui (a language model through the proxy), when the parent has turned them on." },
                 "image": { "type": "string" },
                 "cliffhanger": { "type": "boolean" },
                 "unlocks": { "type": "string" },
