@@ -8,6 +8,8 @@ export interface RecognitionRequest {
   expectedText: string;
   /** Listening stops after this long, or on silence (FR-06). */
   maxDurationMs: number;
+  /** Hand back the audio too, for "listen back" (FR-29). It's never sent anywhere else or kept. */
+  keepAudio?: boolean;
 }
 
 export interface RecognitionResult {
@@ -16,6 +18,8 @@ export interface RecognitionResult {
   voicedMs: number;
   /** True when the speech service couldn't be reached, so only the length of the voice is known (NFR-02). */
   offline?: boolean;
+  /** The child's turn as a 16 kHz WAV, only when the request asked to keep it. */
+  audio?: Uint8Array;
 }
 
 export interface Listening {

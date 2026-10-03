@@ -8,6 +8,7 @@ import { greeting, localDay, nextMission, nextScene } from './src/engine/episode
 import { buildAlbum, type AlbumStop, type Postcard } from './src/engine/album';
 import { isSleepy } from './src/engine/session';
 import { buildWarmup } from './src/engine/warmup';
+import { defaultSettings, readSettings, settingsKey, type ChildSettings } from './src/settings/childSettings';
 import type { PlayableBeat } from './src/engine/scene';
 import { COINS_PER_TURN, coinsForStars } from './src/engine/rewards';
 import { createRecognizer, createSmartReplies } from './src/speech';
@@ -67,6 +68,8 @@ export default function App() {
   /** The warm-up comes once per session, before the first scene (FR-15). */
   const warmedUp = useRef(false);
   const [postcard, setPostcard] = useState<NewPostcard | null>(null);
+  /** Dad's settings for the child playing (FR-29). */
+  const [settings, setSettings] = useState<ChildSettings>(() => defaultSettings(8, guiLines.session.aimMinutes));
 
   const refreshProfiles = useCallback(async (s: Store) => {
     const ps = await s.listProfiles();
@@ -103,13 +106,15 @@ export default function App() {
   const pick = async (p: StoredProfile) => {
     if (!store) return;
     const c = toChildProfile(p);
-    const [prog, wallet, played, last, worn] = await Promise.all([
+    const [prog, wallet, played, last, worn, saved] = await Promise.all([
       store.getProgress(c.id),
       store.getCoins(c.id),
       store.scenesPlayed(c.id),
       store.lastPlayedDay(c.id),
       store.getOutfit(c.id),
+      store.getSetting(settingsKey(c.id)),
     ]);
+    setSettings(readSettings(saved, c.age, guiLines.session.aimMinutes));
     setOutfit(worn);
     setChild(c);
     setProgress(prog);
@@ -170,7 +175,7 @@ export default function App() {
     setScreen({ name: 'mission', unitId, mission, rowId: row.id });
   };
 
-  const doneScreen = (): Screen => ({ name: 'done', sleepy: isSleepy(sessionStart.current, Date.now(), guiLines.session.aimMinutes) });
+  const doneScreen = (): Screen => ({ name: 'done', sleepy: isSleepy(sessionStart.current, Date.now(), settings.sessionMinutes) });
 
   /** A word from "Como se diz?" said back in Portuguese: it counts like a turn (FR-11). */
   const onWordLearned = () => {
@@ -252,6 +257,7 @@ export default function App() {
           onFinished={() => setScreen({ name: 'scene', unitId: screen.unitId, sceneId: screen.sceneId })}
           onExit={() => void backToStart()}
           onWordLearned={onWordLearned}
+          settings={settings}
           wear={wear}
           smartReplies={smartOn ? smartReplies : null}
         />
@@ -269,6 +275,7 @@ export default function App() {
           onFinished={() => void onSceneFinished(screen.unitId, screen.sceneId)}
           onExit={() => void backToStart()}
           onWordLearned={onWordLearned}
+          settings={settings}
           wear={wear}
           smartReplies={smartOn ? smartReplies : null}
         />

@@ -52,12 +52,15 @@ export class CloudRecognizer implements SpeechRecognizer {
       await mic.stop();
       const voicedMs = endpointer.voicedMs;
       if (voicedMs < MIN_VOICE_TO_SEND_MS) return { transcript: '', voicedMs };
+      const wav = encodeWav(chunks);
+      // Listen back (FR-29) is the only time the audio is handed on, and only to be played once.
+      const audio = request.keepAudio ? { audio: wav } : {};
       try {
-        const transcript = await this.send(encodeWav(chunks), request);
-        return { transcript, voicedMs };
+        const transcript = await this.send(wav, request);
+        return { transcript, voicedMs, ...audio };
       } catch (e) {
         console.warn('Speech service not reached, using the offline fallback', e);
-        return { transcript: '', voicedMs, offline: true };
+        return { transcript: '', voicedMs, offline: true, ...audio };
       }
     })();
 
