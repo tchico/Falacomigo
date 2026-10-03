@@ -116,7 +116,7 @@ function OnOff({ value, onChange, label }: { value: boolean; onChange: (v: boole
 
 const styles = StyleSheet.create({
   field: { flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap' },
-  label: { width: 120, fontSize: 15, fontWeight: '800', color: colors.inkSoft },
+  label: { width: 150, fontSize: 15, fontWeight: '800', color: colors.inkSoft },
   input: { flex: 1, minHeight: TOUCH, borderWidth: 2, borderColor: '#E2D9C6', borderRadius: 12, paddingHorizontal: 14, fontSize: 18, color: colors.ink },
   choice: { minWidth: TOUCH, minHeight: TOUCH, borderRadius: 12, borderWidth: 2, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   wide: { paddingHorizontal: 14 },
