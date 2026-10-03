@@ -12,8 +12,14 @@ export interface MatchTarget {
   keywords: string[];
 }
 
-/** How close a transcript must be to count as "got it". Looser for the younger child. */
-export const STRICTNESS: Record<AgeBand, number> = { 6: 0.6, 8: 0.72 };
+/**
+ * How close each spoken word must be to the target word to count as the same word (allowing for a child's
+ * pronunciation and for recogniser slips like "kero" for "quero"). Looser for the younger child.
+ */
+export const STRICTNESS: Record<AgeBand, number> = { 6: 0.6, 8: 0.7 };
+
+/** Extra words (an "olá" first, a "por favor" after) are fine, up to this many beyond the phrase's own length. */
+const EXTRA_WORDS = 2;
 
 /** Similarity between two short strings, 0..1, based on edit distance over characters. */
 export function similarity(a: string, b: string): number {
@@ -32,35 +38,98 @@ export function similarity(a: string, b: string): number {
   return 1 - prev[b.length] / Math.max(a.length, b.length);
 }
 
-/** Best similarity of `variant` against any run of words in the transcript, so extra words around it don't hurt. */
-function bestWindowSimilarity(transcriptWords: string[], variant: string): number {
-  const vWords = variant.split(' ');
-  let best = 0;
-  for (let len = Math.max(1, vWords.length - 1); len <= vWords.length + 1; len++) {
-    for (let start = 0; start + len <= transcriptWords.length; start++) {
-      const window = transcriptWords.slice(start, start + len).join(' ');
-      best = Math.max(best, similarity(window, variant));
+// Number words (after normalize()). "um" and "uma" are left out because they are mostly "a"/"an".
+const NUMBERS = new Set(
+  'zero dois duas tres quatro cinco seis sete oito nove dez onze doze treze catorze quatorze quinze dezasseis dezassete dezoito dezanove vinte trinta quarenta cinquenta sessenta setenta oitenta noventa cem cento duzentos trezentos mil'.split(' '),
+);
+const isNumber = (word: string) => NUMBERS.has(word) || /^\d+$/.test(word);
+
+/** Whether a spoken word is the target word. Numbers carry the meaning, so they must be exact. */
+function sameWord(target: string, heard: string, age: AgeBand): boolean {
+  if (target === heard) return true;
+  if (isNumber(target) || isNumber(heard)) return false;
+  return similarity(target, heard) >= STRICTNESS[age];
+}
+
+interface Alignment {
+  /** Target words that were said (or close enough). */
+  matched: number;
+  /** Target words missing or said as a different word. */
+  misses: string[];
+  /** Spoken words that aren't part of the phrase. */
+  extras: string[];
+}
+
+/**
+ * Lines up the whole of what was said against the whole phrase, word by word and in order, and finds the
+ * reading with the fewest wrong or missing words (then the fewest extra words).
+ */
+function align(target: string[], heard: string[], age: AgeBand): Alignment {
+  const m = target.length;
+  const n = heard.length;
+  // best[i][j]: the best alignment of target[i..] with heard[j..].
+  const best: Alignment[][] = Array.from({ length: m + 1 }, () => new Array<Alignment>(n + 1));
+  const better = (a: Alignment, b: Alignment) =>
+    a.misses.length !== b.misses.length ? a.misses.length < b.misses.length : a.extras.length <= b.extras.length;
+  for (let i = m; i >= 0; i--) {
+    for (let j = n; j >= 0; j--) {
+      if (i === m) {
+        best[i][j] = { matched: 0, misses: [], extras: heard.slice(j) };
+        continue;
+      }
+      // The target word is missing...
+      const next = best[i + 1][j];
+      let pick: Alignment = { ...next, misses: [target[i], ...next.misses] };
+      if (j < n) {
+        // ...or the spoken word is extra...
+        const skip = best[i][j + 1];
+        const extra = { ...skip, extras: [heard[j], ...skip.extras] };
+        if (better(extra, pick)) pick = extra;
+        // ...or it is the target word (or a different word in its place).
+        const on = best[i + 1][j + 1];
+        const pair = sameWord(target[i], heard[j], age)
+          ? { ...on, matched: on.matched + 1 }
+          : { ...on, misses: [target[i], ...on.misses] };
+        if (better(pair, pick)) pick = pair;
+      }
+      best[i][j] = pick;
     }
   }
-  return best;
+  return best[0][0];
+}
+
+/**
+ * "Got it" when the whole phrase was said: every word, in order, close enough to count. Extra words around it
+ * are fine, but a different number never is. The six-year-old may also drop or slur one short word ("chama
+ * Ana" for "Chamo-me Ana") in a phrase of three or more words.
+ */
+function saidWhole(a: Alignment, target: string[], age: AgeBand): boolean {
+  if (a.extras.some(isNumber)) return false;
+  if (a.extras.length > EXTRA_WORDS + target.length) return false;
+  if (a.misses.length === 0) return true;
+  return age === 6 && target.length >= 3 && a.misses.length === 1 && a.misses[0].length <= 3 && !isNumber(a.misses[0]);
 }
 
 function keywordHeard(transcriptWords: string[], keyword: string): boolean {
   const k = normalize(keyword);
-  return transcriptWords.some((w) => w === k || (k.length >= 4 && similarity(w, k) >= 0.75));
+  return transcriptWords.some((w) => w === k || (k.length >= 4 && !isNumber(k) && similarity(w, k) >= 0.75));
 }
 
 export function matchAttempt(transcript: string, target: MatchTarget, age: AgeBand): MatchResult {
   const words = tokens(transcript);
   if (words.length === 0) return 'not-heard';
 
-  const threshold = STRICTNESS[age];
-  const variants = target.accept.map(normalize).filter(Boolean);
-  const best = Math.max(0, ...variants.map((v) => bestWindowSimilarity(words, v)));
-  if (best >= threshold) return 'got-it';
+  let mostMatched = 0;
+  for (const variant of target.accept.map(normalize).filter(Boolean)) {
+    const vWords = variant.split(' ');
+    const a = align(vWords, words, age);
+    if (saidWhole(a, vWords, age)) return 'got-it';
+    mostMatched = Math.max(mostMatched, a.matched / vWords.length);
+  }
 
+  // Part of it, or the key words: a near miss, so the character says it back the right way (a recast).
   const heard = target.keywords.filter((k) => keywordHeard(words, k)).length;
-  if (heard > 0) return 'nearly';
+  if (heard > 0 || mostMatched >= 0.5) return 'nearly';
 
   return 'not-heard';
 }

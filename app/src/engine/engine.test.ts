@@ -44,6 +44,35 @@ test('the younger child gets a looser match', () => {
   assert.equal(matchAttempt('chama ana', t, 8), 'nearly');
 });
 
+test('numbers must be said exactly: a different age is "nearly", not "got it"', () => {
+  const age = { accept: ['tenho oito anos', 'eu tenho oito anos', 'oito anos', 'tenho oito'], keywords: ['tenho', 'anos', 'oito'] };
+  for (const band of [6, 8] as const) {
+    assert.equal(matchAttempt('tenho 8 anos', age, band), 'got-it');
+    assert.equal(matchAttempt('Eu tenho oito anos, e tu?', age, band), 'got-it');
+    assert.equal(matchAttempt('tenho 150 anos', age, band), 'nearly');
+    assert.equal(matchAttempt('tenho cento e cinquenta anos', age, band), 'nearly');
+    assert.equal(matchAttempt('tenho nove anos', age, band), 'nearly');
+  }
+  // "um"/"uma" are mostly articles, so they don't count as numbers.
+  assert.equal(matchAttempt('quero um bolo', { accept: ['quero um bolo'], keywords: ['bolo'] }, 8), 'got-it');
+});
+
+test('the whole sentence must be said: a different word in it is "nearly", not "got it"', () => {
+  for (const band of [6, 8] as const) {
+    assert.equal(matchAttempt('quero sumo', water, band), 'nearly');
+    assert.equal(matchAttempt('quero', water, band), 'nearly');
+    assert.equal(matchAttempt('quero muito agua', water, band), 'got-it');
+  }
+  const hello = { accept: ['ola gui', 'ola'], keywords: ['ola'] };
+  assert.equal(matchAttempt('olá, Gui!', hello, 8), 'got-it');
+  const name = { accept: ['chamo me ana', 'sou a ana'], keywords: ['chamo', 'ana'] };
+  assert.equal(matchAttempt('chamo-me Ana', name, 8), 'got-it');
+  assert.equal(matchAttempt('chamo-me Ana e gosto de bolo de chocolate', name, 8), 'nearly');
+  const cake = { accept: ['quero um bolo'], keywords: ['bolo'] };
+  assert.equal(matchAttempt('quero o bolo', cake, 8), 'nearly');
+  assert.equal(matchAttempt('quero o bolo', cake, 6), 'got-it');
+});
+
 test('turn: model plays after two misses, third attempt with speech is accepted', () => {
   let t = newTurn();
   t = applyAttempt(t, { result: 'not-heard', durationMs: 1200 });
