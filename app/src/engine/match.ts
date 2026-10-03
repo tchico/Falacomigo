@@ -32,14 +32,28 @@ export function similarity(a: string, b: string): number {
   return 1 - prev[b.length] / Math.max(a.length, b.length);
 }
 
+// Number words (after normalize()). "um" and "uma" are left out because they are mostly "a"/"an".
+const NUMBERS = new Set(
+  'zero dois duas tres quatro cinco seis sete oito nove dez onze doze treze catorze quatorze quinze dezasseis dezassete dezoito dezanove vinte trinta quarenta cinquenta sessenta setenta oitenta noventa cem cento duzentos trezentos mil'.split(' '),
+);
+const isNumber = (word: string) => NUMBERS.has(word) || /^\d+$/.test(word);
+
+/** Numbers carry the meaning ("tenho oito anos"), so they must be said exactly: close spelling isn't enough. */
+function sameNumbers(window: string[], vWords: string[]): boolean {
+  const a = window.filter(isNumber).sort().join(' ');
+  const b = vWords.filter(isNumber).sort().join(' ');
+  return a === b;
+}
+
 /** Best similarity of `variant` against any run of words in the transcript, so extra words around it don't hurt. */
 function bestWindowSimilarity(transcriptWords: string[], variant: string): number {
   const vWords = variant.split(' ');
   let best = 0;
   for (let len = Math.max(1, vWords.length - 1); len <= vWords.length + 1; len++) {
     for (let start = 0; start + len <= transcriptWords.length; start++) {
-      const window = transcriptWords.slice(start, start + len).join(' ');
-      best = Math.max(best, similarity(window, variant));
+      const window = transcriptWords.slice(start, start + len);
+      if (!sameNumbers(window, vWords)) continue;
+      best = Math.max(best, similarity(window.join(' '), variant));
     }
   }
   return best;
