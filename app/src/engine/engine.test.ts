@@ -93,6 +93,21 @@ test('open questions: the reply follows the answer the child gave', () => {
   }
 });
 
+test('open questions: the answer that fits most closely wins, so "pouca sede" isn\'t just "sede"', () => {
+  const answers = [
+    { target: { accept: ['tenho sede', 'tenho muita sede', 'sede'], keywords: ['sede'] }, recast: 'Também tens sede?' },
+    { target: { accept: ['nao tenho sede', 'nao'], keywords: [] }, recast: 'Não tens sede?' },
+    { target: { accept: ['tenho pouca sede', 'um bocadinho', 'tenho um pouco de sede'], keywords: [] }, recast: 'Só um bocadinho?' },
+  ];
+  for (const band of [6, 8] as const) {
+    assert.deepEqual(matchAnswer('Tenho pouca sede.', answers, band), { result: 'got-it', answer: answers[2] });
+    assert.deepEqual(matchAnswer('Tenho um pouco de sede', answers, band), { result: 'got-it', answer: answers[2] });
+    assert.deepEqual(matchAnswer('Tenho sede!', answers, band), { result: 'got-it', answer: answers[0] });
+    assert.deepEqual(matchAnswer('Tenho muita sede', answers, band), { result: 'got-it', answer: answers[0] });
+    assert.deepEqual(matchAnswer('Não, não tenho sede', answers, band), { result: 'got-it', answer: answers[1] });
+  }
+});
+
 test('turn: model plays after two misses, third attempt with speech is accepted', () => {
   let t = newTurn();
   t = applyAttempt(t, { result: 'not-heard', durationMs: 1200 });
