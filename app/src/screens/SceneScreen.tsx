@@ -4,6 +4,8 @@ import type { ChildProfile, Unit } from '../content/types';
 import { getUnit, guiLines, sounds, units } from '../content';
 import { troubleWord, type WordHelp } from '../engine/pronounce';
 import { Truque } from './Truque';
+import { playChildAudio } from '../audio/listenBack';
+import type { ChildSettings } from '../settings/childSettings';
 import { saidInEnglish, wordsUpTo, type Word } from '../engine/comoSeDiz';
 import { ComoSeDiz } from './ComoSeDiz';
 import { buildScene, type PlayableBeat } from '../engine/scene';
@@ -61,13 +63,15 @@ interface Props {
   smartReplies?: SmartReplies | null;
   /** A word from "Como se diz?" said back in Portuguese (FR-11). */
   onWordLearned?: () => void;
+  /** Dad's settings for this child (FR-29). */
+  settings?: ChildSettings;
 }
 
 /**
  * One scene, beat by beat (FR-03: speaking is the only way forward).
  * With the stub recogniser, a developer panel at the bottom stands in for the microphone.
  */
-export function SceneScreen({ unit, sceneId, beats: given, title, child, recognizer, progress, onTurn, onFinished, onExit, wear, smartReplies, onWordLearned }: Props) {
+export function SceneScreen({ unit, sceneId, beats: given, title, child, recognizer, progress, onTurn, onFinished, onExit, wear, smartReplies, onWordLearned, settings }: Props) {
   const beats = useMemo(() => given ?? buildScene(unit, sceneId, child), [given, unit, sceneId, child]);
   const [index, setIndex] = useState(0);
   const [turn, setTurn] = useState<TurnState>(newTurn());
@@ -177,7 +181,7 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
       say('Segura e fala!');
       return;
     }
-    const l = recognizer.listen({ locale: 'pt-PT', expectedText: beat.modelText, maxDurationMs: MAX_LISTEN_MS }, setLevel);
+    const l = recognizer.listen({ locale: 'pt-PT', expectedText: beat.modelText, maxDurationMs: MAX_LISTEN_MS, keepAudio: settings?.listenBack }, setLevel);
     listening.current = l;
     setMic('listening');
     let heard: RecognitionResult;
@@ -237,6 +241,11 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
       next = applyAttempt(turn, { result, durationMs: heard.voicedMs });
     }
     setTurn(next);
+    // Listen back (FR-29): the child hears their own turn first, then Gui's reply.
+    if (next.done && settings?.listenBack && heard.audio) {
+      await talk('gui', guiLines.session.listenBack);
+      await playChildAudio(heard.audio);
+    }
     if (next.done) finishTurn(next);
     else if (next.playModel) {
       // Stuck on one word two tries running: a trick for that word first, then the whole phrase again.
@@ -301,7 +310,7 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
         </Pressable>
         <Animated.View style={[styles.bubble, { opacity: lineIn, transform: [{ translateY: lineIn.interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) }] }]}>
           <Text style={styles.line}>{turn.done && feedback ? feedback : beat.line}</Text>
-          {child.age === 8 && beat.lineEn && !turn.done ? <Text style={styles.lineEn}>{beat.lineEn}</Text> : null}
+          {(settings ? settings.subtitles : child.age === 8) && beat.lineEn && !turn.done ? <Text style={styles.lineEn}>{beat.lineEn}</Text> : null}
           {!turn.done && feedback ? <Text style={styles.nudge}>{feedback}</Text> : null}
           {__DEV__ && devHeard ? <Text style={styles.devHeard}>{devHeard}</Text> : null}
           {pictureFor(beat.image).length ? (

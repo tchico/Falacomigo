@@ -10,6 +10,9 @@ function pictureOf(p: Place): string {
   if (p.props.has('trampoline')) return '🤸';
   if (p.props.has('photo')) return '🖼️';
   if (p.props.has('dining')) return '🍽️';
+  if (p.props.has('castle')) return '🏰';
+  if (p.props.has('ball')) return '⚽';
+  if (p.kind === 'beach') return '🍦';
   if (p.kind === 'kitchen') return '🍳';
   if (p.kind === 'ferry') return '⛴️';
   return '🌳';

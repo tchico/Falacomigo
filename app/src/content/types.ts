@@ -155,6 +155,9 @@ export interface JourneyStop {
   name: string;
   nameEn?: string;
   emoji: string;
+  /** Where it is on the journey map, as fractions of the map's width and height. */
+  x: number;
+  y: number;
 }
 
 export interface Journey {
@@ -164,7 +167,7 @@ export interface Journey {
 /** Gui's own lines outside the scenes. See content/gui.json. */
 export interface GuiLines {
   warmup: { title: string; intro: string; introEn: string };
-  session: { aimMinutes: number; more: string; moreEn: string; moreButton: string; sleepy: string; sleepyEn: string; bye: string };
+  session: { aimMinutes: number; listenBack: string; more: string; moreEn: string; moreButton: string; sleepy: string; sleepyEn: string; bye: string };
   album: { title: string; titleEn: string; button: string; newPostcard: string; newPostcardEn: string; newStop: string; newStopEn: string; soon: string; locked: string };
   truque: { title: string; go: string };
   comoSeDiz: { button: string; ask: string; askEn: string; answer: string; yourTurn: string; praise: string; again: string; unknown: string; unknownEn: string; back: string };

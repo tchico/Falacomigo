@@ -57,3 +57,10 @@ export function postcardCount(album: AlbumStop[]): { got: number; total: number 
 export function focusStop(album: AlbumStop[]): AlbumStop {
   return album.find((s) => s.state === 'current') ?? [...album].reverse().find((s) => s.state === 'done') ?? album[0];
 }
+
+/** Where Gui is on the map: the stop being played now, or the last one finished once everything's done. */
+export function hereIndex(album: AlbumStop[]): number {
+  const current = album.findIndex((s) => s.state === 'current');
+  if (current >= 0) return current;
+  return Math.max(0, album.map((s) => s.state).lastIndexOf('done'));
+}

@@ -9,13 +9,17 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "name", "emoji"],
+        "required": ["id", "name", "emoji", "lat", "lon", "x", "y"],
         "additionalProperties": false,
         "properties": {
           "id": { "type": "string", "description": "Matches a unit's stop.id." },
           "name": { "type": "string" },
           "nameEn": { "type": "string" },
-          "emoji": { "type": "string", "description": "Stand-in picture until there's an illustration." }
+          "emoji": { "type": "string", "description": "Stand-in picture until there's an illustration." },
+          "lat": { "type": "number", "description": "Where the stop really is. tools/build-map.mjs turns lat/lon into x and y." },
+          "lon": { "type": "number" },
+          "x": { "type": "number", "minimum": 0, "maximum": 1, "description": "Where the stop is on the map, from the left, as a fraction of its width." },
+          "y": { "type": "number", "minimum": 0, "maximum": 1, "description": "From the top, as a fraction of its height." }
         }
       }
     }

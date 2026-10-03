@@ -82,3 +82,11 @@ test('cloud: the default fetch works when called detached, as browsers require',
     globalThis.fetch = realFetch;
   }
 });
+
+test('cloud: hands the audio back only when listen back is on (FR-29)', async () => {
+  const script = () => [...Array(10)].map(loud).concat([...Array(12)].map(quiet));
+  const on = await new CloudRecognizer({ url: 'https://proxy', appKey: 'k' }, fakeMic(script()), okFetch('olá')).listen({ ...request, keepAudio: true }).result;
+  assert.ok(on.audio && on.audio.length > 44, 'a WAV to play back');
+  const off = await new CloudRecognizer({ url: 'https://proxy', appKey: 'k' }, fakeMic(script()), okFetch('olá')).listen(request).result;
+  assert.equal('audio' in off, false);
+});

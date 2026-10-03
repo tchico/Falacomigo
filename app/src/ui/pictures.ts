@@ -3,6 +3,7 @@
 
 const EMOJI: Record<string, string> = {
   bread: '🍞', soup: '🍲', fish: '🐟', water: '💧', milk: '🥛', octopus: '🐙', biscuit: '🍪', plate: '🍽️',
+  ball: '⚽', bucket: '🪣', icecream: '🍦',
   dad: '👨', mum: '👩', sibling: '🧒', child: '🙂',
 };
 

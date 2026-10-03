@@ -1,0 +1,254 @@
+{
+  "$schema": "../schema/unit.schema.json",
+  "id": "unit-03",
+  "unit": 3,
+  "title": "Vamos brincar!",
+  "titleEn": "Let's play!",
+  "stop": {"id": "beach", "name": "A praia", "nameEn": "A beach in Galicia"},
+  "characters": {
+    "rita": {"name": "Rita", "role": "uma menina do Porto, de férias", "roleEn": "a girl from Porto, on holiday", "emoji": "👧", "color": "#F9D2D9"},
+    "duarte": {"name": "Duarte", "role": "o irmão da Rita", "roleEn": "Rita's brother", "emoji": "👦", "color": "#CDE6F7"}
+  },
+  "phrases": [
+    {
+      "id": "P29",
+      "text": "Posso brincar?",
+      "en": "Can I play?",
+      "accept": ["posso brincar", "posso brincar convosco", "posso brincar contigo", "posso brincar tambem", "eu posso brincar", "posso jogar", "quero brincar", "posso"],
+      "keywords": ["posso", "brincar", "jogar"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P29.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P30",
+      "text": "Queres brincar comigo?",
+      "en": "Do you want to play with me?",
+      "accept": ["queres brincar comigo", "queres brincar", "queres jogar comigo", "queres jogar", "gui queres brincar comigo", "anda brincar comigo", "brincas comigo"],
+      "keywords": ["queres", "brincar", "comigo"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P30.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P31",
+      "text": "Vamos jogar à bola!",
+      "en": "Let's play ball!",
+      "accept": ["vamos jogar a bola", "vamos jogar a bola duarte", "jogar a bola", "vamos jogar", "vamos a bola", "a bola", "bola"],
+      "keywords": ["bola", "jogar", "vamos"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P31.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P32",
+      "text": "É a minha vez!",
+      "en": "It's my turn!",
+      "accept": ["e a minha vez", "a minha vez", "minha vez", "agora e a minha vez", "agora sou eu", "sou eu", "eu primeiro"],
+      "keywords": ["minha", "vez", "eu"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P32.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P33",
+      "text": "É a tua vez!",
+      "en": "It's your turn!",
+      "accept": ["e a tua vez", "a tua vez", "tua vez", "agora e a tua vez", "agora es tu", "es tu", "e a tua vez rita", "vai tu", "tu primeiro"],
+      "keywords": ["tua", "vez", "tu"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P33.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P34",
+      "text": "Posso usar a pá?",
+      "en": "Can I use the spade?",
+      "accept": ["posso usar a pa", "posso usar a pa por favor", "posso usar o balde", "posso usar o balde por favor", "posso usar", "posso ter a pa", "a pa por favor", "o balde por favor", "pa por favor", "balde por favor"],
+      "keywords": ["posso", "usar", "pa", "balde"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P34.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P35",
+      "text": "Toma, é para ti.",
+      "en": "Here, it's for you.",
+      "accept": ["toma e para ti", "toma rita e para ti", "e para ti", "para ti", "toma", "toma la", "aqui tens", "aqui tens rita"],
+      "keywords": ["toma", "ti", "tens"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P35.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P36",
+      "text": "Vamos partilhar!",
+      "en": "Let's share!",
+      "accept": ["vamos partilhar", "vamos partilhar o gelado", "partilhamos", "podemos partilhar", "vamos dividir", "partilhar", "metade para cada um"],
+      "keywords": ["partilhar", "partilhamos", "dividir"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P36.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P37",
+      "text": "Anda cá!",
+      "en": "Come here!",
+      "accept": ["anda ca", "anda ca gui", "anda gui", "anda", "vem ca", "vem ca gui", "anda ca depressa"],
+      "keywords": ["anda", "vem", "ca"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": {"dad": "P37.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P38",
+      "text": "Espera por mim!",
+      "en": "Wait for me!",
+      "accept": ["espera por mim", "espera por mim duarte", "espera", "espera ai", "espera duarte", "esperem por mim", "espera um bocadinho"],
+      "keywords": ["espera", "esperem", "mim"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P38.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P39",
+      "text": "Ganhei!",
+      "en": "I won!",
+      "accept": ["ganhei", "eu ganhei", "ganhei eu", "sim ganhei", "ganhamos", "fui eu"],
+      "keywords": ["ganhei", "ganhamos"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": {"dad": "P39.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P40",
+      "text": "Outra vez!",
+      "en": "Again!",
+      "accept": ["outra vez", "outra vez por favor", "vamos outra vez", "mais uma vez", "mais uma", "outra", "sim outra vez", "sim"],
+      "keywords": ["outra", "vez", "mais"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": {"dad": "P40.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P41",
+      "text": "Que divertido!",
+      "en": "What fun!",
+      "accept": ["que divertido", "e divertido", "muito divertido", "divertido", "que fixe", "fixe", "que giro", "muito giro", "gosto muito", "adoro"],
+      "keywords": ["divertido", "fixe", "giro", "adoro"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P41.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P42",
+      "text": "Desculpa!",
+      "en": "Sorry!",
+      "accept": ["desculpa", "desculpa duarte", "ai desculpa", "desculpa la", "peco desculpa", "desculpe"],
+      "keywords": ["desculpa", "desculpe"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": {"dad": "P42.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P43",
+      "text": "Estou cansado. / Estou cansada.",
+      "en": "I'm tired.",
+      "accept": ["estou cansado", "estou cansada", "estou muito cansado", "estou muito cansada", "ja estou cansado", "ja estou cansada", "cansado", "cansada"],
+      "keywords": ["cansado", "cansada"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P43.m4a", "ttsFallback": true}
+    }
+  ],
+  "vocab": [
+    {"pt": "a praia", "en": "beach"},
+    {"pt": "o mar", "en": "sea"},
+    {"pt": "a onda", "en": "wave"},
+    {"pt": "a areia", "en": "sand"},
+    {"pt": "o castelo de areia", "en": "sandcastle"},
+    {"pt": "a bola", "en": "ball"},
+    {"pt": "o balde", "en": "bucket"},
+    {"pt": "a pá", "en": "spade"},
+    {"pt": "a concha", "en": "shell"},
+    {"pt": "o caranguejo", "en": "crab"},
+    {"pt": "a toalha", "en": "towel"},
+    {"pt": "o chapéu de sol", "en": "beach umbrella"},
+    {"pt": "o sol", "en": "sun"},
+    {"pt": "nadar", "en": "to swim"},
+    {"pt": "correr", "en": "to run"},
+    {"pt": "brincar", "en": "to play"}
+  ],
+  "warmup": ["P29", "P31", "P32", "P35", "P40"],
+  "scenes": [
+    {
+      "id": "S3.1",
+      "title": "Posso brincar?",
+      "titleEn": "Can I play?",
+      "setting": "beach-castle",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "gui", "text": "Chegámos à praia! Que sol! Olha, dois meninos a fazer um castelo de areia.", "en": "We've reached the beach! So sunny! Look, two children making a sandcastle."}, "expect": null},
+        {"id": "b2", "say": {"speaker": "rita", "text": "Olá! Eu sou a Rita e este é o Duarte, o meu irmão. Somos do Porto!", "en": "Hello! I'm Rita and this is Duarte, my brother. We're from Porto!"}, "expect": null},
+        {"id": "b3", "say": {"speaker": "rita", "text": "Estamos a fazer um castelo enorme! Hmm… queres alguma coisa?", "en": "We're making a huge castle! Hmm… do you want something?"}, "expect": "P29", "recast": "Claro que podes! Anda!"},
+        {"id": "b4", "say": {"speaker": "duarte", "text": "Temos de ir buscar água ao mar. Quem vai primeiro?", "en": "We need to fetch water from the sea. Who goes first?"}, "expect": "P32", "answers": [{"accept": ["e a tua vez", "a tua vez", "tua vez", "vai tu", "tu primeiro", "primeiro tu", "es tu"], "recast": "Eu primeiro? Obrigado! Já volto!"}], "recast": "É a tua vez! Toma o balde!"},
+        {"id": "b5", "ages": [8], "say": {"speaker": "rita", "text": "Eu tenho a pá e o balde. Precisas de alguma coisa?", "en": "I've got the spade and the bucket. Do you need anything?"}, "expect": "P34", "image": "beach:bucket", "recast": "Claro! Toma, podes usar."},
+        {"id": "b5y", "ages": [6], "say": {"speaker": "rita", "text": "Olha, o balde! Toma, é para ti.", "en": "Look, the bucket! Here, it's for you."}, "expect": null, "image": "beach:bucket"},
+        {"id": "b6", "say": {"speaker": "gui", "text": "O castelo está pronto! Que tal? Gostas?", "en": "The castle is ready! What do you think? Do you like it?"}, "model": "Que divertido!", "expect": "P41", "answers": [{"accept": ["nao gosto", "nao gosto muito", "nao e giro", "nao"], "recast": "Não gostas? Amanhã fazemos um ainda maior!"}], "recast": "Que divertido, não é?"},
+        {"id": "b7", "say": {"speaker": "gui", "text": "Oh, não! Olha o mar… vem aí uma onda enorme!", "en": "Oh no! Look at the sea… a huge wave is coming!"}, "expect": null, "cliffhanger": true}
+      ]
+    },
+    {
+      "id": "S3.2",
+      "title": "Vamos jogar à bola!",
+      "titleEn": "Let's play ball!",
+      "setting": "beach-ball",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "duarte", "text": "A onda levou o castelo! Não faz mal. Temos uma bola. O que fazemos agora?", "en": "The wave took the castle! Never mind. We've got a ball. What shall we do now?"}, "expect": "P31", "image": "beach:ball", "recast": "Boa ideia! Vamos jogar à bola!"},
+        {"id": "b2", "say": {"speaker": "gui", "text": "Eu também quero jogar! Mas estou tão longe… onde fico?", "en": "I want to play too! But I'm so far away… where do I go?"}, "model": "Anda cá!", "expect": "P37", "recast": "Vou já! Voo, voo, voo!"},
+        {"id": "b3", "ages": [8], "say": {"speaker": "rita", "text": "Quem atira a bola agora? Sou eu ou és tu?", "en": "Who throws the ball now? Me or you?"}, "expect": "P33", "answers": [{"accept": ["e a minha vez", "a minha vez", "minha vez", "agora sou eu", "sou eu", "eu primeiro"], "recast": "É a tua vez? Está bem, apanha!"}], "recast": "Obrigada! Apanha, Duarte!"},
+        {"id": "b4", "say": {"speaker": "duarte", "text": "Ai! A bola bateu-me na cabeça!", "en": "Ouch! The ball hit me on the head!"}, "model": "Desculpa!", "expect": "P42", "recast": "Não faz mal! Estou bem!"},
+        {"id": "b5", "say": {"speaker": "duarte", "text": "Corrida até ao mar! Um, dois, três… já!", "en": "Race to the sea! One, two, three… go!"}, "model": "Espera por mim!", "expect": "P38", "recast": "Está bem, eu espero! Vamos juntos!"},
+        {"id": "b6", "say": {"speaker": "rita", "text": "Chegaste primeiro ao mar! Quem ganhou?", "en": "You got to the sea first! Who won?"}, "expect": "P39", "answers": [{"accept": ["tu ganhaste", "ganhaste tu", "a rita ganhou", "o duarte ganhou", "eu perdi", "perdi"], "recast": "Eu? Não, ganhaste tu! Chegaste primeiro!"}], "recast": "Ganhaste! Parabéns!"},
+        {"id": "b7", "say": {"speaker": "gui", "text": "Olha! O Duarte tem um gelado… mas só tem um. Hmm…", "en": "Look! Duarte has an ice cream… but he's only got one. Hmm…"}, "expect": null, "cliffhanger": true}
+      ]
+    },
+    {
+      "id": "S3.3",
+      "title": "Partilhar é fixe",
+      "titleEn": "Sharing is cool",
+      "setting": "beach-evening",
+      "beats": [
+        {"id": "b1", "ages": [8], "say": {"speaker": "duarte", "text": "Tenho um gelado, mas somos muitos. O que fazemos?", "en": "I've got one ice cream, but there are lots of us. What shall we do?"}, "expect": "P36", "image": "beach:icecream", "recast": "Boa ideia! Um bocadinho para cada um!"},
+        {"id": "b1y", "ages": [6], "say": {"speaker": "gui", "text": "Só um gelado? Não faz mal. Vamos partilhar!", "en": "Only one ice cream? Never mind. Let's share!"}, "expect": null, "image": "beach:icecream"},
+        {"id": "b2", "say": {"speaker": "rita", "text": "E eu? Eu também quero um bocadinho!", "en": "What about me? I want a little bit too!"}, "model": "Toma, é para ti.", "expect": "P35", "image": "beach:icecream", "recast": "Obrigada! Hmm, que bom!"},
+        {"id": "b3", "say": {"speaker": "gui", "text": "Isto é tão divertido! Mais um jogo?", "en": "This is such fun! One more game?"}, "model": "Outra vez!", "expect": "P40", "answers": [{"accept": ["nao", "nao obrigado", "nao obrigada", "ja chega", "agora nao", "nao quero"], "recast": "Já chega? Está bem, descansamos um bocadinho."}], "recast": "Outra vez! Vamos lá!"},
+        {"id": "b4", "ages": [8], "say": {"speaker": "rita", "text": "Ufa! Corremos tanto. E tu, como estás?", "en": "Phew! We ran so much. How about you, how are you?"}, "expect": "P43", "answers": [{"accept": ["estou bem", "bem", "estou otimo", "estou otima", "nao estou cansado", "nao estou cansada", "estou fixe"], "recast": "Estás bem? Que energia!"}], "recast": "Eu também estou cansada!"},
+        {"id": "b5", "ages": [8], "say": {"speaker": "gui", "text": "Ai… a Rita e o Duarte vão embora. Agora ninguém brinca comigo…", "en": "Oh… Rita and Duarte are leaving. Now nobody will play with me…"}, "model": "Queres brincar comigo?", "expect": "P30", "recast": "Quero! Quero muito! Obrigado!"},
+        {"id": "b6", "say": {"speaker": "rita", "text": "Adeus! Até amanhã! Vemo-nos no Porto!", "en": "Bye! See you tomorrow! See you in Porto!"}, "expect": null},
+        {"id": "b7", "say": {"speaker": "gui", "text": "Amanhã vamos para o Porto! Espera… onde está o meu mapa?", "en": "Tomorrow we're going to Porto! Wait… where's my map?"}, "expect": null, "cliffhanger": true}
+      ]
+    }
+  ],
+  "missions": [
+    {"id": "M1", "day": 1, "card": {"text": "Pergunta ao pai se podes brincar", "en": "Ask Dad if you can play", "image": "m1-play.png"}, "say": {"6": "Pai, posso brincar?", "8": "Pai, queres brincar comigo?"}, "targets": {"6": ["P29"], "8": ["P29", "P30"]}, "when": "When Dad has a free moment"},
+    {"id": "M2", "day": 2, "card": {"text": "Joga com o pai e diz de quem é a vez", "en": "Play a game with Dad and say whose turn it is", "image": "m2-turns.png"}, "say": {"6": "É a minha vez!", "8": "É a minha vez! Agora é a tua vez!"}, "targets": {"6": ["P32"], "8": ["P32", "P33"]}, "when": "During a board game or a ball game"},
+    {"id": "M3", "day": 3, "card": {"text": "Dá uma coisa ao pai", "en": "Give Dad something", "image": "m3-give.png"}, "say": {"6": "Toma, é para ti!", "8": "Toma, pai, é para ti!"}, "targets": {"6": ["P35"], "8": ["P35"]}, "when": "Any time"},
+    {"id": "M4", "day": 4, "card": {"text": "Pede ao pai para brincar outra vez", "en": "Ask Dad to play again", "image": "m4-again.png"}, "say": {"6": "Outra vez!", "8": "Outra vez! Que divertido!"}, "targets": {"6": ["P40"], "8": ["P40", "P41"]}, "when": "When a game ends"},
+    {"id": "M5", "day": 5, "card": {"text": "Uma corrida com o pai!", "en": "A race with Dad!", "image": "m5-race.png"}, "say": {"6": "Espera por mim! Ganhei!", "8": "Espera por mim, pai! Ganhei!"}, "targets": {"6": ["P38", "P39"], "8": ["P38", "P39"]}, "when": "Outside, in the garden or the park"},
+    {"id": "M6", "day": 6, "siblings": true, "card": {"text": "Juntos! Partilhem um lanche", "en": "Together! Share a snack", "image": "m6-share.png"}, "say": {"6": "Toma, é para ti!", "8": "Vamos partilhar! Toma, é para ti."}, "targets": {"6": ["P35"], "8": ["P36", "P35"]}, "when": "At snack time, when both kids are around"},
+    {"id": "M7", "day": 7, "bonus": true, "card": {"text": "Conta à avó a que jogaste", "en": "Tell Granny what you played", "image": "m7-call.png"}, "say": {"6": "Avó, vamos jogar à bola!", "8": "Olá, avó! Vamos jogar à bola? Que divertido!"}, "targets": {"6": ["P31"], "8": ["P31", "P41"]}, "when": "Next call with Granny"}
+  ],
+  "schedule": {
+    "sessionsPerWeek": 2,
+    "sessions": [
+      {"session": 1, "scene": "S3.1"},
+      {"session": 2, "warmup": true, "review": true},
+      {"session": 3, "scene": "S3.2"},
+      {"session": 4, "warmup": true, "review": true},
+      {"session": 5, "scene": "S3.3"},
+      {"session": 6, "warmup": true, "review": true},
+      {"session": 7, "review": true, "replay": "S3.1"}
+    ],
+    "missionsPerDay": 1
+  }
+}
