@@ -2,7 +2,7 @@
 // Checks every content pack so a typo in the JSON is caught by CI, not by a child mid-game.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { guide, units } from './index';
+import { guide, shop, units } from './index';
 import { normalize } from '../engine/normalize';
 import { buildScene } from '../engine/scene';
 import { matchAttempt } from '../engine/match';
@@ -85,4 +85,17 @@ test('guide: 8 cards, each with a try-this-week line and valid references', () =
     if (c.kind === 'research') assert.ok(c.refs.length > 0, `research card ${c.id} has no sources`);
   }
   for (const s of guide.sources) assert.match(s.url, /^https:\/\//);
+});
+
+test('shop: items have unique ids, sensible prices, and accept their own phrase (FR-22)', () => {
+  const ids = shop.items.map((i) => i.id);
+  assert.equal(new Set(ids).size, ids.length);
+  for (const item of shop.items) {
+    assert.ok(item.price > 0, `${item.id} has a price`);
+    for (const a of item.accept) assert.equal(normalize(a), a, `${item.id}: "${a}" should be written as "${normalize(a)}"`);
+    for (const age of [6, 8] as const) {
+      assert.equal(matchAttempt(item.say, item, age), 'got-it', `${item.id}: "${item.say}" for age ${age}`);
+      assert.equal(matchAttempt(item.name, item, age), 'got-it', `${item.id}: just "${item.name}" for age ${age}`);
+    }
+  }
 });

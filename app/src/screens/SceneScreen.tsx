@@ -10,6 +10,7 @@ import { MAX_LISTEN_MS } from '../speech/pcm';
 import { clipKey, phraseClipFile } from '../audio/clips';
 import { play, sayAs, sourceFor, stop } from '../audio/voice';
 import { COINS_PER_TURN } from '../engine/rewards';
+import type { Wear } from '../engine/shop';
 import { StubRecognizer } from '../speech/stub';
 import { BigButton } from '../ui/BigButton';
 import { Gui } from '../ui/Gui';
@@ -41,13 +42,15 @@ interface Props {
   onFinished: () => void;
   /** Back to the profile screen. */
   onExit: () => void;
+  /** What Gui is wearing from his shop. */
+  wear?: Wear;
 }
 
 /**
  * One scene, beat by beat (FR-03: speaking is the only way forward).
  * With the stub recogniser, a developer panel at the bottom stands in for the microphone.
  */
-export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn, onFinished, onExit }: Props) {
+export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn, onFinished, onExit, wear }: Props) {
   const beats = useMemo(() => buildScene(unit, sceneId, child), [unit, sceneId, child]);
   const [index, setIndex] = useState(0);
   const [turn, setTurn] = useState<TurnState>(newTurn());
@@ -232,7 +235,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
             <Character info={character} talking={talker === beat.speaker} />
           ) : (
             <View style={{ alignItems: 'center' }}>
-              <Gui size={240} happy={turn.done} talking={talker === 'gui'} />
+              <Gui size={240} happy={turn.done} talking={talker === 'gui'} wear={wear} />
               {place.props.has('trampoline') ? <View style={{ marginTop: -36 }}><Trampoline width={260} /></View> : null}
             </View>
           )}

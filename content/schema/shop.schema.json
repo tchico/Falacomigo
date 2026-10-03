@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gui's shop (FR-22)",
+  "type": "object",
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "titleEn": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "en",
+          "slot",
+          "price",
+          "emoji",
+          "say",
+          "accept",
+          "keywords"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "description": "With its article, pt-PT, e.g. \"o boné\"."
+          },
+          "en": {
+            "type": "string"
+          },
+          "slot": {
+            "enum": [
+              "head",
+              "eyes",
+              "neck"
+            ]
+          },
+          "price": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "emoji": {
+            "type": "string",
+            "description": "Stand-in picture until there's an illustration."
+          },
+          "say": {
+            "type": "string",
+            "description": "What the child says to buy it."
+          },
+          "accept": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Normalised: lower case, no accents or punctuation."
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

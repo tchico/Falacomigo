@@ -15,6 +15,9 @@ import { ProfilePicker } from './src/screens/ProfilePicker';
 import { ParentZone } from './src/parent/ParentZone';
 import { SceneScreen, type TurnLog } from './src/screens/SceneScreen';
 import { WelcomeScreen } from './src/screens/WelcomeScreen';
+import { ShopScreen } from './src/screens/ShopScreen';
+import { shop } from './src/content';
+import { wearFor } from './src/engine/shop';
 import { BigButton } from './src/ui/BigButton';
 import { BackButton } from './src/ui/BackButton';
 import { MissionScreen } from './src/screens/MissionScreen';
@@ -28,7 +31,8 @@ type Screen =
   | { name: 'welcome'; text: string; unitId: string; sceneId: string }
   | { name: 'scene'; unitId: string; sceneId: string }
   | { name: 'mission'; unitId: string; mission: Mission; rowId: number }
-  | { name: 'done' };
+  | { name: 'done' }
+  | { name: 'shop'; back: Screen };
 
 export default function App() {
   const recognizer = useMemo(() => createRecognizer(), []);
@@ -39,6 +43,9 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'loading' });
   const [coins, setCoins] = useState(0);
   const [progress, setProgress] = useState<Record<string, PhraseProgress>>({});
+  /** What Gui is wearing for this child, from his shop (FR-22). */
+  const [outfit, setOutfit] = useState<Record<string, string>>({});
+  const wear = wearFor(outfit, shop.items);
   /** Phrases said in this episode, for picking the mission (FR-17). */
   const practised = useRef<string[]>([]);
 
@@ -76,7 +83,14 @@ export default function App() {
   const pick = async (p: StoredProfile) => {
     if (!store) return;
     const c = toChildProfile(p);
-    const [prog, wallet, played, last] = await Promise.all([store.getProgress(c.id), store.getCoins(c.id), store.scenesPlayed(c.id), store.lastPlayedDay(c.id)]);
+    const [prog, wallet, played, last, worn] = await Promise.all([
+      store.getProgress(c.id),
+      store.getCoins(c.id),
+      store.scenesPlayed(c.id),
+      store.lastPlayedDay(c.id),
+      store.getOutfit(c.id),
+    ]);
+    setOutfit(worn);
     setChild(c);
     setProgress(prog);
     setCoins(wallet);
@@ -161,6 +175,8 @@ export default function App() {
           text={screen.text}
           stopName={getUnit(screen.unitId).stop.name}
           setting={getUnit(screen.unitId).scenes.find((sc) => sc.id === screen.sceneId)?.setting}
+          wear={wear}
+          onShop={() => setScreen({ name: 'shop', back: screen })}
           onStart={() => setScreen({ name: 'scene', unitId: screen.unitId, sceneId: screen.sceneId })}
         />
       )}
@@ -176,6 +192,7 @@ export default function App() {
           onTurn={onTurn(screen.unitId, screen.sceneId)}
           onFinished={() => void onSceneFinished(screen.unitId, screen.sceneId)}
           onExit={() => void backToStart()}
+          wear={wear}
         />
       )}
 
@@ -191,9 +208,23 @@ export default function App() {
             }
             setScreen({ name: 'done' });
           }}
+          wear={wear}
           onLater={() => {
             setScreen({ name: 'done' });
           }}
+        />
+      )}
+
+      {screen.name === 'shop' && store && child && (
+        <ShopScreen
+          store={store}
+          child={child}
+          coins={coins}
+          outfit={outfit}
+          recognizer={recognizer}
+          onCoins={setCoins}
+          onOutfit={setOutfit}
+          onExit={() => setScreen(screen.back)}
         />
       )}
 
@@ -201,7 +232,10 @@ export default function App() {
         <View style={styles.done}>
           <Text style={styles.doneTitle}>Até amanhã!</Text>
           <Text style={styles.doneText}>{coins} moedas</Text>
-          <BigButton label="🏠 Voltar ao início" variant="secondary" onPress={() => void backToStart()} />
+          <View style={{ flexDirection: 'row', gap: 16 }}>
+            <BigButton label="🛍️ Loja do Gui" onPress={() => setScreen({ name: 'shop', back: { name: 'done' } })} accessibilityLabel="Gui's shop" />
+            <BigButton label="🏠 Voltar ao início" variant="secondary" onPress={() => void backToStart()} />
+          </View>
         </View>
       )}
     </SafeAreaView>

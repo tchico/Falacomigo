@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Animated, Easing, StyleSheet, View } from 'react-native';
+import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
 import { colors } from './theme';
 import { useLoop, useNative, useReducedMotion } from './motion';
 
@@ -9,6 +9,8 @@ interface Props {
   happy?: boolean;
   /** Beak moves while he's speaking. */
   talking?: boolean;
+  /** What he's wearing from his shop (FR-22), as pictures by slot. */
+  wear?: { head?: string; eyes?: string; neck?: string };
 }
 
 /**
@@ -16,7 +18,7 @@ interface Props {
  * while he talks and hops when the child gets it right. All slow and gentle (NFR-09).
  * Replace with the real illustration (SVG or Lottie) later.
  */
-export function Gui({ size = 180, happy = false, talking = false }: Props) {
+export function Gui({ size = 180, happy = false, talking = false, wear = {} }: Props) {
   const s = size / 180;
   const reduced = useReducedMotion();
   const breathe = useLoop(2600, !reduced);
@@ -74,6 +76,10 @@ export function Gui({ size = 180, happy = false, talking = false }: Props) {
         {/* Lower beak opens and closes while he talks; the upper beak stays put. */}
         <Animated.View style={[styles.beakLower, { left: 150 * s, top: 58 * s, borderTopWidth: 0, borderBottomWidth: 7 * s, borderLeftWidth: 22 * s, transform: [{ rotate: beakOpen }] }]} />
         <View style={[styles.beak, { left: 152 * s, top: 50 * s, borderTopWidth: 8 * s, borderBottomWidth: 6 * s, borderLeftWidth: 26 * s }]} />
+        {/* Things from his shop sit on top, so they move with him. */}
+        {wear.neck ? <Text style={[styles.wear, { left: 94 * s, top: 62 * s, fontSize: 40 * s }]}>{wear.neck}</Text> : null}
+        {wear.eyes ? <Text style={[styles.wear, { left: 110 * s, top: 26 * s, fontSize: 34 * s }]}>{wear.eyes}</Text> : null}
+        {wear.head ? <Text style={[styles.wear, { left: 94 * s, top: -24 * s, fontSize: 54 * s }]}>{wear.head}</Text> : null}
       </Animated.View>
       <View style={[styles.leg, { left: 62 * s, top: 160 * s, width: 6 * s, height: 18 * s }]} />
       <View style={[styles.leg, { left: 96 * s, top: 160 * s, width: 6 * s, height: 18 * s }]} />
@@ -106,4 +112,5 @@ const styles = StyleSheet.create({
     borderLeftColor: '#E0A21F',
   },
   leg: { position: 'absolute', backgroundColor: '#E8833A', borderRadius: 3 },
+  wear: { position: 'absolute' },
 });

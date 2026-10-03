@@ -7,6 +7,7 @@ import { clipKey, missionClipFile } from '../audio/clips';
 import { play, sayAsGui, sourceFor, stop } from '../audio/voice';
 import { BigButton } from '../ui/BigButton';
 import { Gui } from '../ui/Gui';
+import type { Wear } from '../engine/shop';
 import { HoldButton } from '../ui/HoldButton';
 import { colors, radius, TOUCH } from '../ui/theme';
 
@@ -18,13 +19,15 @@ interface Props {
   onApproved: (stars: number) => void;
   /** The mission stays open, and Dad can give the stars later from the parent zone. */
   onLater: () => void;
+  /** What Gui is wearing from his shop. */
+  wear?: Wear;
 }
 
 /** How long Dad holds a star to approve. Long enough that a child tapping around won't do it by accident. */
 export const STAR_HOLD_MS = 2000;
 
 /** FR-17: the mission card from Gui to Dad, with the phrase in Dad's voice. */
-export function MissionScreen({ unitId, mission, child, onApproved, onLater }: Props) {
+export function MissionScreen({ unitId, mission, child, onApproved, onLater, wear }: Props) {
   const [going, setGoing] = useState(false);
   const [stars, setStars] = useState(0);
   const age = String(child.age) as '6' | '8';
@@ -54,7 +57,7 @@ export function MissionScreen({ unitId, mission, child, onApproved, onLater }: P
           <View style={styles.missionBubble}>
             <Text style={styles.missionBubbleText}>{going ? 'Vai! Eu espero.' : 'Missão!'}</Text>
           </View>
-          <Gui size={220} happy={going || stars > 0} />
+          <Gui size={220} happy={going || stars > 0} wear={wear} />
         </View>
         <View style={styles.text}>
           <View style={styles.header}>
