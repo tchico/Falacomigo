@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { guiLines, journey, units } from '../content';
 import type { ChildProfile } from '../content/types';
-import { buildAlbum, focusStop, postcardCount } from './album';
+import { buildAlbum, focusStop, hereIndex, postcardCount } from './album';
 import { newProgress, type PhraseProgress } from './ladder';
 import { isSleepy } from './session';
 import { buildWarmup, WARMUP_SIZE } from './warmup';
@@ -96,4 +96,12 @@ test('como se diz: saying the word back counts with or without its article (FR-1
     assert.equal(matchAttempt(w.pt, targetFor(w), 6), 'got-it', w.pt);
     assert.equal(matchAttempt(w.pt, targetFor(w), 8), 'got-it', w.pt);
   }
+});
+
+test('journey map: Gui is at the stop being played, and stays at the last one when everything is done', () => {
+  assert.equal(hereIndex(buildAlbum(units, journey.stops, [])), 0);
+  const unit1 = units[0].scenes.map((s) => ({ unitId: 'unit-01', sceneId: s.id }));
+  assert.equal(hereIndex(buildAlbum(units, journey.stops, unit1)), 1);
+  const all = units.flatMap((u) => u.scenes.map((s) => ({ unitId: u.id, sceneId: s.id })));
+  assert.equal(hereIndex(buildAlbum(units, journey.stops, all)), units.length - 1);
 });

@@ -155,6 +155,9 @@ export interface JourneyStop {
   name: string;
   nameEn?: string;
   emoji: string;
+  /** Where it is on the journey map, as fractions of the map's width and height. */
+  x: number;
+  y: number;
 }
 
 export interface Journey {

@@ -34,7 +34,7 @@ type Screen =
   | { name: 'store-error' }
   | { name: 'pick' }
   | { name: 'parent' }
-  | { name: 'welcome'; text: string; unitId: string; sceneId: string }
+  | { name: 'welcome'; text: string; unitId: string; sceneId: string; album: AlbumStop[] }
   | { name: 'warmup'; unitId: string; sceneId: string; beats: PlayableBeat[] }
   | { name: 'scene'; unitId: string; sceneId: string }
   | { name: 'mission'; unitId: string; mission: Mission; rowId: number }
@@ -118,7 +118,7 @@ export default function App() {
     practised.current = [];
     sessionStart.current = Date.now();
     warmedUp.current = false;
-    setScreen({ name: 'welcome', text: greeting(c.name, last, localDay()), unitId: next.unitId, sceneId: next.sceneId });
+    setScreen({ name: 'welcome', text: greeting(c.name, last, localDay()), unitId: next.unitId, sceneId: next.sceneId, album: buildAlbum(units, journey.stops, played) });
   };
 
   /** Into the episode: the warm-up first, if anything is due and it hasn't been done this session (FR-15). */
@@ -230,7 +230,7 @@ export default function App() {
         <WelcomeScreen
           text={screen.text}
           stopName={getUnit(screen.unitId).stop.name}
-          setting={getUnit(screen.unitId).scenes.find((sc) => sc.id === screen.sceneId)?.setting}
+          album={screen.album}
           wear={wear}
           onShop={() => setScreen({ name: 'shop', back: screen })}
           onAlbum={() => void showAlbum(screen)}
