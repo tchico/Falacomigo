@@ -114,6 +114,19 @@ const MIGRATIONS: string[] = [
      day TEXT NOT NULL,
      at INTEGER NOT NULL
    );`,
+  // Gui's shop (FR-22): what each child has bought, and what Gui is wearing for them.
+  `CREATE TABLE shop_items (
+     child_id TEXT NOT NULL,
+     item_id TEXT NOT NULL,
+     bought_at INTEGER NOT NULL,
+     PRIMARY KEY (child_id, item_id)
+   );
+   CREATE TABLE outfit (
+     child_id TEXT NOT NULL,
+     slot TEXT NOT NULL,
+     item_id TEXT NOT NULL,
+     PRIMARY KEY (child_id, slot)
+   );`,
 ];
 
 interface ProgressRow {
@@ -249,6 +262,42 @@ export class Store {
 
   private async addCoinsInTx(childId: string, n: number): Promise<void> {
     await this.db.runAsync('UPDATE profiles SET coins = coins + ? WHERE id = ?', [n, childId]);
+  }
+
+  // Gui's shop (FR-22)
+
+  async ownedItems(childId: string): Promise<string[]> {
+    const rows = await this.db.getAllAsync<{ item_id: string }>('SELECT item_id FROM shop_items WHERE child_id = ? ORDER BY bought_at', [childId]);
+    return rows.map((r) => r.item_id);
+  }
+
+  /**
+   * Buys an item if the child can afford it and doesn't have it yet: takes the coins and records it, together.
+   * Returns false (and changes nothing) otherwise.
+   */
+  async buyItem(childId: string, itemId: string, price: number): Promise<boolean> {
+    let bought = false;
+    await this.db.withTransactionAsync(async () => {
+      const owned = await this.db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM shop_items WHERE child_id = ? AND item_id = ?', [childId, itemId]);
+      if (owned?.n) return;
+      if ((await this.getCoins(childId)) < price) return;
+      await this.db.runAsync('UPDATE profiles SET coins = coins - ? WHERE id = ?', [price, childId]);
+      await this.db.runAsync('INSERT INTO shop_items (child_id, item_id, bought_at) VALUES (?, ?, ?)', [childId, itemId, this.now()]);
+      bought = true;
+    });
+    return bought;
+  }
+
+  /** What Gui is wearing for this child, by slot (e.g. { head: 'hat-blue' }). */
+  async getOutfit(childId: string): Promise<Record<string, string>> {
+    const rows = await this.db.getAllAsync<{ slot: string; item_id: string }>('SELECT slot, item_id FROM outfit WHERE child_id = ?', [childId]);
+    return Object.fromEntries(rows.map((r) => [r.slot, r.item_id]));
+  }
+
+  /** Puts an item on Gui in its slot, or takes the slot off with null. */
+  async setOutfit(childId: string, slot: string, itemId: string | null): Promise<void> {
+    if (itemId === null) await this.db.runAsync('DELETE FROM outfit WHERE child_id = ? AND slot = ?', [childId, slot]);
+    else await this.db.runAsync('INSERT OR REPLACE INTO outfit (child_id, slot, item_id) VALUES (?, ?, ?)', [childId, slot, itemId]);
   }
 
   // Missions to Dad (FR-17, FR-18)

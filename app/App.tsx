@@ -8,14 +8,18 @@ import { greeting, localDay, nextMission, nextScene } from './src/engine/episode
 import { COINS_PER_TURN, coinsForStars } from './src/engine/rewards';
 import { createRecognizer } from './src/speech';
 import { openStore } from './src/store/open';
-import { initVoice, sayAsGui } from './src/audio/voice';
+import { initVoice, sayAsGui, stop as stopVoice } from './src/audio/voice';
 import { initRecordings } from './src/audio/recordings';
 import { toChildProfile, type Store, type StoredProfile } from './src/store/store';
 import { ProfilePicker } from './src/screens/ProfilePicker';
 import { ParentZone } from './src/parent/ParentZone';
 import { SceneScreen, type TurnLog } from './src/screens/SceneScreen';
 import { WelcomeScreen } from './src/screens/WelcomeScreen';
+import { ShopScreen } from './src/screens/ShopScreen';
+import { shop } from './src/content';
+import { wearFor } from './src/engine/shop';
 import { BigButton } from './src/ui/BigButton';
+import { BackButton } from './src/ui/BackButton';
 import { MissionScreen } from './src/screens/MissionScreen';
 import { colors } from './src/ui/theme';
 
@@ -27,7 +31,8 @@ type Screen =
   | { name: 'welcome'; text: string; unitId: string; sceneId: string }
   | { name: 'scene'; unitId: string; sceneId: string }
   | { name: 'mission'; unitId: string; mission: Mission; rowId: number }
-  | { name: 'done' };
+  | { name: 'done' }
+  | { name: 'shop'; back: Screen };
 
 export default function App() {
   const recognizer = useMemo(() => createRecognizer(), []);
@@ -38,6 +43,9 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'loading' });
   const [coins, setCoins] = useState(0);
   const [progress, setProgress] = useState<Record<string, PhraseProgress>>({});
+  /** What Gui is wearing for this child, from his shop (FR-22). */
+  const [outfit, setOutfit] = useState<Record<string, string>>({});
+  const wear = wearFor(outfit, shop.items);
   /** Phrases said in this episode, for picking the mission (FR-17). */
   const practised = useRef<string[]>([]);
 
@@ -75,7 +83,14 @@ export default function App() {
   const pick = async (p: StoredProfile) => {
     if (!store) return;
     const c = toChildProfile(p);
-    const [prog, wallet, played, last] = await Promise.all([store.getProgress(c.id), store.getCoins(c.id), store.scenesPlayed(c.id), store.lastPlayedDay(c.id)]);
+    const [prog, wallet, played, last, worn] = await Promise.all([
+      store.getProgress(c.id),
+      store.getCoins(c.id),
+      store.scenesPlayed(c.id),
+      store.lastPlayedDay(c.id),
+      store.getOutfit(c.id),
+    ]);
+    setOutfit(worn);
     setChild(c);
     setProgress(prog);
     setCoins(wallet);
@@ -109,6 +124,7 @@ export default function App() {
   }, [screen.name]);
 
   const backToStart = async () => {
+    void stopVoice();
     setChild(null);
     setScreen({ name: 'pick' });
     if (store) await refreshProfiles(store);
@@ -122,6 +138,13 @@ export default function App() {
           <Text style={styles.coinsText}>{coins} moedas</Text>
         </View>
       ) : null}
+
+      {/* Back to "Quem vai jogar?" from the game screens; the scene draws its own in its top bar. */}
+      {(screen.name === 'welcome' || screen.name === 'mission' || screen.name === 'done') && (
+        <View style={styles.back}>
+          <BackButton onPress={() => void backToStart()} />
+        </View>
+      )}
 
       {screen.name === 'loading' && (
         <View style={styles.done}>
@@ -151,6 +174,9 @@ export default function App() {
         <WelcomeScreen
           text={screen.text}
           stopName={getUnit(screen.unitId).stop.name}
+          setting={getUnit(screen.unitId).scenes.find((sc) => sc.id === screen.sceneId)?.setting}
+          wear={wear}
+          onShop={() => setScreen({ name: 'shop', back: screen })}
           onStart={() => setScreen({ name: 'scene', unitId: screen.unitId, sceneId: screen.sceneId })}
         />
       )}
@@ -165,6 +191,8 @@ export default function App() {
           progress={progress}
           onTurn={onTurn(screen.unitId, screen.sceneId)}
           onFinished={() => void onSceneFinished(screen.unitId, screen.sceneId)}
+          onExit={() => void backToStart()}
+          wear={wear}
         />
       )}
 
@@ -180,9 +208,23 @@ export default function App() {
             }
             setScreen({ name: 'done' });
           }}
+          wear={wear}
           onLater={() => {
             setScreen({ name: 'done' });
           }}
+        />
+      )}
+
+      {screen.name === 'shop' && store && child && (
+        <ShopScreen
+          store={store}
+          child={child}
+          coins={coins}
+          outfit={outfit}
+          recognizer={recognizer}
+          onCoins={setCoins}
+          onOutfit={setOutfit}
+          onExit={() => setScreen(screen.back)}
         />
       )}
 
@@ -190,7 +232,10 @@ export default function App() {
         <View style={styles.done}>
           <Text style={styles.doneTitle}>Até amanhã!</Text>
           <Text style={styles.doneText}>{coins} moedas</Text>
-          <BigButton label="🏠 Voltar ao início" variant="secondary" onPress={() => void backToStart()} />
+          <View style={{ flexDirection: 'row', gap: 16 }}>
+            <BigButton label="🛍️ Loja do Gui" onPress={() => setScreen({ name: 'shop', back: { name: 'done' } })} accessibilityLabel="Gui's shop" />
+            <BigButton label="🏠 Voltar ao início" variant="secondary" onPress={() => void backToStart()} />
+          </View>
         </View>
       )}
     </SafeAreaView>
@@ -199,6 +244,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.cream },
+  back: { position: 'absolute', left: 24, top: 20, zIndex: 10 },
   coins: { position: 'absolute', right: 24, top: 20, zIndex: 10, backgroundColor: colors.white, borderWidth: 3, borderColor: colors.ink, borderRadius: 999, paddingHorizontal: 18, paddingVertical: 6 },
   coinsText: { fontSize: 20, fontWeight: '800', color: colors.ink },
   done: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },

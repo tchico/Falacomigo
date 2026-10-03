@@ -6,6 +6,7 @@ import { createAudioPlayer, setAudioModeAsync } from 'expo-audio';
 import { bundledClips } from '../content/audioClips';
 import { pickSource, type ClipSource } from './clips';
 import { recordingUri } from './recordings';
+import { forSpeech } from './spoken';
 
 let ptVoice: string | undefined;
 let ready: Promise<void> | null = null;
@@ -36,7 +37,8 @@ export async function stop(): Promise<void> {
 
 function speak(text: string, pitch: number): Promise<void> {
   return new Promise((resolve) => {
-    Speech.speak(text, {
+    // The bubble keeps "Hmm…" and "Brrr…"; the voice gets something it can say (NFR-03).
+    Speech.speak(forSpeech(text), {
       language: 'pt-PT',
       voice: ptVoice,
       rate: 0.9,

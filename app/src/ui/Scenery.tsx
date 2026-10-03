@@ -1,0 +1,182 @@
+import { useWindowDimensions, Animated, StyleSheet, View } from 'react-native';
+import { colors } from './theme';
+import { useLoop, useReducedMotion } from './motion';
+import { placeFor, type Place } from './placeFor';
+
+export { placeFor, type Place };
+
+// Backgrounds for scenes, chosen from the scene's "setting" in the content pack (e.g. "garden-trampoline",
+// "ferry-kitchen-evening"): where it is (garden, kitchen, ferry), what's there, and whether it's evening.
+// Drawn with plain views and kept calm: slow drifting clouds and waves, nothing that flashes (NFR-09).
+
+/** Sky and ground colours, so the screen's own panels can match the scenery. */
+export function paletteFor(p: Place): { sky: string; ground: string; groundEdge: string } {
+  if (p.kind === 'garden') return p.evening ? { sky: '#2E3F70', ground: '#5E8F5A', groundEdge: '#4C7A49' } : { sky: colors.sky, ground: colors.grass, groundEdge: '#7FBF6E' };
+  if (p.kind === 'kitchen') return { sky: p.evening ? '#D9C7A8' : '#F6E7CF', ground: '#C99563', groundEdge: '#B07D4D' };
+  return { sky: p.evening ? '#9AA7B8' : '#E4ECF2', ground: '#B5804F', groundEdge: '#94643A' };
+}
+
+/** How much of the screen, from the bottom, is ground. Screens put their controls on it. */
+export const GROUND = 0.34;
+
+export function Scenery({ setting }: { setting?: string }) {
+  const place = placeFor(setting);
+  const pal = paletteFor(place);
+  const { width, height } = useWindowDimensions();
+  const horizon = height * (1 - GROUND);
+  const reduced = useReducedMotion();
+  const drift = useLoop(60_000, !reduced);
+  const swell = useLoop(5_000, !reduced);
+
+  return (
+    <View style={[StyleSheet.absoluteFill, { backgroundColor: pal.sky }]} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+      {place.kind === 'garden' && (
+        <>
+          {place.evening ? (
+            <>
+              <View style={[styles.moon, { right: width * 0.12, top: height * 0.12 }]} />
+              {[[0.08, 0.1], [0.22, 0.2], [0.36, 0.08], [0.58, 0.16], [0.7, 0.06], [0.9, 0.22]].map(([x, y], i) => (
+                <View key={i} style={[styles.star, { left: width * x, top: height * y }]} />
+              ))}
+            </>
+          ) : (
+            <>
+              <View style={[styles.sun, { right: width * 0.1, top: height * 0.1 }]} />
+              {[0.12, 0.55].map((x, i) => (
+                <Animated.View
+                  key={i}
+                  style={[styles.cloud, { left: width * x, top: height * (0.12 + i * 0.08) }, { transform: [{ translateX: drift.interpolate({ inputRange: [0, 1], outputRange: [0, (i ? -1 : 1) * 60] }) }] }]}
+                >
+                  <View style={[styles.puff, { left: 0, top: 14, width: 60, height: 34 }]} />
+                  <View style={[styles.puff, { left: 30, top: 0, width: 56, height: 48 }]} />
+                  <View style={[styles.puff, { left: 70, top: 16, width: 50, height: 32 }]} />
+                </Animated.View>
+              ))}
+            </>
+          )}
+          {/* Rolling hills on the horizon. */}
+          <View style={[styles.hill, { left: -width * 0.1, top: horizon - 70, width: width * 0.45, height: 160, borderRadius: 140, backgroundColor: pal.groundEdge }]} />
+          <View style={[styles.hill, { left: width * 0.62, top: horizon - 90, width: width * 0.5, height: 180, borderRadius: 160, backgroundColor: pal.groundEdge }]} />
+          {/* A garden fence. */}
+          <View style={[styles.fenceRail, { top: horizon - 34, width }]} />
+          {Array.from({ length: Math.ceil(width / 46) }, (_, i) => (
+            <View key={i} style={[styles.fencePost, { left: i * 46 + 10, top: horizon - 52 }]} />
+          ))}
+        </>
+      )}
+
+      {place.kind === 'kitchen' && (
+        <>
+          {/* Window onto the garden, a fridge with Gui's Lisbon postcard, and a strip of azulejo tiles. */}
+          <View style={[styles.window, { right: width * 0.08, top: height * 0.1, width: width * 0.22, height: height * 0.3, backgroundColor: place.evening ? '#2E3F70' : colors.sky }]}>
+            <View style={[styles.windowGrass, { backgroundColor: place.evening ? '#5E8F5A' : colors.grass }]} />
+            <View style={styles.windowBarV} />
+            <View style={styles.windowBarH} />
+          </View>
+          <View style={[styles.fridge, { left: width * 0.03, top: height * 0.16, height: horizon - height * 0.16 }]}>
+            <View style={styles.postcard} />
+          </View>
+          <View style={[styles.tiles, { top: horizon - 40, width }]}>
+            {Array.from({ length: Math.ceil(width / 40) }, (_, i) => (
+              <View key={i} style={[styles.tile, i % 2 ? { backgroundColor: colors.blue } : null]}>
+                <View style={[styles.tileDot, i % 2 ? { backgroundColor: colors.white } : null]} />
+              </View>
+            ))}
+          </View>
+        </>
+      )}
+
+      {place.kind === 'ferry' && (
+        <>
+          {/* Portholes with the sea outside. */}
+          {[0.1, 0.42, 0.74].map((x, i) => (
+            <View key={i} style={[styles.porthole, { left: width * x, top: height * 0.12 }]}>
+              <View style={[styles.portSky, { backgroundColor: place.evening ? '#2E3F70' : '#BFE0F2' }]} />
+              <Animated.View
+                style={[styles.portSea, { backgroundColor: place.evening ? '#1E3A5F' : '#3C8DBC' }, { transform: [{ translateY: swell.interpolate({ inputRange: [0, 1], outputRange: [4, -4] }) }] }]}
+              />
+              {place.evening && i === 2 ? <View style={styles.portMoon} /> : null}
+            </View>
+          ))}
+          {place.props.has('kitchen') && (
+            // Pots and pans hanging from a rail.
+            <View style={[styles.potRail, { right: width * 0.015, top: height * 0.3, width: width * 0.14 }]}>
+              {[30, 38].map((d, i) => (
+                <View key={i} style={{ alignItems: 'center' }}>
+                  <View style={styles.potHook} />
+                  <View style={[styles.pot, { width: d, height: d * 0.8 }]} />
+                </View>
+              ))}
+            </View>
+          )}
+        </>
+      )}
+
+      {/* The ground, where the controls sit. */}
+      <View style={[styles.ground, { top: horizon, backgroundColor: pal.ground, borderColor: pal.groundEdge }]} />
+
+      {place.kind === 'ferry' && (
+        <>
+          {/* Deck planks. */}
+          {Array.from({ length: 4 }, (_, i) => (
+            <View key={i} style={[styles.plank, { top: horizon + i * (height * GROUND) / 4, width, backgroundColor: pal.groundEdge }]} />
+          ))}
+          {place.props.has('dining') && (
+            // A table with a cloth.
+            <View style={[styles.table, { right: width * 0.02, top: horizon - 60, width: width * 0.15 }]}>
+              <View style={styles.tableLegs} />
+            </View>
+          )}
+        </>
+      )}
+    </View>
+  );
+}
+
+/** Gui's trampoline from Scene 1.1, drawn under him. */
+export function Trampoline({ width }: { width: number }) {
+  return (
+    <View style={{ width, height: width * 0.28, alignItems: 'center' }} pointerEvents="none">
+      <View style={[styles.trampMat, { width, height: width * 0.16, borderRadius: width }]} />
+      <View style={[styles.trampLegs, { width: width * 0.8 }]}>
+        <View style={styles.trampLeg} />
+        <View style={styles.trampLeg} />
+        <View style={styles.trampLeg} />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  sun: { position: 'absolute', width: 70, height: 70, borderRadius: 35, backgroundColor: colors.sun, borderWidth: 3, borderColor: colors.ink },
+  moon: { position: 'absolute', width: 60, height: 60, borderRadius: 30, backgroundColor: '#F4EBC6', borderWidth: 3, borderColor: colors.ink },
+  star: { position: 'absolute', width: 5, height: 5, borderRadius: 3, backgroundColor: '#F4EBC6' },
+  cloud: { position: 'absolute', width: 120, height: 50 },
+  puff: { position: 'absolute', backgroundColor: colors.white, borderRadius: 30 },
+  hill: { position: 'absolute', borderWidth: 3, borderColor: colors.ink },
+  fenceRail: { position: 'absolute', left: 0, height: 8, backgroundColor: '#E8D3B0', borderTopWidth: 2, borderBottomWidth: 2, borderColor: colors.ink },
+  fencePost: { position: 'absolute', width: 14, height: 52, backgroundColor: '#F1E1C4', borderWidth: 2, borderColor: colors.ink, borderTopLeftRadius: 7, borderTopRightRadius: 7 },
+  ground: { position: 'absolute', left: 0, right: 0, bottom: 0, borderTopWidth: 3 },
+  window: { position: 'absolute', borderWidth: 6, borderColor: colors.white, borderRadius: 8, overflow: 'hidden' },
+  windowGrass: { position: 'absolute', left: 0, right: 0, bottom: 0, height: '35%' },
+  windowBarV: { position: 'absolute', top: 0, bottom: 0, left: '50%', width: 6, marginLeft: -3, backgroundColor: colors.white },
+  windowBarH: { position: 'absolute', left: 0, right: 0, top: '50%', height: 6, marginTop: -3, backgroundColor: colors.white },
+  fridge: { position: 'absolute', width: 110, backgroundColor: '#F8F8F6', borderWidth: 3, borderColor: colors.ink, borderTopLeftRadius: 12, borderTopRightRadius: 12, alignItems: 'center', paddingTop: 30 },
+  postcard: { width: 50, height: 34, backgroundColor: colors.sun, borderWidth: 2, borderColor: colors.ink, transform: [{ rotate: '-6deg' }] },
+  tiles: { position: 'absolute', left: 0, height: 40, flexDirection: 'row', borderTopWidth: 2, borderColor: colors.ink },
+  tile: { width: 40, height: 40, backgroundColor: colors.white, borderRightWidth: 1, borderColor: colors.blueTint, alignItems: 'center', justifyContent: 'center' },
+  tileDot: { width: 12, height: 12, borderRadius: 6, backgroundColor: colors.blue, transform: [{ rotate: '45deg' }] },
+  porthole: { position: 'absolute', width: 96, height: 96, borderRadius: 48, borderWidth: 8, borderColor: '#9AA5B1', overflow: 'hidden', backgroundColor: '#BFE0F2' },
+  portSky: { position: 'absolute', left: 0, right: 0, top: 0, height: '55%' },
+  portSea: { position: 'absolute', left: -10, right: -10, top: '50%', height: '70%' },
+  portMoon: { position: 'absolute', right: 18, top: 12, width: 18, height: 18, borderRadius: 9, backgroundColor: '#F4EBC6' },
+  potRail: { position: 'absolute', height: 6, backgroundColor: '#7D8691', borderRadius: 3, flexDirection: 'row', justifyContent: 'space-around', overflow: 'visible' },
+  potHook: { width: 3, height: 18, backgroundColor: '#7D8691' },
+  pot: { backgroundColor: '#C9612F', borderWidth: 3, borderColor: colors.ink, borderBottomLeftRadius: 14, borderBottomRightRadius: 14 },
+  table: { position: 'absolute', height: 26, backgroundColor: colors.white, borderWidth: 3, borderColor: colors.ink, borderRadius: 6, alignItems: 'center' },
+  tableLegs: { width: '80%', height: 40, borderLeftWidth: 6, borderRightWidth: 6, borderColor: '#7A5233', marginTop: 20 },
+  plank: { position: 'absolute', left: 0, height: 2 },
+  trampMat: { backgroundColor: colors.blue, borderWidth: 4, borderColor: colors.ink },
+  trampLegs: { flexDirection: 'row', justifyContent: 'space-between', marginTop: -4 },
+  trampLeg: { width: 6, height: 26, backgroundColor: colors.ink, borderRadius: 3 },
+});

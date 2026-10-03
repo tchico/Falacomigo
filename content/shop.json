@@ -1,0 +1,161 @@
+{
+  "$schema": "./schema/shop.schema.json",
+  "title": "A loja do Gui",
+  "titleEn": "Gui's shop",
+  "items": [
+    {
+      "id": "bow",
+      "name": "o laço",
+      "en": "the bow tie",
+      "slot": "neck",
+      "price": 30,
+      "emoji": "🎀",
+      "say": "Quero o laço!",
+      "accept": [
+        "quero o laco",
+        "o laco",
+        "laco",
+        "quero laco",
+        "eu quero o laco",
+        "queria o laco",
+        "posso ter o laco",
+        "quero o laco por favor"
+      ],
+      "keywords": [
+        "laco"
+      ]
+    },
+    {
+      "id": "flower",
+      "name": "a flor",
+      "en": "the flower",
+      "slot": "head",
+      "price": 30,
+      "emoji": "🌸",
+      "say": "Quero a flor!",
+      "accept": [
+        "quero a flor",
+        "a flor",
+        "flor",
+        "quero flor",
+        "eu quero a flor",
+        "queria a flor",
+        "posso ter a flor",
+        "quero a flor por favor"
+      ],
+      "keywords": [
+        "flor"
+      ]
+    },
+    {
+      "id": "cap",
+      "name": "o boné",
+      "en": "the cap",
+      "slot": "head",
+      "price": 50,
+      "emoji": "🧢",
+      "say": "Quero o boné!",
+      "accept": [
+        "quero o bone",
+        "o bone",
+        "bone",
+        "quero bone",
+        "eu quero o bone",
+        "queria o bone",
+        "posso ter o bone",
+        "quero o bone por favor"
+      ],
+      "keywords": [
+        "bone"
+      ]
+    },
+    {
+      "id": "scarf",
+      "name": "o cachecol vermelho",
+      "en": "the red scarf",
+      "slot": "neck",
+      "price": 60,
+      "emoji": "🧣",
+      "say": "Quero o cachecol vermelho!",
+      "accept": [
+        "quero o cachecol vermelho",
+        "o cachecol vermelho",
+        "cachecol vermelho",
+        "quero cachecol vermelho",
+        "eu quero o cachecol vermelho",
+        "queria o cachecol vermelho",
+        "posso ter o cachecol vermelho",
+        "quero o cachecol vermelho por favor"
+      ],
+      "keywords": [
+        "cachecol"
+      ]
+    },
+    {
+      "id": "sunglasses",
+      "name": "os óculos de sol",
+      "en": "the sunglasses",
+      "slot": "eyes",
+      "price": 80,
+      "emoji": "🕶️",
+      "say": "Quero os óculos de sol!",
+      "accept": [
+        "quero os oculos de sol",
+        "os oculos de sol",
+        "oculos de sol",
+        "quero oculos de sol",
+        "eu quero os oculos de sol",
+        "queria os oculos de sol",
+        "posso ter os oculos de sol",
+        "quero os oculos de sol por favor"
+      ],
+      "keywords": [
+        "oculos"
+      ]
+    },
+    {
+      "id": "top-hat",
+      "name": "o chapéu alto",
+      "en": "the top hat",
+      "slot": "head",
+      "price": 100,
+      "emoji": "🎩",
+      "say": "Quero o chapéu alto!",
+      "accept": [
+        "quero o chapeu alto",
+        "o chapeu alto",
+        "chapeu alto",
+        "quero chapeu alto",
+        "eu quero o chapeu alto",
+        "queria o chapeu alto",
+        "posso ter o chapeu alto",
+        "quero o chapeu alto por favor"
+      ],
+      "keywords": [
+        "chapeu"
+      ]
+    },
+    {
+      "id": "crown",
+      "name": "a coroa",
+      "en": "the crown",
+      "slot": "head",
+      "price": 150,
+      "emoji": "👑",
+      "say": "Quero a coroa!",
+      "accept": [
+        "quero a coroa",
+        "a coroa",
+        "coroa",
+        "quero coroa",
+        "eu quero a coroa",
+        "queria a coroa",
+        "posso ter a coroa",
+        "quero a coroa por favor"
+      ],
+      "keywords": [
+        "coroa"
+      ]
+    }
+  ]
+}

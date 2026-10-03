@@ -20,6 +20,8 @@ export interface Line {
   speaker: string;
   text: string;
   en?: string;
+  /** What the voice says, when the written line has sounds text-to-speech can't do ("a minha barriga faz rrrr"). */
+  spoken?: string;
 }
 
 export interface Beat {
@@ -115,4 +117,27 @@ export interface ChildProfile {
   ageWord: string;
   /** How they'd name a sibling, e.g. "irmão" or the sibling's name. */
   sibling: string;
+}
+
+/** Something Gui can wear, bought in his shop by saying it in Portuguese (FR-22). See content/shop.json. */
+export interface ShopItem {
+  id: string;
+  /** With its article, e.g. "o boné". */
+  name: string;
+  en: string;
+  slot: 'head' | 'eyes' | 'neck';
+  price: number;
+  /** Stand-in picture until there's an illustration. */
+  emoji: string;
+  /** What the child says to buy it, e.g. "Quero o boné!". */
+  say: string;
+  /** Accepted versions, already normalised. */
+  accept: string[];
+  keywords: string[];
+}
+
+export interface Shop {
+  title: string;
+  titleEn?: string;
+  items: ShopItem[];
 }

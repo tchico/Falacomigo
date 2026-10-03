@@ -91,3 +91,26 @@ test('store: finished scenes are counted per child', async () => {
   assert.deepEqual(await store.scenesPlayed('child1'), [{ unitId: 'unit-01', sceneId: 'S1.1', times: 2, lastAt: 1_000 }]);
   assert.deepEqual(await store.scenesPlayed('child2'), []);
 });
+
+test('store: buying in the shop takes the coins once, and only if there are enough (FR-22)', async () => {
+  const { store } = await freshStore();
+  await store.recordTurn(turn({ coins: 50 }));
+  assert.equal(await store.buyItem('child1', 'hat-blue', 80), false, 'not enough coins');
+  assert.equal(await store.getCoins('child1'), 50);
+  assert.equal(await store.buyItem('child1', 'bow', 40), true);
+  assert.equal(await store.getCoins('child1'), 10);
+  assert.equal(await store.buyItem('child1', 'bow', 0), false, 'already owned');
+  assert.deepEqual(await store.ownedItems('child1'), ['bow']);
+  assert.deepEqual(await store.ownedItems('child2'), []);
+});
+
+test('store: Gui wears one item per slot, per child', async () => {
+  const { store } = await freshStore();
+  await store.setOutfit('child1', 'head', 'hat-blue');
+  await store.setOutfit('child1', 'head', 'crown');
+  await store.setOutfit('child1', 'eyes', 'sunglasses');
+  assert.deepEqual(await store.getOutfit('child1'), { head: 'crown', eyes: 'sunglasses' });
+  await store.setOutfit('child1', 'eyes', null);
+  assert.deepEqual(await store.getOutfit('child1'), { head: 'crown' });
+  assert.deepEqual(await store.getOutfit('child2'), {});
+});
