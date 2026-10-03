@@ -6,13 +6,15 @@ import guideJson from '../../../content/guide.json';
 import shopJson from '../../../content/shop.json';
 import journeyJson from '../../../content/journey.json';
 import guiJson from '../../../content/gui.json';
-import type { Guide, GuiLines, Journey, Shop, Unit } from './types';
+import soundsJson from '../../../content/sounds.json';
+import type { Guide, GuiLines, Journey, Shop, SoundGuide, Unit } from './types';
 
 export const units: Unit[] = [unit01 as unknown as Unit, unit02 as unknown as Unit];
 export const guide: Guide = guideJson as unknown as Guide;
 export const shop: Shop = shopJson as unknown as Shop;
 export const journey: Journey = journeyJson as unknown as Journey;
 export const guiLines: GuiLines = guiJson as unknown as GuiLines;
+export const sounds: SoundGuide = soundsJson as unknown as SoundGuide;
 
 export function getUnit(id: string): Unit {
   const unit = units.find((u) => u.id === id);

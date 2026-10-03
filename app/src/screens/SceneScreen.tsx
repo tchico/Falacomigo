@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Easing, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { ChildProfile, Unit } from '../content/types';
-import { getUnit, guiLines, units } from '../content';
+import { getUnit, guiLines, sounds, units } from '../content';
+import { troubleWord, type WordHelp } from '../engine/pronounce';
+import { Truque } from './Truque';
 import { saidInEnglish, wordsUpTo, type Word } from '../engine/comoSeDiz';
 import { ComoSeDiz } from './ComoSeDiz';
 import { buildScene, type PlayableBeat } from '../engine/scene';
@@ -12,7 +14,7 @@ import { startRungFor, type Outcome, type PhraseProgress } from '../engine/ladde
 import type { Listening, RecognitionResult, SpeechRecognizer } from '../speech/types';
 import { MAX_LISTEN_MS } from '../speech/pcm';
 import { clipKey, phraseClipFile } from '../audio/clips';
-import { play, sayAs, sourceFor, stop } from '../audio/voice';
+import { play, sayAs, saySlowly, sourceFor, stop } from '../audio/voice';
 import { COINS_PER_TURN } from '../engine/rewards';
 import type { Wear } from '../engine/shop';
 import { StubRecognizer } from '../speech/stub';
@@ -102,6 +104,10 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
   /** "Como se diz?" is open (FR-11), with the English word already heard if the child said one in the scene. */
   const [asking, setAsking] = useState<{ word: Word | null } | null>(null);
   const words = useMemo(() => wordsUpTo(units, unit.id), [unit.id]);
+  /** What was heard on each try of this beat, to find a word the child is stuck on. */
+  const tries = useRef<string[]>([]);
+  /** Help with that word ("Truque!"), when it's showing. */
+  const [truque, setTruque] = useState<WordHelp | null>(null);
 
   const beat = beats[index];
   const beatUnit = beat.unitId === unit.id ? unit : getUnit(beat.unitId);
@@ -147,6 +153,7 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
     setFeedback(null);
     setTurn(newTurn());
     reply.current = null;
+    tries.current = [];
     if (index + 1 >= beats.length) onFinished();
     else setIndex(index + 1);
   };
@@ -206,6 +213,7 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
     let next: TurnState;
     if (heard.offline) next = applyOfflineAttempt(turn, heard.voicedMs);
     else {
+      tries.current.push(heard.transcript);
       const matched = matchAnswer(heard.transcript, beat.answers, child.age);
       let result = matched.result;
       // Just an English word from the list ("water!"): that's "Como se diz?", and the try doesn't count (FR-11).
@@ -231,6 +239,13 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
     setTurn(next);
     if (next.done) finishTurn(next);
     else if (next.playModel) {
+      // Stuck on one word two tries running: a trick for that word first, then the whole phrase again.
+      const help = troubleWord(beat.modelText ?? '', tries.current.slice(-2), child.age, sounds);
+      if (help) {
+        setFeedback(`Ouve: ${beat.modelText}`);
+        setTruque(help);
+        return;
+      }
       // After two tries, Gui plays the model and the next try with any real speech counts (FR-09).
       setFeedback(`Ouve: ${beat.modelText}`);
       await talk('gui', 'Ouve!');
@@ -320,9 +335,14 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
               <Text style={styles.askText}>{guiLines.comoSeDiz.button}</Text>
             </Pressable>
             {rung <= 3 || turn.playModel ? (
-              <Pressable accessibilityRole="button" accessibilityLabel="Listen" onPress={() => void playModel()} style={styles.listen}>
-                <Text style={styles.listenText}>🔊</Text>
-              </Pressable>
+              <>
+                <Pressable accessibilityRole="button" accessibilityLabel="Listen" onPress={() => void playModel()} style={styles.listen}>
+                  <Text style={styles.listenText}>🔊</Text>
+                </Pressable>
+                <Pressable accessibilityRole="button" accessibilityLabel="Listen slowly" onPress={() => void saySlowly(beat.modelText ?? '')} style={styles.listen}>
+                  <Text style={styles.listenText}>🐢</Text>
+                </Pressable>
+              </>
             ) : null}
             <View style={styles.micWrap}>
               {/* A calm ring that grows with the child's voice while listening: no flashing (NFR-09). */}
@@ -346,6 +366,17 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
         )}
       </View>
 
+      {truque ? (
+        <Truque
+          help={truque}
+          wear={wear}
+          onDone={() => {
+            setTruque(null);
+            void playModel();
+          }}
+        />
+      ) : null}
+
       {asking ? (
         <ComoSeDiz
           recognizer={recognizer}
@@ -361,7 +392,7 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
         />
       ) : null}
 
-      {isStub && beat.phrase && !turn.done && !asking ? (
+      {isStub && beat.phrase && !turn.done && !asking && !truque ? (
         <View style={styles.dev}>
           <Text style={styles.devLabel}>DEV · stub microphone</Text>
           <BigButton label="Say it right" variant="secondary" onPress={() => void simulate(beat.modelText ?? '')} />
