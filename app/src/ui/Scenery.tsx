@@ -6,12 +6,13 @@ import { placeFor, type Place } from './placeFor';
 export { placeFor, type Place };
 
 // Backgrounds for scenes, chosen from the scene's "setting" in the content pack (e.g. "garden-trampoline",
-// "ferry-kitchen-evening"): where it is (garden, kitchen, ferry), what's there, and whether it's evening.
+// "ferry-kitchen-evening"): where it is (garden, kitchen, ferry, beach), what's there, and whether it's evening.
 // Drawn with plain views and kept calm: slow drifting clouds and waves, nothing that flashes (NFR-09).
 
 /** Sky and ground colours, so the screen's own panels can match the scenery. */
 export function paletteFor(p: Place): { sky: string; ground: string; groundEdge: string } {
   if (p.kind === 'garden') return p.evening ? { sky: '#2E3F70', ground: '#5E8F5A', groundEdge: '#4C7A49' } : { sky: colors.sky, ground: colors.grass, groundEdge: '#7FBF6E' };
+  if (p.kind === 'beach') return p.evening ? { sky: '#F4B183', ground: '#E3C08A', groundEdge: '#C9A06A' } : { sky: colors.sky, ground: '#F2D48F', groundEdge: '#E0B86A' };
   if (p.kind === 'kitchen') return { sky: p.evening ? '#D9C7A8' : '#F6E7CF', ground: '#C99563', groundEdge: '#B07D4D' };
   return { sky: p.evening ? '#9AA7B8' : '#E4ECF2', ground: '#B5804F', groundEdge: '#94643A' };
 }
@@ -112,8 +113,38 @@ export function Scenery({ setting }: { setting?: string }) {
         </>
       )}
 
+      {place.kind === 'beach' && (
+        <>
+          {/* The sun (setting, in the evening), and the sea on the horizon with slow waves. */}
+          <View style={[styles.sun, place.evening ? { left: width * 0.62, top: horizon - 140, width: 90, height: 90, borderRadius: 45, backgroundColor: '#F7D06B' } : { right: width * 0.1, top: height * 0.1 }]} />
+          <View style={[styles.sea, { top: horizon - 90, width, height: 96, backgroundColor: place.evening ? '#3E6E9C' : '#3C8DBC' }]} />
+          {[0, 1, 2].map((row) => (
+            <Animated.View
+              key={row}
+              style={[styles.waveRow, { top: horizon - 70 + row * 24, width: width + 80 }, { transform: [{ translateX: swell.interpolate({ inputRange: [0, 1], outputRange: row % 2 ? [-30, 0] : [0, -30] }) }] }]}
+            >
+              {Array.from({ length: Math.ceil(width / 80) + 2 }, (_, i) => (
+                <View key={i} style={styles.wave} />
+              ))}
+            </Animated.View>
+          ))}
+        </>
+      )}
+
       {/* The ground, where the controls sit. */}
       <View style={[styles.ground, { top: horizon, backgroundColor: pal.ground, borderColor: pal.groundEdge }]} />
+
+      {place.kind === 'beach' && (
+        // A striped beach umbrella stuck in the sand.
+        <View style={[styles.umbrella, { right: width * 0.04, top: horizon - 110 }]}>
+          <View style={styles.umbrellaTop}>
+            {[colors.terracotta, colors.white, colors.terracotta, colors.white].map((c, i) => (
+              <View key={i} style={{ flex: 1, backgroundColor: c }} />
+            ))}
+          </View>
+          <View style={styles.umbrellaPole} />
+        </View>
+      )}
 
       {place.kind === 'ferry' && (
         <>
@@ -175,6 +206,12 @@ const styles = StyleSheet.create({
   pot: { backgroundColor: '#C9612F', borderWidth: 3, borderColor: colors.ink, borderBottomLeftRadius: 14, borderBottomRightRadius: 14 },
   table: { position: 'absolute', height: 26, backgroundColor: colors.white, borderWidth: 3, borderColor: colors.ink, borderRadius: 6, alignItems: 'center' },
   tableLegs: { width: '80%', height: 40, borderLeftWidth: 6, borderRightWidth: 6, borderColor: '#7A5233', marginTop: 20 },
+  sea: { position: 'absolute', left: 0, borderTopWidth: 3, borderColor: colors.ink },
+  waveRow: { position: 'absolute', left: -40, flexDirection: 'row', gap: 30 },
+  wave: { width: 50, height: 10, borderTopWidth: 3, borderColor: 'rgba(255,255,255,0.7)', borderTopLeftRadius: 25, borderTopRightRadius: 25 },
+  umbrella: { position: 'absolute', alignItems: 'center' },
+  umbrellaTop: { width: 130, height: 50, borderTopLeftRadius: 65, borderTopRightRadius: 65, borderWidth: 3, borderColor: colors.ink, overflow: 'hidden', flexDirection: 'row' },
+  umbrellaPole: { width: 6, height: 120, backgroundColor: colors.ink },
   plank: { position: 'absolute', left: 0, height: 2 },
   trampMat: { backgroundColor: colors.blue, borderWidth: 4, borderColor: colors.ink },
   trampLegs: { flexDirection: 'row', justifyContent: 'space-between', marginTop: -4 },
