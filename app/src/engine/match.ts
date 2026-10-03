@@ -115,24 +115,33 @@ function keywordHeard(transcriptWords: string[], keyword: string): boolean {
   return transcriptWords.some((w) => w === k || (k.length >= 4 && !isNumber(k) && similarity(w, k) >= 0.75));
 }
 
-function judge(words: string[], target: MatchTarget, age: AgeBand): { result: MatchResult; coverage: number } {
-  if (words.length === 0) return { result: 'not-heard', coverage: 0 };
+interface Judged {
+  result: MatchResult;
+  coverage: number;
+  /** For "got it": the fewest words said beyond an accepted version. Fewer means a closer fit. */
+  extras: number;
+}
+
+function judge(words: string[], target: MatchTarget, age: AgeBand): Judged {
+  if (words.length === 0) return { result: 'not-heard', coverage: 0, extras: 0 };
 
   let coverage = 0;
+  let whole: number | null = null;
   for (const variant of target.accept.map(normalize).filter(Boolean)) {
     const vWords = variant.split(' ');
     const a = align(vWords, words, age);
     // "Não" turns an answer around ("não estou bem"), so it must be there in both or in neither.
     const sameSense = words.includes('nao') === vWords.includes('nao');
-    if (sameSense && saidWhole(a, vWords, age)) return { result: 'got-it', coverage: 1 };
+    if (sameSense && saidWhole(a, vWords, age)) whole = Math.min(whole ?? Infinity, a.extras.length);
     coverage = Math.max(coverage, a.matched / vWords.length);
   }
+  if (whole !== null) return { result: 'got-it', coverage: 1, extras: whole };
 
   // Part of it, or the key words: a near miss, so the character says it back the right way (a recast).
   const heard = target.keywords.filter((k) => keywordHeard(words, k)).length;
-  if (heard > 0 || coverage >= 0.5) return { result: 'nearly', coverage };
+  if (heard > 0 || coverage >= 0.5) return { result: 'nearly', coverage, extras: 0 };
 
-  return { result: 'not-heard', coverage };
+  return { result: 'not-heard', coverage, extras: 0 };
 }
 
 export function matchAttempt(transcript: string, target: MatchTarget, age: AgeBand): MatchResult {
@@ -140,14 +149,17 @@ export function matchAttempt(transcript: string, target: MatchTarget, age: AgeBa
 }
 
 /**
- * For a question with several real answers (FR-10): which one the child gave, and how well. The first answer
- * said whole wins; otherwise the result is the best of them, and the answer is the one closest to what was said
- * (the first on a tie), so the character's reply fits.
+ * For a question with several real answers (FR-10): which one the child gave, and how well. Of the answers said
+ * whole, the one that fits most closely wins: "tenho pouca sede" is the "pouca sede" answer, not "tenho sede" with an
+ * extra word. Otherwise the result is the best of them, and the answer is the one closest to what was said (the
+ * first on a tie), so the character's reply fits.
  */
 export function matchAnswer<T extends { target: MatchTarget }>(transcript: string, answers: T[], age: AgeBand): { result: MatchResult; answer: T } {
   const words = tokens(transcript);
   const judged = answers.map((answer) => ({ answer, ...judge(words, answer.target, age) }));
   const rank = { 'got-it': 2, nearly: 1, 'not-heard': 0 } as const;
-  const best = judged.reduce((a, b) => (rank[b.result] > rank[a.result] || (b.result === a.result && b.coverage > a.coverage) ? b : a));
+  const closer = (a: Judged, b: Judged) =>
+    rank[b.result] !== rank[a.result] ? rank[b.result] > rank[a.result] : b.result === 'got-it' ? b.extras < a.extras : b.coverage > a.coverage;
+  const best = judged.reduce((a, b) => (closer(a, b) ? b : a));
   return { result: best.result, answer: best.answer };
 }
