@@ -6,6 +6,25 @@ compatibility_date = "2026-09-01"
 # No request logging of bodies: keep observability off so children's audio is never recorded (NFR-05).
 [observability]
 enabled = false
+head_sampling_rate = 1
+redact_query_string = false
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
+
+[observability.traces]
+enabled = false
+head_sampling_rate = 1
+persist = true
+
+[observability.issue_detection]
+enabled = true
+# ...
+
+
 
 # Daily cap (NFR-06). Create with: npx wrangler@4 kv namespace create USAGE, then paste the id here.
 # [[kv_namespaces]]
@@ -13,7 +32,6 @@ enabled = false
 # id = "<your namespace id>"
 
 [vars]
-AZURE_SPEECH_REGION = "westeurope"
+AZURE_SPEECH_REGION = "northeurope"
 DAILY_LIMIT = "400"
-# Model for Gui's smart replies (POST /reply). Only used once GEMINI_API_KEY is set. Use a current Flash model.
-GEMINI_MODEL = "gemini-2.5-flash"
+
