@@ -4,12 +4,12 @@ import type { ShopItem } from '../content/types';
 
 export type Wear = { head?: string; eyes?: string; neck?: string };
 
-/** Pictures for what Gui is wearing, from the stored outfit (slot → item id). */
+/** What Gui is wearing, from the stored outfit (slot → item id), keeping only real items in their own slot. */
 export function wearFor(outfit: Record<string, string>, items: ShopItem[]): Wear {
   const wear: Wear = {};
   for (const [slot, id] of Object.entries(outfit)) {
     const item = items.find((i) => i.id === id);
-    if (item && item.slot === slot) wear[item.slot] = item.emoji;
+    if (item && item.slot === slot) wear[item.slot] = item.id;
   }
   return wear;
 }
