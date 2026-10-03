@@ -148,3 +148,23 @@ export interface Shop {
   titleEn?: string;
   items: ShopItem[];
 }
+
+/** One stop on the journey map, whether or not its unit exists yet (FR-21). See content/journey.json. */
+export interface JourneyStop {
+  id: string;
+  name: string;
+  nameEn?: string;
+  emoji: string;
+}
+
+export interface Journey {
+  stops: JourneyStop[];
+}
+
+/** Gui's own lines outside the scenes. See content/gui.json. */
+export interface GuiLines {
+  warmup: { title: string; intro: string; introEn: string };
+  session: { aimMinutes: number; more: string; moreEn: string; moreButton: string; sleepy: string; sleepyEn: string; bye: string };
+  album: { title: string; titleEn: string; button: string; newPostcard: string; newPostcardEn: string; newStop: string; newStopEn: string; soon: string; locked: string };
+  comoSeDiz: { button: string; ask: string; askEn: string; answer: string; yourTurn: string; praise: string; again: string; unknown: string; unknownEn: string; back: string };
+}

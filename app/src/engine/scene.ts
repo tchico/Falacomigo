@@ -6,6 +6,8 @@ import type { MatchTarget } from './match';
 
 export interface PlayableBeat {
   id: string;
+  /** The unit the beat comes from. A warm-up mixes beats from several units (FR-15). */
+  unitId: string;
   speaker: string;
   line: string;
   /** What the voice should say for the line, when it differs from what's shown. */
@@ -47,6 +49,7 @@ export function buildScene(unit: Unit, sceneId: string, child: ChildProfile): Pl
     const recast = b.recast ? f(b.recast) : null;
     return {
       id: b.id,
+      unitId: unit.id,
       speaker: b.say.speaker,
       line: f(b.say.text),
       lineSpoken: b.say.spoken ? f(b.say.spoken) : undefined,

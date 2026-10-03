@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "The journey map: every stop in order, including ones with no unit yet (FR-21)",
+  "type": "object",
+  "required": ["stops"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "stops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "emoji"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "description": "Matches a unit's stop.id." },
+          "name": { "type": "string" },
+          "nameEn": { "type": "string" },
+          "emoji": { "type": "string", "description": "Stand-in picture until there's an illustration." }
+        }
+      }
+    }
+  }
+}

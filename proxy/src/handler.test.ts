@@ -40,6 +40,15 @@ test('proxy: forwards the audio to Azure pt-PT and returns the transcript', asyn
   assert.equal(assessment.ReferenceText, 'Olá!');
 });
 
+test('proxy: an English word for "Como se diz?" goes to Azure en-GB, with no reference text (FR-11)', async () => {
+  const { calls, deps } = azure({ RecognitionStatus: 'Success', DisplayText: 'Dog.' });
+  const res = await handle(post({ ...good, locale: 'en-GB', expected: '' }), env(), deps);
+  assert.equal(res.status, 200);
+  assert.equal(((await res.json()) as { transcript: string }).transcript, 'Dog.');
+  assert.match(calls[0].url, /language=en-GB/);
+  assert.equal(calls[0].headers.get('Pronunciation-Assessment'), null);
+});
+
 test('proxy: rejects a wrong app key, other paths and other languages', async () => {
   const { calls, deps } = azure(success);
   assert.equal((await handle(post(good, 'nope'), env(), deps)).status, 401);

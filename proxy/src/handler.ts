@@ -58,19 +58,23 @@ function base64ToBytes(b64: string): Uint8Array<ArrayBuffer> {
 
 const toBase64Text = (text: string) => btoa(String.fromCharCode(...new TextEncoder().encode(text)));
 
-export function azureRequest(env: Env, expected: string, wav: Uint8Array<ArrayBuffer>): Request {
-  const url = `https://${env.AZURE_SPEECH_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-PT&format=detailed&profanity=raw`;
-  const assessment = { ReferenceText: expected, GradingSystem: 'HundredMark', Granularity: 'Word', Dimension: 'Comprehensive', EnableMiscue: true };
-  return new Request(url, {
-    method: 'POST',
-    headers: {
-      'Ocp-Apim-Subscription-Key': env.AZURE_SPEECH_KEY,
-      'Content-Type': 'audio/wav; codecs=audio/pcm; samplerate=16000',
-      Accept: 'application/json',
-      'Pronunciation-Assessment': toBase64Text(JSON.stringify(assessment)),
-    },
-    body: wav,
-  });
+/** pt-PT for the game; en-GB only for the English word a child asks about in "Como se diz?" (FR-11). */
+export const LOCALES = ['pt-PT', 'en-GB'] as const;
+export type Locale = (typeof LOCALES)[number];
+
+export function azureRequest(env: Env, expected: string, wav: Uint8Array<ArrayBuffer>, locale: Locale = 'pt-PT'): Request {
+  const url = `https://${env.AZURE_SPEECH_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${locale}&format=detailed&profanity=raw`;
+  const headers: Record<string, string> = {
+    'Ocp-Apim-Subscription-Key': env.AZURE_SPEECH_KEY,
+    'Content-Type': 'audio/wav; codecs=audio/pcm; samplerate=16000',
+    Accept: 'application/json',
+  };
+  // The expected phrase helps the recogniser. An English word has none: the child can ask about any word.
+  if (expected) {
+    const assessment = { ReferenceText: expected, GradingSystem: 'HundredMark', Granularity: 'Word', Dimension: 'Comprehensive', EnableMiscue: true };
+    headers['Pronunciation-Assessment'] = toBase64Text(JSON.stringify(assessment));
+  }
+  return new Request(url, { method: 'POST', headers, body: wav });
 }
 
 interface AzureResult {
@@ -112,7 +116,7 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
     return json(400, { error: 'bad json' });
   }
   const { locale, expected, audio } = body;
-  if (locale !== 'pt-PT') return json(400, { error: 'only pt-PT' });
+  if (!LOCALES.includes(locale as Locale)) return json(400, { error: 'only pt-PT, or en-GB for Como se diz' });
   if (typeof expected !== 'string' || expected.length > 200) return json(400, { error: 'bad expected text' });
   if (typeof audio !== 'string' || !audio.length || audio.length > MAX_AUDIO_BASE64) return json(413, { error: 'audio missing or too long' });
 
@@ -125,7 +129,7 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
 
   if (!(await underDailyLimit(env, deps.now().toISOString().slice(0, 10)))) return json(429, { error: 'daily limit reached' });
 
-  const res = await deps.fetch(azureRequest(env, expected, wav));
+  const res = await deps.fetch(azureRequest(env, expected, wav, locale as Locale));
   if (!res.ok) return json(502, { error: `speech service ${res.status}` });
   return json(200, parseAzure((await res.json()) as AzureResult));
 }

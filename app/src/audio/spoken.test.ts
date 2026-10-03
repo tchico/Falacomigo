@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { units } from '../content';
+import { guiLines, units } from '../content';
 import { forSpeech } from './spoken';
 
 test('spoken: "hmm" becomes "hum", which a Portuguese voice can say', () => {
@@ -25,5 +25,11 @@ test('spoken: no content line is left with letters a voice would spell out', () 
     for (const t of [b.say.spoken ?? b.say.text, b.recast ?? '', ...(b.answers ?? []).map((a) => a.recast)]) {
       assert.doesNotMatch(forSpeech(t), /\b(hm{2,}|b?r{3,}|z{3,})\b/i, `${u.id} ${s.id}/${b.id}: "${t}"`);
     }
+  }
+});
+
+test('spoken: Gui\'s own lines (warm-up, goodbye, album, Como se diz) read aloud well', () => {
+  for (const group of Object.values(guiLines)) for (const t of Object.values(group)) {
+    if (typeof t === 'string') assert.doesNotMatch(forSpeech(t), /\b(hm{2,}|b?r{3,}|z{3,})\b/i, t);
   }
 });

@@ -4,6 +4,7 @@ A Cloudflare Worker between the app and Azure Speech (design doc §5). It keeps 
 checks the app's key, caps daily use, and returns what the child said.
 
 - **FR-07:** audio is recognised as pt-PT, with the expected phrase sent as the pronunciation-assessment reference text.
+- **FR-11:** "Como se diz?" sends `"locale": "en-GB"` with an empty `expected`, for the one English word the child asks about. Everything else is pt-PT.
 - **NFR-01:** one short request per turn. The app gives up after 5 seconds and uses the offline fallback.
 - **NFR-05:** audio stays in memory for the one request. Nothing is logged or stored, and Worker observability is off.
   Azure's short-audio REST API doesn't keep audio (don't turn on logging on a custom endpoint).

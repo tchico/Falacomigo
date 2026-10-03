@@ -1,0 +1,40 @@
+{
+  "$schema": "./schema/gui.schema.json",
+  "warmup": {
+    "title": "Aquecimento",
+    "intro": "Vamos aquecer! Lembras-te disto?",
+    "introEn": "Let's warm up! Do you remember this?"
+  },
+  "session": {
+    "aimMinutes": 12,
+    "more": "Mais uma aventura?",
+    "moreEn": "One more adventure?",
+    "moreButton": "Mais uma ▶",
+    "sleepy": "Ai, que sono… Até amanhã!",
+    "sleepyEn": "Oh, I'm so sleepy… See you tomorrow!",
+    "bye": "Até amanhã!"
+  },
+  "album": {
+    "title": "O meu álbum",
+    "titleEn": "My postcard album",
+    "button": "🗺️ Álbum",
+    "newPostcard": "Um postal novo!",
+    "newPostcardEn": "A new postcard!",
+    "newStop": "Vamos para a próxima paragem!",
+    "newStopEn": "Off to the next stop!",
+    "soon": "Em breve",
+    "locked": "Ainda não"
+  },
+  "comoSeDiz": {
+    "button": "Como se diz?",
+    "ask": "Diz a palavra em inglês!",
+    "askEn": "Say the word in English",
+    "answer": "Em português, diz-se…",
+    "yourTurn": "Agora tu!",
+    "praise": "Boa! Agora já sabes!",
+    "again": "Outra vez!",
+    "unknown": "Essa ainda não sei! Diz outra.",
+    "unknownEn": "I don't know that one yet. Try another word.",
+    "back": "Voltar ▶"
+  }
+}

@@ -279,6 +279,11 @@ export class Store {
     return r?.coins ?? 0;
   }
 
+  /** Coins earned outside a phrase turn, e.g. a word from "Como se diz?" said back (FR-11). */
+  async addCoins(childId: string, n: number): Promise<void> {
+    await this.addCoinsInTx(childId, n);
+  }
+
   private async addCoinsInTx(childId: string, n: number): Promise<void> {
     await this.db.runAsync('UPDATE profiles SET coins = coins + ? WHERE id = ?', [n, childId]);
   }
