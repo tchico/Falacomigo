@@ -1,5 +1,5 @@
 // The real recogniser (FR-06, FR-07, NFR-01, NFR-02). It listens to the microphone, stops after 6 seconds or a pause,
-// and sends the audio as a 16 kHz WAV to the proxy, which asks a pt-PT speech service with the expected phrase as a hint.
+// and sends the audio as a 16 kHz WAV to the proxy, which asks a pt-PT speech service what was said.
 // If the proxy can't be reached in time, it reports how long the child spoke so the game can fall back (NFR-02).
 // The audio only lives in memory for this one request (NFR-05).
 

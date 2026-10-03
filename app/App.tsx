@@ -1,16 +1,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { getUnit, units } from './src/content';
+import { getUnit, guiLines, journey, units } from './src/content';
 import type { ChildProfile, Mission } from './src/content/types';
 import type { PhraseProgress } from './src/engine/ladder';
 import { greeting, localDay, nextMission, nextScene } from './src/engine/episode';
+import { buildAlbum, type AlbumStop, type Postcard } from './src/engine/album';
+import { isSleepy } from './src/engine/session';
+import { buildWarmup } from './src/engine/warmup';
+import type { PlayableBeat } from './src/engine/scene';
 import { COINS_PER_TURN, coinsForStars } from './src/engine/rewards';
-import { createRecognizer } from './src/speech';
+import { createRecognizer, createSmartReplies } from './src/speech';
 import { openStore } from './src/store/open';
-import { initVoice, sayAsGui, stop as stopVoice } from './src/audio/voice';
+import { initVoice, stop as stopVoice } from './src/audio/voice';
 import { initRecordings } from './src/audio/recordings';
-import { toChildProfile, type Store, type StoredProfile } from './src/store/store';
+import { SMART_REPLIES, toChildProfile, type Store, type StoredProfile } from './src/store/store';
 import { ProfilePicker } from './src/screens/ProfilePicker';
 import { ParentZone } from './src/parent/ParentZone';
 import { SceneScreen, type TurnLog } from './src/screens/SceneScreen';
@@ -21,6 +25,8 @@ import { wearFor } from './src/engine/shop';
 import { BigButton } from './src/ui/BigButton';
 import { BackButton } from './src/ui/BackButton';
 import { MissionScreen } from './src/screens/MissionScreen';
+import { AlbumScreen } from './src/screens/AlbumScreen';
+import { DoneScreen } from './src/screens/DoneScreen';
 import { colors } from './src/ui/theme';
 
 type Screen =
@@ -29,13 +35,21 @@ type Screen =
   | { name: 'pick' }
   | { name: 'parent' }
   | { name: 'welcome'; text: string; unitId: string; sceneId: string }
+  | { name: 'warmup'; unitId: string; sceneId: string; beats: PlayableBeat[] }
   | { name: 'scene'; unitId: string; sceneId: string }
   | { name: 'mission'; unitId: string; mission: Mission; rowId: number }
-  | { name: 'done' }
+  | { name: 'done'; sleepy: boolean }
+  | { name: 'album'; album: AlbumStop[]; back: Screen }
   | { name: 'shop'; back: Screen };
+
+/** The postcard an episode just added (FR-21), shown when it ends. */
+type NewPostcard = { card: Postcard; stamp: string; newStop: boolean };
 
 export default function App() {
   const recognizer = useMemo(() => createRecognizer(), []);
+  const smartReplies = useMemo(() => createSmartReplies(), []);
+  /** Dad's switch for Gui's smart replies, in the parent zone. Off by default. */
+  const [smartOn, setSmartOn] = useState(false);
   const [store, setStore] = useState<Store | null>(null);
   const [profiles, setProfiles] = useState<StoredProfile[]>([]);
   const [stops, setStops] = useState<Record<string, string>>({});
@@ -48,6 +62,11 @@ export default function App() {
   const wear = wearFor(outfit, shop.items);
   /** Phrases said in this episode, for picking the mission (FR-17). */
   const practised = useRef<string[]>([]);
+  /** When this child's session started, so Gui gets sleepy after a while (FR-16). */
+  const sessionStart = useRef(0);
+  /** The warm-up comes once per session, before the first scene (FR-15). */
+  const warmedUp = useRef(false);
+  const [postcard, setPostcard] = useState<NewPostcard | null>(null);
 
   const refreshProfiles = useCallback(async (s: Store) => {
     const ps = await s.listProfiles();
@@ -58,6 +77,7 @@ export default function App() {
     }
     setProfiles(ps);
     setStops(labels);
+    setSmartOn((await s.getSetting(SMART_REPLIES)) === 'on');
   }, []);
 
   const start = useCallback(() => {
@@ -96,22 +116,53 @@ export default function App() {
     setCoins(wallet);
     const next = nextScene(units, played);
     practised.current = [];
+    sessionStart.current = Date.now();
+    warmedUp.current = false;
     setScreen({ name: 'welcome', text: greeting(c.name, last, localDay()), unitId: next.unitId, sceneId: next.sceneId });
   };
 
-  const onTurn = (unitId: string, sceneId: string) => (t: TurnLog) => {
+  /** Into the episode: the warm-up first, if anything is due and it hasn't been done this session (FR-15). */
+  const startEpisode = (unitId: string, sceneId: string) => {
+    if (!child) return;
+    const beats = warmedUp.current ? [] : buildWarmup(units, progress, localDay(), child, guiLines.warmup.intro, guiLines.warmup.introEn);
+    warmedUp.current = true;
+    setScreen(beats.length ? { name: 'warmup', unitId, sceneId, beats } : { name: 'scene', unitId, sceneId });
+  };
+
+  /** "Mais uma": straight into the next scene (FR-16, no lock-out). */
+  const oneMore = async () => {
+    if (!store || !child) return;
+    const next = nextScene(units, await store.scenesPlayed(child.id));
+    practised.current = [];
+    setPostcard(null);
+    startEpisode(next.unitId, next.sceneId);
+  };
+
+  const showAlbum = async (back: Screen) => {
+    if (!store || !child) return;
+    setScreen({ name: 'album', album: buildAlbum(units, journey.stops, await store.scenesPlayed(child.id)), back });
+  };
+
+  const onTurn = (sceneId: string) => (t: TurnLog) => {
     if (!store || !child) return;
     setCoins((c) => c + COINS_PER_TURN);
     practised.current.push(t.phraseId);
     store
-      .recordTurn({ childId: child.id, unitId, sceneId, beatId: t.beatId, phraseId: t.phraseId, startRung: t.startRung, outcome: t.outcome, day: localDay(), coins: COINS_PER_TURN })
+      .recordTurn({ childId: child.id, unitId: t.unitId, sceneId, beatId: t.beatId, phraseId: t.phraseId, startRung: t.startRung, outcome: t.outcome, day: localDay(), coins: COINS_PER_TURN })
       .then((updated) => setProgress((prev) => ({ ...prev, [updated.phraseId]: updated })))
       .catch((e) => console.error('Could not save the turn', e));
   };
 
   const onSceneFinished = async (unitId: string, sceneId: string) => {
     if (!store || !child) return;
+    const before = buildAlbum(units, journey.stops, await store.scenesPlayed(child.id));
     await store.finishScene(child.id, unitId, sceneId, localDay());
+    const after = buildAlbum(units, journey.stops, await store.scenesPlayed(child.id));
+    // A new postcard for the album, and maybe a full stop that opens the next one (FR-21).
+    const stopNow = after.find((st) => st.unitId === unitId);
+    const card = stopNow?.postcards.find((p) => p.sceneId === sceneId);
+    const wasNew = !before.find((st) => st.unitId === unitId)?.postcards.find((p) => p.sceneId === sceneId)?.got;
+    setPostcard(stopNow && card && wasNew ? { card, stamp: stopNow.stop.emoji, newStop: stopNow.state === 'done' } : null);
     const unit = getUnit(unitId);
     const given = await store.missionsGiven(child.id, unitId);
     const mission = nextMission(unit, given.map((m) => m.missionId), child.age, practised.current);
@@ -119,9 +170,14 @@ export default function App() {
     setScreen({ name: 'mission', unitId, mission, rowId: row.id });
   };
 
-  useEffect(() => {
-    if (screen.name === 'done') void sayAsGui('Até amanhã!');
-  }, [screen.name]);
+  const doneScreen = (): Screen => ({ name: 'done', sleepy: isSleepy(sessionStart.current, Date.now(), guiLines.session.aimMinutes) });
+
+  /** A word from "Como se diz?" said back in Portuguese: it counts like a turn (FR-11). */
+  const onWordLearned = () => {
+    if (!store || !child) return;
+    setCoins((c) => c + COINS_PER_TURN);
+    store.addCoins(child.id, COINS_PER_TURN).catch((e) => console.error('Could not save the coins', e));
+  };
 
   const backToStart = async () => {
     void stopVoice();
@@ -140,7 +196,7 @@ export default function App() {
       ) : null}
 
       {/* Back to "Quem vai jogar?" from the game screens; the scene draws its own in its top bar. */}
-      {(screen.name === 'welcome' || screen.name === 'mission' || screen.name === 'done') && (
+      {(screen.name === 'welcome' || screen.name === 'mission') && (
         <View style={styles.back}>
           <BackButton onPress={() => void backToStart()} />
         </View>
@@ -167,7 +223,7 @@ export default function App() {
       {screen.name === 'pick' && <ProfilePicker profiles={profiles} details={stops} onPick={pick} onParent={() => setScreen({ name: 'parent' })} />}
 
       {screen.name === 'parent' && store && (
-        <ParentZone store={store} profiles={profiles} onProfilesChanged={() => void refreshProfiles(store)} onExit={() => void backToStart()} />
+        <ParentZone store={store} profiles={profiles} smartRepliesAvailable={!!smartReplies} onProfilesChanged={() => void refreshProfiles(store)} onExit={() => void backToStart()} />
       )}
 
       {screen.name === 'welcome' && (
@@ -177,7 +233,27 @@ export default function App() {
           setting={getUnit(screen.unitId).scenes.find((sc) => sc.id === screen.sceneId)?.setting}
           wear={wear}
           onShop={() => setScreen({ name: 'shop', back: screen })}
-          onStart={() => setScreen({ name: 'scene', unitId: screen.unitId, sceneId: screen.sceneId })}
+          onAlbum={() => void showAlbum(screen)}
+          onStart={() => startEpisode(screen.unitId, screen.sceneId)}
+        />
+      )}
+
+      {screen.name === 'warmup' && child && (
+        <SceneScreen
+          key={`${child.id}/warmup`}
+          unit={getUnit(screen.unitId)}
+          sceneId={screen.sceneId}
+          beats={screen.beats}
+          title={guiLines.warmup.title}
+          child={child}
+          recognizer={recognizer}
+          progress={progress}
+          onTurn={onTurn('warmup')}
+          onFinished={() => setScreen({ name: 'scene', unitId: screen.unitId, sceneId: screen.sceneId })}
+          onExit={() => void backToStart()}
+          onWordLearned={onWordLearned}
+          wear={wear}
+          smartReplies={smartOn ? smartReplies : null}
         />
       )}
 
@@ -189,10 +265,12 @@ export default function App() {
           child={child}
           recognizer={recognizer}
           progress={progress}
-          onTurn={onTurn(screen.unitId, screen.sceneId)}
+          onTurn={onTurn(screen.sceneId)}
           onFinished={() => void onSceneFinished(screen.unitId, screen.sceneId)}
           onExit={() => void backToStart()}
+          onWordLearned={onWordLearned}
           wear={wear}
+          smartReplies={smartOn ? smartReplies : null}
         />
       )}
 
@@ -206,11 +284,11 @@ export default function App() {
               await store.approveMission(screen.rowId, stars, coinsForStars(stars));
               setCoins(await store.getCoins(child.id));
             }
-            setScreen({ name: 'done' });
+            setScreen(doneScreen());
           }}
           wear={wear}
           onLater={() => {
-            setScreen({ name: 'done' });
+            setScreen(doneScreen());
           }}
         />
       )}
@@ -229,15 +307,25 @@ export default function App() {
       )}
 
       {screen.name === 'done' && (
-        <View style={styles.done}>
-          <Text style={styles.doneTitle}>Até amanhã!</Text>
-          <Text style={styles.doneText}>{coins} moedas</Text>
-          <View style={{ flexDirection: 'row', gap: 16 }}>
-            <BigButton label="🛍️ Loja do Gui" onPress={() => setScreen({ name: 'shop', back: { name: 'done' } })} accessibilityLabel="Gui's shop" />
-            <BigButton label="🏠 Voltar ao início" variant="secondary" onPress={() => void backToStart()} />
-          </View>
-        </View>
+        <DoneScreen
+          coins={coins}
+          sleepy={screen.sleepy}
+          postcard={postcard}
+          wear={wear}
+          onMore={() => void oneMore()}
+          onAlbum={() => {
+            setPostcard(null);
+            void showAlbum({ name: 'done', sleepy: screen.sleepy });
+          }}
+          onShop={() => {
+            setPostcard(null);
+            setScreen({ name: 'shop', back: { name: 'done', sleepy: screen.sleepy } });
+          }}
+          onHome={() => void backToStart()}
+        />
       )}
+
+      {screen.name === 'album' && <AlbumScreen album={screen.album} onExit={() => setScreen(screen.back)} />}
     </SafeAreaView>
   );
 }

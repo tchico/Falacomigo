@@ -114,3 +114,19 @@ test('store: Gui wears one item per slot, per child', async () => {
   assert.deepEqual(await store.getOutfit('child1'), { head: 'crown' });
   assert.deepEqual(await store.getOutfit('child2'), {});
 });
+
+test('store: settings start unset, and can be changed', async () => {
+  const { store } = await freshStore();
+  assert.equal(await store.getSetting('smart-replies'), null);
+  await store.setSetting('smart-replies', 'on');
+  await store.setSetting('smart-replies', 'off');
+  assert.equal(await store.getSetting('smart-replies'), 'off');
+});
+
+test('store: coins can be added outside a turn (FR-11)', async () => {
+  const { store } = await freshStore();
+  await store.addCoins('child1', 10);
+  await store.addCoins('child1', 10);
+  assert.equal(await store.getCoins('child1'), 20);
+  assert.equal(await store.getCoins('child2'), 0);
+});

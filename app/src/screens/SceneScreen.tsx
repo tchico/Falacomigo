@@ -1,8 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Easing, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { ChildProfile, Unit } from '../content/types';
-import { buildScene } from '../engine/scene';
-import { matchAttempt } from '../engine/match';
+import { getUnit, guiLines, units } from '../content';
+import { saidInEnglish, wordsUpTo, type Word } from '../engine/comoSeDiz';
+import { ComoSeDiz } from './ComoSeDiz';
+import { buildScene, type PlayableBeat } from '../engine/scene';
+import { matchAnswer } from '../engine/match';
+import type { SmartReplies } from '../speech/smartReply';
 import { applyAttempt, applyOfflineAttempt, ladderOutcome, newTurn, parentOverride, type TurnState } from '../engine/turn';
 import { startRungFor, type Outcome, type PhraseProgress } from '../engine/ladder';
 import type { Listening, RecognitionResult, SpeechRecognizer } from '../speech/types';
@@ -22,6 +26,8 @@ import { pictureFor } from '../ui/pictures';
 import { colors, radius } from '../ui/theme';
 
 export interface TurnLog {
+  /** The unit the phrase belongs to (a warm-up mixes units). */
+  unitId: string;
   beatId: string;
   phraseId: string;
   startRung: number;
@@ -32,7 +38,12 @@ export interface TurnLog {
 
 interface Props {
   unit: Unit;
+  /** The scene to play. With `beats`, only its scenery is used. */
   sceneId: string;
+  /** Beats built elsewhere, e.g. the warm-up (FR-15), instead of the scene's own. */
+  beats?: PlayableBeat[];
+  /** Shown instead of the scene's title. */
+  title?: string;
   child: ChildProfile;
   recognizer: SpeechRecognizer;
   /** The child's ladder progress, to pick how much support each phrase gets. */
@@ -44,14 +55,18 @@ interface Props {
   onExit: () => void;
   /** What Gui is wearing from his shop. */
   wear?: Wear;
+  /** Smart replies for off-script answers, when Dad has turned them on. */
+  smartReplies?: SmartReplies | null;
+  /** A word from "Como se diz?" said back in Portuguese (FR-11). */
+  onWordLearned?: () => void;
 }
 
 /**
  * One scene, beat by beat (FR-03: speaking is the only way forward).
  * With the stub recogniser, a developer panel at the bottom stands in for the microphone.
  */
-export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn, onFinished, onExit, wear }: Props) {
-  const beats = useMemo(() => buildScene(unit, sceneId, child), [unit, sceneId, child]);
+export function SceneScreen({ unit, sceneId, beats: given, title, child, recognizer, progress, onTurn, onFinished, onExit, wear, smartReplies, onWordLearned }: Props) {
+  const beats = useMemo(() => given ?? buildScene(unit, sceneId, child), [given, unit, sceneId, child]);
   const [index, setIndex] = useState(0);
   const [turn, setTurn] = useState<TurnState>(newTurn());
   const [mic, setMic] = useState<'idle' | 'listening' | 'thinking'>('idle');
@@ -81,9 +96,15 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
   // "Boa! +10" pops in when a spoken turn ends.
   const [reward] = useState(() => new Animated.Value(0));
   const [feedback, setFeedback] = useState<string | null>(null);
+  /** The character's reply to the answer the child gave last (open questions have several, FR-10). */
+  const reply = useRef<string | null>(null);
   const [devText, setDevText] = useState('');
+  /** "Como se diz?" is open (FR-11), with the English word already heard if the child said one in the scene. */
+  const [asking, setAsking] = useState<{ word: Word | null } | null>(null);
+  const words = useMemo(() => wordsUpTo(units, unit.id), [unit.id]);
 
   const beat = beats[index];
+  const beatUnit = beat.unitId === unit.id ? unit : getUnit(beat.unitId);
   const isStub = recognizer instanceof StubRecognizer;
   const startRung = beat.phrase ? startRungFor(beat.phrase.startRung, child.age) : 1;
   const rung = beat.phrase ? progress[beat.phrase.id]?.rung ?? startRung : 1;
@@ -93,7 +114,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
     if (!beat.phrase || !beat.modelText) return Promise.resolve();
     const source = beat.ownModel
       ? ({ kind: 'tts', text: beat.modelText } as const)
-      : sourceFor(clipKey(unit.id, phraseClipFile(beat.phrase, child)), beat.modelText);
+      : sourceFor(clipKey(beatUnit.id, phraseClipFile(beat.phrase, child)), beat.modelText);
     return play(source);
   };
 
@@ -119,23 +140,24 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
     setFeedback(text);
     void talk(beat.speaker, text);
   };
-  const character = beat.speaker === 'gui' ? null : unit.characters?.[beat.speaker];
+  const character = beat.speaker === 'gui' ? null : beatUnit.characters?.[beat.speaker];
 
   const advance = () => {
     void stop();
     setFeedback(null);
     setTurn(newTurn());
+    reply.current = null;
     if (index + 1 >= beats.length) onFinished();
     else setIndex(index + 1);
   };
 
   const finishTurn = (t: TurnState) => {
     if (!beat.phrase) return;
-    onTurn({ beatId: beat.id, phraseId: beat.phrase.id, startRung, outcome: ladderOutcome(t.outcome), turnOutcome: t.outcome });
+    onTurn({ unitId: beat.unitId, beatId: beat.id, phraseId: beat.phrase.id, startRung, outcome: ladderOutcome(t.outcome), turnOutcome: t.outcome });
     reward.setValue(0);
     Animated.spring(reward, { toValue: 1, friction: 5, tension: 120, useNativeDriver: useNative }).start();
     // Gui always answers with the correct form (a recast), whether the child got it exactly or nearly (FR-10).
-    say(beat.recast ?? (t.outcome === 'got-it' ? 'Boa!' : beat.modelText) ?? 'Boa!');
+    say(reply.current ?? beat.recast ?? (t.outcome === 'got-it' ? 'Boa!' : beat.modelText) ?? 'Boa!');
   };
 
   /** Hold-to-talk (FR-06): listening starts when the button goes down and ends on release, a pause, or 6 seconds. */
@@ -181,9 +203,31 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
 
   const onHeard = async (heard: RecognitionResult) => {
     if (!beat.target) return;
-    const next = heard.offline
-      ? applyOfflineAttempt(turn, heard.voicedMs)
-      : applyAttempt(turn, { result: matchAttempt(heard.transcript, beat.target, child.age), durationMs: heard.voicedMs });
+    let next: TurnState;
+    if (heard.offline) next = applyOfflineAttempt(turn, heard.voicedMs);
+    else {
+      const matched = matchAnswer(heard.transcript, beat.answers, child.age);
+      let result = matched.result;
+      // Just an English word from the list ("water!"): that's "Como se diz?", and the try doesn't count (FR-11).
+      const english = result === 'got-it' ? null : saidInEnglish(heard.transcript, words);
+      if (english) {
+        setAsking({ word: english });
+        return;
+      }
+      reply.current = matched.answer.recast;
+      // Something real the script doesn't cover ("Estou cansado"): Gui may answer it with a smart reply. It counts
+      // as a near miss, so the phrase still gets practised; if the reply doesn't come, the script carries on.
+      if (result !== 'got-it' && beat.freeReply && smartReplies && heard.transcript.trim() && beat.modelText) {
+        setMic('thinking');
+        const smart = await smartReplies.ask({ question: beat.line, expected: beat.modelText, heard: heard.transcript, age: child.age }, child.name);
+        setMic('idle');
+        if (smart) {
+          result = 'nearly';
+          reply.current = smart;
+        }
+      }
+      next = applyAttempt(turn, { result, durationMs: heard.voicedMs });
+    }
     setTurn(next);
     if (next.done) finishTurn(next);
     else if (next.playModel) {
@@ -220,7 +264,7 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
             onExit();
           }}
         />
-        <Text style={[styles.sceneTitle, place.evening && place.kind === 'garden' ? { color: colors.white } : null]}>{scene?.title}</Text>
+        <Text style={[styles.sceneTitle, place.evening && place.kind === 'garden' ? { color: colors.white } : null]}>{title ?? scene?.title}</Text>
         <View style={styles.dots} accessibilityLabel={`Turn ${index + 1} of ${beats.length}`}>
           {beats.map((b, i) => (
             <View key={b.id} style={[styles.dot, i < index && { backgroundColor: colors.teal }, i === index && { backgroundColor: colors.terracottaLight }]} />
@@ -272,6 +316,9 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
               <Text style={styles.hintLabel}>DIZ ASSIM</Text>
               <Text style={styles.hintText}>{hintFor(beat.modelText ?? '', rung, turn.playModel)}</Text>
             </View>
+            <Pressable accessibilityRole="button" accessibilityLabel="How do you say it?" onPress={() => { void stop(); setAsking({ word: null }); }} style={styles.ask} disabled={mic !== 'idle'}>
+              <Text style={styles.askText}>{guiLines.comoSeDiz.button}</Text>
+            </Pressable>
             {rung <= 3 || turn.playModel ? (
               <Pressable accessibilityRole="button" accessibilityLabel="Listen" onPress={() => void playModel()} style={styles.listen}>
                 <Text style={styles.listenText}>🔊</Text>
@@ -299,7 +346,22 @@ export function SceneScreen({ unit, sceneId, child, recognizer, progress, onTurn
         )}
       </View>
 
-      {isStub && beat.phrase && !turn.done ? (
+      {asking ? (
+        <ComoSeDiz
+          recognizer={recognizer}
+          words={words}
+          age={child.age}
+          word={asking.word}
+          wear={wear}
+          onLearned={() => onWordLearned?.()}
+          onClose={() => {
+            void stop();
+            setAsking(null);
+          }}
+        />
+      ) : null}
+
+      {isStub && beat.phrase && !turn.done && !asking ? (
         <View style={styles.dev}>
           <Text style={styles.devLabel}>DEV · stub microphone</Text>
           <BigButton label="Say it right" variant="secondary" onPress={() => void simulate(beat.modelText ?? '')} />
@@ -352,6 +414,8 @@ const styles = StyleSheet.create({
   pictures: { flexDirection: 'row', gap: 12, marginTop: 8 },
   picture: { width: 88, height: 88, borderRadius: 18, borderWidth: 3, borderColor: colors.ink, backgroundColor: colors.cream, alignItems: 'center', justifyContent: 'center' },
   pictureText: { fontSize: 52 },
+  ask: { minHeight: 60, maxWidth: 130, paddingHorizontal: 12, borderRadius: 18, backgroundColor: colors.blueTint, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
+  askText: { fontSize: 18, fontWeight: '900', color: colors.blueDark, textAlign: 'center' },
   listen: { width: 84, height: 84, borderRadius: 42, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   listenText: { fontSize: 36 },
   mic: { width: 130, height: 130, borderRadius: 65, backgroundColor: colors.terracotta, borderWidth: 5, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
