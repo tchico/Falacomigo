@@ -25,22 +25,22 @@ function azure(body: unknown, status = 200) {
   return { calls, deps: { fetch: fetchFn, now: () => new Date('2026-10-01T10:00:00Z') } };
 }
 
-const success = { RecognitionStatus: 'Success', DisplayText: 'Olá.', NBest: [{ Display: 'Olá, Gui.', AccuracyScore: 90, CompletenessScore: 100, PronScore: 88 }] };
+const success = { RecognitionStatus: 'Success', DisplayText: 'Olá.', NBest: [{ Display: 'Olá, Gui.' }] };
 
 test('proxy: forwards the audio to Azure pt-PT and returns the transcript', async () => {
   const { calls, deps } = azure(success);
   const res = await handle(post(good), env(), deps);
   assert.equal(res.status, 200);
-  assert.deepEqual(await res.json(), { transcript: 'Olá, Gui.', scores: { accuracy: 90, completeness: 100, pronunciation: 88 } });
+  assert.deepEqual(await res.json(), { transcript: 'Olá, Gui.' });
   const req = calls[0];
   assert.match(req.url, /^https:\/\/westeurope\.stt\.speech\.microsoft\.com\/.*language=pt-PT/);
   assert.equal(req.headers.get('Ocp-Apim-Subscription-Key'), 'azure');
   assert.match(req.headers.get('Content-Type')!, /samplerate=16000/);
-  const assessment = JSON.parse(Buffer.from(req.headers.get('Pronunciation-Assessment')!, 'base64').toString('utf8'));
-  assert.equal(assessment.ReferenceText, 'Olá!');
+  // No reference text: it made Azure hear the expected phrase instead of what the child said.
+  assert.equal(req.headers.get('Pronunciation-Assessment'), null);
 });
 
-test('proxy: an English word for "Como se diz?" goes to Azure en-GB, with no reference text (FR-11)', async () => {
+test('proxy: an English word for "Como se diz?" goes to Azure en-GB (FR-11)', async () => {
   const { calls, deps } = azure({ RecognitionStatus: 'Success', DisplayText: 'Dog.' });
   const res = await handle(post({ ...good, locale: 'en-GB', expected: '' }), env(), deps);
   assert.equal(res.status, 200);
@@ -79,10 +79,10 @@ test('proxy: caps recognitions per day (NFR-06)', async () => {
   assert.equal(usage.store.get('usage:2026-10-01'), '2');
 });
 
-test('proxy: the reference text survives accents', () => {
-  const req = azureRequest(env(), 'Até amanhã!', new Uint8Array([1]));
-  const assessment = JSON.parse(Buffer.from(req.headers.get('Pronunciation-Assessment')!, 'base64').toString('utf8'));
-  assert.equal(assessment.ReferenceText, 'Até amanhã!');
+test('proxy: the request to Azure is plain recognition in the chosen language', () => {
+  const req = azureRequest(env(), new Uint8Array([1]), 'en-GB');
+  assert.match(req.url, /language=en-GB/);
+  assert.equal(req.headers.get('Pronunciation-Assessment'), null);
 });
 
 test('proxy: answers the browser preflight and allows cross-site calls, for the web build', async () => {

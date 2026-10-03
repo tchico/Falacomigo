@@ -1,6 +1,5 @@
 // The speech proxy (design doc §5). It holds the speech service key so it never ships in the app, checks the app's
-// key, caps daily use (NFR-06), and forwards one short WAV to Azure Speech's pt-PT recogniser, with the expected
-// phrase as the pronunciation-assessment reference text (FR-07).
+// key, caps daily use (NFR-06), and forwards one short WAV to Azure Speech's pt-PT recogniser (FR-07).
 //
 // Privacy (NFR-05): the audio is only held in memory for this one request. Nothing is logged or stored, and
 // Azure's short-audio REST API doesn't keep the audio unless logging is turned on for a custom endpoint, which we don't use.
@@ -56,40 +55,34 @@ function base64ToBytes(b64: string): Uint8Array<ArrayBuffer> {
   return out;
 }
 
-const toBase64Text = (text: string) => btoa(String.fromCharCode(...new TextEncoder().encode(text)));
-
 /** pt-PT for the game; en-GB only for the English word a child asks about in "Como se diz?" (FR-11). */
 export const LOCALES = ['pt-PT', 'en-GB'] as const;
 export type Locale = (typeof LOCALES)[number];
 
-export function azureRequest(env: Env, expected: string, wav: Uint8Array<ArrayBuffer>, locale: Locale = 'pt-PT'): Request {
+/**
+ * Plain recognition, so the transcript is what the child actually said. The expected phrase is deliberately not sent:
+ * as pronunciation-assessment reference text it pulled the transcript towards the phrase ("Chamo-me Joao" came back as
+ * "Chamo-me Ana."), and the app's own matcher, not Azure, decides whether the child said it (design doc §5).
+ */
+export function azureRequest(env: Env, wav: Uint8Array<ArrayBuffer>, locale: Locale = 'pt-PT'): Request {
   const url = `https://${env.AZURE_SPEECH_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${locale}&format=detailed&profanity=raw`;
-  const headers: Record<string, string> = {
+  const headers = {
     'Ocp-Apim-Subscription-Key': env.AZURE_SPEECH_KEY,
     'Content-Type': 'audio/wav; codecs=audio/pcm; samplerate=16000',
     Accept: 'application/json',
   };
-  // The expected phrase helps the recogniser. An English word has none: the child can ask about any word.
-  if (expected) {
-    const assessment = { ReferenceText: expected, GradingSystem: 'HundredMark', Granularity: 'Word', Dimension: 'Comprehensive', EnableMiscue: true };
-    headers['Pronunciation-Assessment'] = toBase64Text(JSON.stringify(assessment));
-  }
   return new Request(url, { method: 'POST', headers, body: wav });
 }
 
 interface AzureResult {
   RecognitionStatus?: string;
   DisplayText?: string;
-  NBest?: { Display?: string; AccuracyScore?: number; CompletenessScore?: number; PronScore?: number }[];
+  NBest?: { Display?: string }[];
 }
 
-export function parseAzure(body: AzureResult): { transcript: string; scores?: { accuracy?: number; completeness?: number; pronunciation?: number } } {
+export function parseAzure(body: AzureResult): { transcript: string } {
   if (body.RecognitionStatus !== 'Success') return { transcript: '' };
-  const best = body.NBest?.[0];
-  return {
-    transcript: best?.Display ?? body.DisplayText ?? '',
-    scores: best ? { accuracy: best.AccuracyScore, completeness: best.CompletenessScore, pronunciation: best.PronScore } : undefined,
-  };
+  return { transcript: body.NBest?.[0]?.Display ?? body.DisplayText ?? '' };
 }
 
 async function underDailyLimit(env: Env, day: string, kind = 'usage'): Promise<boolean> {
@@ -129,7 +122,7 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
 
   if (!(await underDailyLimit(env, deps.now().toISOString().slice(0, 10)))) return json(429, { error: 'daily limit reached' });
 
-  const res = await deps.fetch(azureRequest(env, expected, wav, locale as Locale));
+  const res = await deps.fetch(azureRequest(env, wav, locale as Locale));
   if (!res.ok) return json(502, { error: `speech service ${res.status}` });
   return json(200, parseAzure((await res.json()) as AzureResult));
 }
