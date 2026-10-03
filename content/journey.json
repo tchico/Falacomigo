@@ -6,64 +6,80 @@
       "name": "O jardim",
       "nameEn": "The back garden, Ireland",
       "emoji": "🏡",
-      "x": 0.243,
-      "y": 0.28
+      "x": 0.345,
+      "y": 0.147,
+      "lat": 53.3,
+      "lon": -6.4
     },
     {
       "id": "ferry",
       "name": "O ferry",
       "nameEn": "The ferry",
       "emoji": "⛴️",
-      "x": 0.357,
-      "y": 0.432
+      "x": 0.274,
+      "y": 0.383,
+      "lat": 47.2,
+      "lon": -7.6
     },
     {
       "id": "beach",
       "name": "A praia",
       "nameEn": "A beach in Galicia",
       "emoji": "🏖️",
-      "x": 0.586,
-      "y": 0.533
+      "x": 0.185,
+      "y": 0.486,
+      "lat": 42.9,
+      "lon": -9.1
     },
     {
       "id": "porto",
       "name": "O Porto",
       "nameEn": "Porto",
       "emoji": "🌉",
-      "x": 0.571,
-      "y": 0.631
+      "x": 0.214,
+      "y": 0.612,
+      "lat": 41.15,
+      "lon": -8.61
     },
     {
       "id": "coimbra",
       "name": "Coimbra",
       "nameEn": "Coimbra",
       "emoji": "🩺",
-      "x": 0.586,
-      "y": 0.741
+      "x": 0.224,
+      "y": 0.736,
+      "lat": 40.21,
+      "lon": -8.43
     },
     {
       "id": "train",
       "name": "O comboio",
       "nameEn": "A train south",
       "emoji": "🚆",
-      "x": 0.606,
-      "y": 0.827
+      "x": 0.238,
+      "y": 0.836,
+      "lat": 39.45,
+      "lon": -8.2
     },
     {
       "id": "village",
       "name": "A aldeia",
       "nameEn": "The grandparents' village",
       "emoji": "👵",
-      "x": 0.64,
-      "y": 0.893
+      "x": 0.274,
+      "y": 0.917,
+      "lat": 38.84,
+      "lon": -7.59
     },
     {
       "id": "lisboa",
       "name": "Lisboa",
       "nameEn": "Lisbon",
       "emoji": "🏰",
-      "x": 0.571,
-      "y": 0.952
+      "x": 0.182,
+      "y": 0.932,
+      "lat": 38.72,
+      "lon": -9.14
     }
   ]
 }

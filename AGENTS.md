@@ -1,7 +1,7 @@
 # Notes for AI coding assistants
 
 - The spec is `docs/design.md`. Requirements have IDs (FR-xx, NFR-xx) and matching GitHub issues. Work on one at a time and mention the ID in commits.
-- Content (phrases, scenes, missions, guide text, Gui's shop in `content/shop.json`) lives in `content/` as JSON, never hard-coded in the app. `content/guide.json` and `tools/issues.json` are generated: edit `docs/parent-guide.md` or `docs/design.md`, then run `node tools/build-guide.mjs` and `node tools/build-issues.mjs`. `app/src/content/audioClips.ts` is generated too: after adding clips to `content/audio/<unit>/`, run `node tools/build-audio.mjs`.
+- Content (phrases, scenes, missions, guide text, Gui's shop in `content/shop.json`) lives in `content/` as JSON, never hard-coded in the app. `content/guide.json` and `tools/issues.json` are generated: edit `docs/parent-guide.md` or `docs/design.md`, then run `node tools/build-guide.mjs` and `node tools/build-issues.mjs`. `app/src/content/audioClips.ts` is generated too: after adding clips to `content/audio/<unit>/`, run `node tools/build-audio.mjs`. The journey map picture and the stops' x/y come from `tools/build-map.mjs`: after changing a stop's `lat`/`lon` in `content/journey.json`, run it (its header says how).
 - All Portuguese is **European Portuguese** (pt-PT): pequeno-almoço, autocarro, "tu" forms. Never Brazilian forms.
 - Accepted answers in content packs are written normalised: lower case, no accents or punctuation (`app/src/engine/normalize.ts`). The content tests enforce this.
 - Lines can have sounds like "Hmm…" and "Brrr…": the voice says "hum" and skips sound effects automatically (`app/src/audio/spoken.ts`). When a line still won't read aloud well, give it a `spoken` version in the content pack.

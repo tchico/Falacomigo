@@ -1,8 +1,8 @@
 // The journey map (FR-21): from the kids' garden in Ireland, over the sea and down Portugal to Lisbon. When a child
-// comes back, Gui flies the journey so far, stop by stop, and lands where they are now. Drawn with plain views
-// like the scenery, slow and calm (NFR-09), and still when "reduce motion" is on.
+// comes back, Gui flies the journey so far, stop by stop, and lands where they are now. Plain views
+// over a map with the real coastlines, slow and calm (NFR-09), and still when "reduce motion" is on.
 import { useEffect, useMemo, useState } from 'react';
-import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
+import { Animated, Easing, Image, StyleSheet, Text, View } from 'react-native';
 import { hereIndex, type AlbumStop } from '../engine/album';
 import { Gui } from './Gui';
 import { trail } from './journeyPath';
@@ -11,9 +11,7 @@ import type { Wear } from '../engine/shop';
 import { colors } from './theme';
 
 const SEA = '#BFDDF0';
-const GREEN = '#9FD18B';
-const SAND = '#F4D9A6';
-const PALE = '#DCE8D2';
+const MAP = require('../../assets/journey-map.png');
 /** How long Gui takes to fly from one stop to the next. */
 const LEG_MS = 1100;
 
@@ -53,13 +51,12 @@ export function JourneyMap({ album, width, wear }: { album: AlbumStop[]; width: 
 
   return (
     <View style={[styles.map, { width, height }]} accessibilityRole="image" accessibilityLabel={`Journey map: Gui is at stop ${here + 1}, ${album[here]?.stop.nameEn ?? ''}`}>
-      {/* Land: Ireland, Great Britain in the distance, and Spain and Portugal. */}
-      <View style={[styles.land, { left: width * 0.12, top: height * 0.08, width: width * 0.22, height: height * 0.28, borderRadius: width * 0.1, backgroundColor: GREEN, transform: [{ rotate: '-12deg' }] }]} />
-      <View style={[styles.land, { left: width * 0.37, top: -height * 0.04, width: width * 0.1, height: height * 0.42, borderRadius: width * 0.05, backgroundColor: PALE, borderColor: '#8A97A8' }]} />
-      <View style={[styles.land, { left: width * 0.52, top: height * 0.48, width: width * 0.56, height: height * 0.6, borderTopLeftRadius: width * 0.08, backgroundColor: SAND }]} />
-      <Text style={[styles.country, { left: width * 0.03, top: height * 0.03, fontSize: width * 0.034 }]}>Irlanda</Text>
-      <Text style={[styles.country, { left: width * 0.8, top: height * 0.6, fontSize: width * 0.034, color: '#8A6A3A' }]}>Espanha</Text>
-      <Text style={[styles.country, { left: width * 0.7, top: height * 0.78, fontSize: width * 0.03 }]}>Portugal</Text>
+      {/* The real coastlines, drawn by tools/build-map.mjs. */}
+      <Image source={MAP} style={{ position: 'absolute', left: 0, top: 0, width, height }} resizeMode="stretch" />
+      <Text style={[styles.country, { left: width * 0.04, top: height * 0.03, fontSize: width * 0.034 }]}>Irlanda</Text>
+      <Text style={[styles.country, { left: width * 0.74, top: height * 0.36, fontSize: width * 0.03, color: colors.inkSoft }]}>França</Text>
+      <Text style={[styles.country, { left: width * 0.56, top: height * 0.78, fontSize: width * 0.034, color: '#8A6A3A' }]}>Espanha</Text>
+      <Text style={[styles.country, { left: width * 0.015, top: height * 0.72, fontSize: width * 0.03, transform: [{ rotate: '-80deg' }] }]}>Portugal</Text>
 
       {/* The route. Dots light up behind Gui as he flies. */}
       {dots.map((d, i) => {
@@ -92,7 +89,16 @@ export function JourneyMap({ album, width, wear }: { album: AlbumStop[]; width: 
       {/* Names of the places reached so far, and of Lisbon, where the journey ends. */}
       {album.map((s, i) =>
         i <= here || i === album.length - 1 ? (
-          <Text key={s.stop.id} style={[styles.name, { left: pts[i].x + width * 0.05, top: pts[i].y - width * 0.02, fontSize: width * 0.027 }, i > here && { color: colors.inkSoft }]}>
+          <Text
+            key={s.stop.id}
+            style={[
+              styles.name,
+              // Stops on the west coast have their name out at sea, clear of the stops inland.
+              s.stop.x < 0.2 ? { right: width - pts[i].x + width * 0.05, textAlign: 'right' } : { left: pts[i].x + width * 0.05 },
+              { top: pts[i].y - width * 0.02, fontSize: width * 0.027 },
+              i > here && { color: colors.inkSoft },
+            ]}
+          >
             {s.stop.name}
           </Text>
         ) : null,
@@ -107,7 +113,6 @@ export function JourneyMap({ album, width, wear }: { album: AlbumStop[]; width: 
 
 const styles = StyleSheet.create({
   map: { backgroundColor: SEA, borderWidth: 4, borderColor: colors.ink, borderRadius: 28, overflow: 'hidden' },
-  land: { position: 'absolute', borderWidth: 3, borderColor: colors.ink },
   country: { position: 'absolute', fontWeight: '900', color: colors.ink },
   dot: { position: 'absolute', width: 8, height: 8, borderRadius: 4, backgroundColor: colors.ink },
   stop: { borderWidth: 3, borderColor: colors.ink, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center' },
