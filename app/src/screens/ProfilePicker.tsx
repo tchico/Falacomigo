@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { sayAsGui } from '../audio/voice';
+import { guessGame } from '../content';
 import type { StoredProfile } from '../store/store';
 import { avatarFor } from '../ui/avatars';
 import { Gui } from '../ui/Gui';
@@ -13,20 +14,42 @@ interface Props {
   details?: Record<string, string>;
   onPick: (p: StoredProfile) => void;
   onParent: () => void;
+  /** Two children playing together (FR-24). */
+  onPair?: (pair: [StoredProfile, StoredProfile]) => void;
 }
 
 export const PARENT_HOLD_MS = 3000;
 
 /** FR-01, FR-02: each child taps their own animal, one tap and no reading needed. */
-export function ProfilePicker({ profiles, details = {}, onPick, onParent }: Props) {
+export function ProfilePicker({ profiles, details = {}, onPick, onParent, onPair }: Props) {
   // Spoken, so a child who can't read yet knows what to do (NFR-03).
   useEffect(() => void sayAsGui('Olá! Anda cá! Quem vai jogar?'), []);
+  /** Picking two children for "Juntos" (FR-24), when there are more than two. */
+  const [pairing, setPairing] = useState<string[] | null>(null);
+
+  const together = () => {
+    if (!onPair) return;
+    if (profiles.length === 2) return onPair(older(profiles[0], profiles[1]));
+    setPairing([]);
+    void sayAsGui(guessGame.lines.pick);
+  };
+
+  const tap = (p: StoredProfile) => {
+    if (!pairing) return onPick(p);
+    const next = pairing.includes(p.id) ? pairing.filter((id) => id !== p.id) : [...pairing, p.id];
+    if (next.length === 2 && onPair) {
+      const [a, b] = next.map((id) => profiles.find((q) => q.id === id)!);
+      setPairing(null);
+      return onPair(older(a, b));
+    }
+    setPairing(next);
+  };
 
   return (
     <View style={styles.screen}>
       <Text style={styles.brand}>Fala Comigo</Text>
-      <Text style={styles.title}>Quem vai jogar?</Text>
-      <Text style={styles.subtitle}>Who's playing?</Text>
+      <Text style={styles.title}>{pairing ? guessGame.lines.pick : 'Quem vai jogar?'}</Text>
+      <Text style={styles.subtitle}>{pairing ? guessGame.lines.pickEn : "Who's playing?"}</Text>
       <View style={styles.row}>
         {profiles.map((p) => {
           const avatar = avatarFor(p.avatar);
@@ -35,8 +58,8 @@ export function ProfilePicker({ profiles, details = {}, onPick, onParent }: Prop
               key={p.id}
               accessibilityRole="button"
               accessibilityLabel={`${p.name}, ${p.age}`}
-              onPress={() => onPick(p)}
-              style={({ pressed }) => [styles.card, pressed && { transform: [{ translateY: 4 }] }]}
+              onPress={() => tap(p)}
+              style={({ pressed }) => [styles.card, pairing?.includes(p.id) && styles.cardPicked, pressed && { transform: [{ translateY: 4 }] }]}
             >
               <View style={[styles.avatar, { backgroundColor: avatar.color }]}>
                 <Text style={styles.emoji}>{avatar.emoji}</Text>
@@ -55,6 +78,16 @@ export function ProfilePicker({ profiles, details = {}, onPick, onParent }: Prop
           <Gui size={200} happy />
         </View>
       </View>
+      {onPair && profiles.length >= 2 ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Play together: describe and guess"
+          onPress={pairing ? () => setPairing(null) : together}
+          style={({ pressed }) => [styles.together, pairing && styles.togetherOn, pressed && { transform: [{ translateY: 4 }] }]}
+        >
+          <Text style={styles.togetherText}>{guessGame.lines.button} · {guessGame.title}</Text>
+        </Pressable>
+      ) : null}
       {/* The parental gate (design doc §5): hold for 3 seconds. */}
       <HoldButton holdMs={PARENT_HOLD_MS} onHeld={onParent} accessibilityLabel="Parent zone" style={styles.parent}>
         <Text style={styles.parentText}>🔒 Pai</Text>
@@ -62,6 +95,9 @@ export function ProfilePicker({ profiles, details = {}, onPick, onParent }: Prop
     </View>
   );
 }
+
+/** The older child gives the first clues; the younger one guesses first (design doc §4). */
+const older = (a: StoredProfile, b: StoredProfile): [StoredProfile, StoredProfile] => (b.age > a.age ? [b, a] : [a, b]);
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.cream, alignItems: 'center', justifyContent: 'center', gap: 8 },
@@ -79,6 +115,10 @@ const styles = StyleSheet.create({
     borderColor: colors.ink,
     borderRadius: radius.lg,
   },
+  cardPicked: { borderColor: colors.terracottaLight, backgroundColor: '#FFF1E6' },
+  together: { marginTop: 24, minHeight: TOUCH, paddingHorizontal: 28, borderRadius: radius.pill, borderWidth: 4, borderColor: colors.ink, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center' },
+  togetherOn: { backgroundColor: colors.blueTint },
+  togetherText: { fontSize: 24, fontWeight: '900', color: colors.ink },
   gui: { alignItems: 'center', gap: 4 },
   guiBubble: { backgroundColor: colors.white, borderWidth: 3, borderColor: colors.ink, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 8 },
   guiBubbleText: { fontSize: 20, fontWeight: '900', color: colors.ink },

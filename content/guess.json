@@ -1,0 +1,735 @@
+{
+  "$schema": "./schema/guess.schema.json",
+  "title": "Adivinha!",
+  "titleEn": "Guess!",
+  "about": "Describe and guess for two children (FR-24). One sees a secret picture and gives clues in Portuguese, then passes the tablet; the other says what it is. accept and clueWords are normalised (lower case, no accents or punctuation). A card is used once both children have reached its unit.",
+  "rounds": 4,
+  "lines": {
+    "button": "👫 Juntos",
+    "pick": "Quem joga junto?",
+    "pickEn": "Who's playing together?",
+    "intro": "Vamos jogar ao Adivinha! Um dá pistas e o outro adivinha.",
+    "introEn": "Let's play Guess! One gives clues and the other guesses.",
+    "describerTurn": "{describer}, é a tua vez! Só tu podes ver. {guesser}, não espreites!",
+    "describerTurnEn": "{describer}, it's your turn! Only you can see it. {guesser}, no peeking!",
+    "ready": "Pronto! ▶",
+    "secret": "🤫 Segredo",
+    "describe": "Diz uma pista!",
+    "describeEn": "Give a clue!",
+    "moreClue": "Mais uma pista!",
+    "psst": "Psst! Isso é o nome! Dá uma pista!",
+    "goodClue": "Boa pista!",
+    "passOn": "Passa o tablet ➡",
+    "guesserTurn": "{guesser}, o que é?",
+    "guesserTurnEn": "{guesser}, what is it?",
+    "guess": "O que é? Diz o nome!",
+    "guessEn": "What is it? Say its name!",
+    "tapHelp": "Toca numa imagem para ouvir o nome.",
+    "tapHelpEn": "Tap a picture to hear its name.",
+    "notIt": "{option}? Boa ideia! Mas é outra coisa. Mais uma pista!",
+    "notItEn": "Good idea! But it's something else. One more clue!",
+    "giveBack": "Devolve o tablet ⬅",
+    "right": "Acertaste!",
+    "again": "Hum? Diz outra vez!",
+    "pickOne": "Toca na tua resposta e diz o nome!",
+    "next": "Próxima ▶",
+    "end": "Que equipa! Acertaram em {n}!",
+    "endEn": "What a team! You got {n} right!",
+    "more": "Outra vez ▶"
+  },
+  "cards": [
+    {
+      "id": "cao",
+      "unit": 1,
+      "emoji": "🐶",
+      "name": "o cão",
+      "say": "É um cão!",
+      "accept": [
+        "cao",
+        "caozinho"
+      ],
+      "clues": [
+        {
+          "text": "Tem quatro patas.",
+          "en": "It has four legs."
+        },
+        {
+          "text": "Faz ão-ão!",
+          "en": "It goes woof!"
+        },
+        {
+          "text": "Gosta de ossos.",
+          "en": "It likes bones."
+        }
+      ],
+      "clueWords": [
+        "patas",
+        "ao",
+        "ossos",
+        "quatro"
+      ]
+    },
+    {
+      "id": "gato",
+      "unit": 1,
+      "emoji": "🐱",
+      "name": "o gato",
+      "say": "É um gato!",
+      "accept": [
+        "gato",
+        "gatinho"
+      ],
+      "clues": [
+        {
+          "text": "Tem bigodes.",
+          "en": "It has whiskers."
+        },
+        {
+          "text": "Faz miau!",
+          "en": "It goes miaow!"
+        },
+        {
+          "text": "Gosta de leite.",
+          "en": "It likes milk."
+        }
+      ],
+      "clueWords": [
+        "bigodes",
+        "miau",
+        "leite"
+      ]
+    },
+    {
+      "id": "sol",
+      "unit": 1,
+      "emoji": "☀️",
+      "name": "o sol",
+      "say": "É o sol!",
+      "accept": [
+        "sol"
+      ],
+      "clues": [
+        {
+          "text": "É amarelo.",
+          "en": "It's yellow."
+        },
+        {
+          "text": "Está no céu.",
+          "en": "It's in the sky."
+        },
+        {
+          "text": "É quente.",
+          "en": "It's hot."
+        }
+      ],
+      "clueWords": [
+        "amarelo",
+        "ceu",
+        "quente"
+      ]
+    },
+    {
+      "id": "casa",
+      "unit": 1,
+      "emoji": "🏠",
+      "name": "a casa",
+      "say": "É uma casa!",
+      "accept": [
+        "casa",
+        "casinha"
+      ],
+      "clues": [
+        {
+          "text": "Tem portas e janelas.",
+          "en": "It has doors and windows."
+        },
+        {
+          "text": "Tem um telhado.",
+          "en": "It has a roof."
+        },
+        {
+          "text": "Moramos lá dentro.",
+          "en": "We live inside it."
+        }
+      ],
+      "clueWords": [
+        "portas",
+        "janelas",
+        "telhado",
+        "moramos",
+        "dentro"
+      ]
+    },
+    {
+      "id": "arvore",
+      "unit": 1,
+      "emoji": "🌳",
+      "name": "a árvore",
+      "say": "É uma árvore!",
+      "accept": [
+        "arvore"
+      ],
+      "clues": [
+        {
+          "text": "É verde.",
+          "en": "It's green."
+        },
+        {
+          "text": "Tem folhas.",
+          "en": "It has leaves."
+        },
+        {
+          "text": "Os pássaros vivem lá.",
+          "en": "Birds live there."
+        }
+      ],
+      "clueWords": [
+        "verde",
+        "folhas",
+        "passaros"
+      ]
+    },
+    {
+      "id": "flor",
+      "unit": 1,
+      "emoji": "🌸",
+      "name": "a flor",
+      "say": "É uma flor!",
+      "accept": [
+        "flor",
+        "florzinha"
+      ],
+      "clues": [
+        {
+          "text": "É bonita.",
+          "en": "It's pretty."
+        },
+        {
+          "text": "Cheira bem.",
+          "en": "It smells nice."
+        },
+        {
+          "text": "Está no jardim.",
+          "en": "It's in the garden."
+        }
+      ],
+      "clueWords": [
+        "bonita",
+        "cheira",
+        "jardim"
+      ]
+    },
+    {
+      "id": "carro",
+      "unit": 1,
+      "emoji": "🚗",
+      "name": "o carro",
+      "say": "É um carro!",
+      "accept": [
+        "carro"
+      ],
+      "clues": [
+        {
+          "text": "Tem quatro rodas.",
+          "en": "It has four wheels."
+        },
+        {
+          "text": "Faz pi-pi!",
+          "en": "It goes beep beep!"
+        },
+        {
+          "text": "O pai conduz.",
+          "en": "Dad drives it."
+        }
+      ],
+      "clueWords": [
+        "rodas",
+        "pi",
+        "conduz",
+        "quatro"
+      ]
+    },
+    {
+      "id": "passaro",
+      "unit": 1,
+      "emoji": "🐦",
+      "name": "o pássaro",
+      "say": "É um pássaro!",
+      "accept": [
+        "passaro",
+        "passarinho"
+      ],
+      "clues": [
+        {
+          "text": "Tem asas.",
+          "en": "It has wings."
+        },
+        {
+          "text": "Voa no céu.",
+          "en": "It flies in the sky."
+        },
+        {
+          "text": "Faz piu-piu!",
+          "en": "It goes tweet tweet!"
+        }
+      ],
+      "clueWords": [
+        "asas",
+        "voa",
+        "ceu",
+        "piu"
+      ]
+    },
+    {
+      "id": "pao",
+      "unit": 2,
+      "emoji": "🍞",
+      "name": "o pão",
+      "say": "É pão!",
+      "accept": [
+        "pao",
+        "paozinho"
+      ],
+      "clues": [
+        {
+          "text": "Come-se com manteiga.",
+          "en": "You eat it with butter."
+        },
+        {
+          "text": "Compra-se na padaria.",
+          "en": "You buy it at the bakery."
+        },
+        {
+          "text": "Come-se ao pequeno-almoço.",
+          "en": "You eat it at breakfast."
+        }
+      ],
+      "clueWords": [
+        "manteiga",
+        "padaria",
+        "come",
+        "pequeno",
+        "almoco"
+      ]
+    },
+    {
+      "id": "agua",
+      "unit": 2,
+      "emoji": "💧",
+      "name": "a água",
+      "say": "É água!",
+      "accept": [
+        "agua"
+      ],
+      "clues": [
+        {
+          "text": "Bebe-se.",
+          "en": "You drink it."
+        },
+        {
+          "text": "Não tem cor.",
+          "en": "It has no colour."
+        },
+        {
+          "text": "Está no mar e no rio.",
+          "en": "It's in the sea and the river."
+        }
+      ],
+      "clueWords": [
+        "bebe",
+        "cor",
+        "mar",
+        "rio"
+      ]
+    },
+    {
+      "id": "leite",
+      "unit": 2,
+      "emoji": "🥛",
+      "name": "o leite",
+      "say": "É leite!",
+      "accept": [
+        "leite"
+      ],
+      "clues": [
+        {
+          "text": "É branco.",
+          "en": "It's white."
+        },
+        {
+          "text": "Vem da vaca.",
+          "en": "It comes from the cow."
+        },
+        {
+          "text": "Bebe-se com bolachas.",
+          "en": "You drink it with biscuits."
+        }
+      ],
+      "clueWords": [
+        "branco",
+        "vaca",
+        "bebe",
+        "bolachas"
+      ]
+    },
+    {
+      "id": "banana",
+      "unit": 2,
+      "emoji": "🍌",
+      "name": "a banana",
+      "say": "É uma banana!",
+      "accept": [
+        "banana"
+      ],
+      "clues": [
+        {
+          "text": "É amarela.",
+          "en": "It's yellow."
+        },
+        {
+          "text": "É uma fruta.",
+          "en": "It's a fruit."
+        },
+        {
+          "text": "Os macacos gostam.",
+          "en": "Monkeys like it."
+        }
+      ],
+      "clueWords": [
+        "amarela",
+        "fruta",
+        "macacos"
+      ]
+    },
+    {
+      "id": "peixe",
+      "unit": 2,
+      "emoji": "🐟",
+      "name": "o peixe",
+      "say": "É um peixe!",
+      "accept": [
+        "peixe",
+        "peixinho"
+      ],
+      "clues": [
+        {
+          "text": "Vive no mar.",
+          "en": "It lives in the sea."
+        },
+        {
+          "text": "Nada muito bem.",
+          "en": "It swims really well."
+        },
+        {
+          "text": "Não tem pernas.",
+          "en": "It has no legs."
+        }
+      ],
+      "clueWords": [
+        "vive",
+        "mar",
+        "nada",
+        "pernas"
+      ]
+    },
+    {
+      "id": "maca",
+      "unit": 2,
+      "emoji": "🍎",
+      "name": "a maçã",
+      "say": "É uma maçã!",
+      "accept": [
+        "maca"
+      ],
+      "clues": [
+        {
+          "text": "É vermelha.",
+          "en": "It's red."
+        },
+        {
+          "text": "É uma fruta.",
+          "en": "It's a fruit."
+        },
+        {
+          "text": "É redonda.",
+          "en": "It's round."
+        }
+      ],
+      "clueWords": [
+        "vermelha",
+        "fruta",
+        "redonda"
+      ]
+    },
+    {
+      "id": "bola",
+      "unit": 3,
+      "emoji": "⚽",
+      "name": "a bola",
+      "say": "É uma bola!",
+      "accept": [
+        "bola"
+      ],
+      "clues": [
+        {
+          "text": "É redonda.",
+          "en": "It's round."
+        },
+        {
+          "text": "Joga-se com os pés.",
+          "en": "You play with it with your feet."
+        },
+        {
+          "text": "Salta muito.",
+          "en": "It bounces a lot."
+        }
+      ],
+      "clueWords": [
+        "redonda",
+        "joga",
+        "pes",
+        "salta"
+      ]
+    },
+    {
+      "id": "gelado",
+      "unit": 3,
+      "emoji": "🍦",
+      "name": "o gelado",
+      "say": "É um gelado!",
+      "accept": [
+        "gelado"
+      ],
+      "clues": [
+        {
+          "text": "É frio.",
+          "en": "It's cold."
+        },
+        {
+          "text": "É doce.",
+          "en": "It's sweet."
+        },
+        {
+          "text": "Come-se na praia.",
+          "en": "You eat it at the beach."
+        }
+      ],
+      "clueWords": [
+        "frio",
+        "doce",
+        "praia",
+        "come"
+      ]
+    },
+    {
+      "id": "balde",
+      "unit": 3,
+      "emoji": "🪣",
+      "name": "o balde",
+      "say": "É um balde!",
+      "accept": [
+        "balde"
+      ],
+      "clues": [
+        {
+          "text": "Leva água.",
+          "en": "It carries water."
+        },
+        {
+          "text": "Usa-se na praia.",
+          "en": "You use it at the beach."
+        },
+        {
+          "text": "Faz castelos de areia.",
+          "en": "It makes sandcastles."
+        }
+      ],
+      "clueWords": [
+        "leva",
+        "agua",
+        "praia",
+        "castelos",
+        "areia"
+      ]
+    },
+    {
+      "id": "caranguejo",
+      "unit": 3,
+      "emoji": "🦀",
+      "name": "o caranguejo",
+      "say": "É um caranguejo!",
+      "accept": [
+        "caranguejo"
+      ],
+      "clues": [
+        {
+          "text": "É vermelho.",
+          "en": "It's red."
+        },
+        {
+          "text": "Anda de lado.",
+          "en": "It walks sideways."
+        },
+        {
+          "text": "Vive na praia.",
+          "en": "It lives on the beach."
+        }
+      ],
+      "clueWords": [
+        "vermelho",
+        "lado",
+        "anda",
+        "vive",
+        "praia"
+      ]
+    },
+    {
+      "id": "concha",
+      "unit": 3,
+      "emoji": "🐚",
+      "name": "a concha",
+      "say": "É uma concha!",
+      "accept": [
+        "concha"
+      ],
+      "clues": [
+        {
+          "text": "Está na areia.",
+          "en": "It's in the sand."
+        },
+        {
+          "text": "É pequena.",
+          "en": "It's small."
+        },
+        {
+          "text": "Vem do mar.",
+          "en": "It comes from the sea."
+        }
+      ],
+      "clueWords": [
+        "areia",
+        "pequena",
+        "mar"
+      ]
+    },
+    {
+      "id": "mapa",
+      "unit": 4,
+      "emoji": "🗺️",
+      "name": "o mapa",
+      "say": "É um mapa!",
+      "accept": [
+        "mapa"
+      ],
+      "clues": [
+        {
+          "text": "É de papel.",
+          "en": "It's made of paper."
+        },
+        {
+          "text": "Mostra o caminho.",
+          "en": "It shows the way."
+        },
+        {
+          "text": "O Gui perdeu-o.",
+          "en": "Gui lost it."
+        }
+      ],
+      "clueWords": [
+        "papel",
+        "mostra",
+        "caminho",
+        "perdeu"
+      ]
+    },
+    {
+      "id": "barco",
+      "unit": 4,
+      "emoji": "⛵",
+      "name": "o barco",
+      "say": "É um barco!",
+      "accept": [
+        "barco"
+      ],
+      "clues": [
+        {
+          "text": "Anda na água.",
+          "en": "It goes on the water."
+        },
+        {
+          "text": "Tem uma vela.",
+          "en": "It has a sail."
+        },
+        {
+          "text": "O pescador tem um.",
+          "en": "The fisherman has one."
+        }
+      ],
+      "clueWords": [
+        "agua",
+        "vela",
+        "pescador"
+      ]
+    },
+    {
+      "id": "ponte",
+      "unit": 4,
+      "emoji": "🌉",
+      "name": "a ponte",
+      "say": "É uma ponte!",
+      "accept": [
+        "ponte"
+      ],
+      "clues": [
+        {
+          "text": "Passa por cima do rio.",
+          "en": "It goes over the river."
+        },
+        {
+          "text": "É muito grande.",
+          "en": "It's really big."
+        },
+        {
+          "text": "Há uma no Porto.",
+          "en": "There's one in Porto."
+        }
+      ],
+      "clueWords": [
+        "cima",
+        "rio",
+        "grande",
+        "porto"
+      ]
+    },
+    {
+      "id": "comboio",
+      "unit": 4,
+      "emoji": "🚆",
+      "name": "o comboio",
+      "say": "É um comboio!",
+      "accept": [
+        "comboio"
+      ],
+      "clues": [
+        {
+          "text": "Anda nos carris.",
+          "en": "It runs on rails."
+        },
+        {
+          "text": "É muito comprido.",
+          "en": "It's really long."
+        },
+        {
+          "text": "Faz pouca-terra, pouca-terra!",
+          "en": "It goes choo-choo!"
+        }
+      ],
+      "clueWords": [
+        "carris",
+        "comprido",
+        "pouca",
+        "terra"
+      ]
+    }
+  ]
+}
