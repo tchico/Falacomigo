@@ -12,12 +12,18 @@ export interface ChildSettings {
    * temporary file on the tablet) until it has played, then deleted (NFR-05). Off by default.
    */
   listenBack: boolean;
+  /** How loud Gui, the characters and Dad's recordings are, 0.25..1 (NFR-10). Never off: the 6-year-old plays by ear. */
+  voiceVolume: number;
+  /** How loud Gui's tune is on the quiet screens, 0 (off)..1 (NFR-10). */
+  musicVolume: number;
 }
 
 export const SESSION_CHOICES = [10, 12, 15, 20] as const;
+export const VOICE_CHOICES = [0.25, 0.5, 0.75, 1] as const;
+export const MUSIC_CHOICES = [0, 0.25, 0.5, 0.75, 1] as const;
 
 export function defaultSettings(age: AgeBand, aimMinutes: number): ChildSettings {
-  return { subtitles: age === 8, sessionMinutes: aimMinutes, listenBack: false };
+  return { subtitles: age === 8, sessionMinutes: aimMinutes, listenBack: false, voiceVolume: 1, musicVolume: 0.5 };
 }
 
 export const settingsKey = (childId: string) => `child:${childId}:settings`;
@@ -32,8 +38,12 @@ export function readSettings(saved: string | null, age: AgeBand, aimMinutes: num
       subtitles: typeof s.subtitles === 'boolean' ? s.subtitles : d.subtitles,
       sessionMinutes: typeof s.sessionMinutes === 'number' && s.sessionMinutes >= 5 && s.sessionMinutes <= 30 ? s.sessionMinutes : d.sessionMinutes,
       listenBack: typeof s.listenBack === 'boolean' ? s.listenBack : d.listenBack,
+      voiceVolume: inRange(s.voiceVolume, 0.25, 1) ?? d.voiceVolume,
+      musicVolume: inRange(s.musicVolume, 0, 1) ?? d.musicVolume,
     };
   } catch {
     return d;
   }
 }
+
+const inRange = (v: unknown, min: number, max: number): number | undefined => (typeof v === 'number' && v >= min && v <= max ? v : undefined);

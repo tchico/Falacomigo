@@ -180,3 +180,28 @@ export interface SoundGuide {
   words: Record<string, { pt: string[]; en: string[] }>;
   tips: { match: string; tip: string; anchor?: string; emoji: string }[];
 }
+
+/** A picture to describe and guess (FR-24). See content/guess.json. */
+export interface GuessCard {
+  id: string;
+  /** Used once both children have reached this unit. */
+  unit: number;
+  emoji: string;
+  /** With its article, e.g. "o gelado". */
+  name: string;
+  /** The guess as the guesser says it, e.g. "É um gelado!". */
+  say: string;
+  /** The word and its other forms, normalised. */
+  accept: string[];
+  clues: { text: string; en: string }[];
+  /** Hearing any of these, normalised, counts as a clue. */
+  clueWords: string[];
+}
+
+export interface GuessGame {
+  title: string;
+  titleEn?: string;
+  rounds: number;
+  lines: Record<string, string>;
+  cards: GuessCard[];
+}

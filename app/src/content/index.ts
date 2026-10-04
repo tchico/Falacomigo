@@ -3,21 +3,24 @@
 import unit01 from '../../../content/units/unit-01.json';
 import unit02 from '../../../content/units/unit-02.json';
 import unit03 from '../../../content/units/unit-03.json';
+import unit04 from '../../../content/units/unit-04.json';
 import guideJson from '../../../content/guide.json';
 import shopJson from '../../../content/shop.json';
 import journeyJson from '../../../content/journey.json';
 import guiJson from '../../../content/gui.json';
 import soundsJson from '../../../content/sounds.json';
-import type { Guide, GuiLines, Journey, Shop, SoundGuide, Unit } from './types';
+import guessJson from '../../../content/guess.json';
+import type { Guide, GuessGame, GuiLines, Journey, Shop, SoundGuide, Unit } from './types';
 import { editedAccept, emptyEdits, familyUnit, FAMILY_UNIT_ID, type FamilyEdits } from '../engine/family';
 import { setFamilyNames } from '../engine/template';
 
-export const units: Unit[] = [unit01 as unknown as Unit, unit02 as unknown as Unit, unit03 as unknown as Unit];
+export const units: Unit[] = [unit01 as unknown as Unit, unit02 as unknown as Unit, unit03 as unknown as Unit, unit04 as unknown as Unit];
 export const guide: Guide = guideJson as unknown as Guide;
 export const shop: Shop = shopJson as unknown as Shop;
 export const journey: Journey = journeyJson as unknown as Journey;
 export const guiLines: GuiLines = guiJson as unknown as GuiLines;
 export const sounds: SoundGuide = soundsJson as unknown as SoundGuide;
+export const guessGame: GuessGame = guessJson as unknown as GuessGame;
 
 /** The packs' own accepted versions, so Dad's edits are always laid over the originals. */
 const original = new Map(units.flatMap((u) => [

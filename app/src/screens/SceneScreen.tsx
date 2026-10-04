@@ -26,7 +26,8 @@ import { BackButton } from '../ui/BackButton';
 import { Character } from '../ui/Character';
 import { placeFor, Scenery, Trampoline } from '../ui/Scenery';
 import { useNative } from '../ui/motion';
-import { pictureFor } from '../ui/pictures';
+import { pictureFor, whereFor } from '../ui/pictures';
+import { WherePicture } from '../ui/WherePicture';
 import { colors, radius } from '../ui/theme';
 
 export interface TurnLog {
@@ -288,7 +289,7 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
             onExit();
           }}
         />
-        <Text style={[styles.sceneTitle, place.evening && place.kind === 'garden' ? { color: colors.white } : null]}>{title ?? scene?.title}</Text>
+        <Text style={[styles.sceneTitle, place.evening && (place.kind === 'garden' || place.kind === 'porto') ? { color: colors.white } : null]}>{title ?? scene?.title}</Text>
         <View style={styles.dots} accessibilityLabel={`Turn ${index + 1} of ${beats.length}`}>
           {beats.map((b, i) => (
             <View key={b.id} style={[styles.dot, i < index && { backgroundColor: colors.teal }, i === index && { backgroundColor: colors.terracottaLight }]} />
@@ -313,7 +314,13 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
           {(settings ? settings.subtitles : child.age === 8) && beat.lineEn && !turn.done ? <Text style={styles.lineEn}>{beat.lineEn}</Text> : null}
           {!turn.done && feedback ? <Text style={styles.nudge}>{feedback}</Text> : null}
           {__DEV__ && devHeard ? <Text style={styles.devHeard}>{devHeard}</Text> : null}
-          {pictureFor(beat.image).length ? (
+          {whereFor(beat.image) ? (
+            <View style={styles.pictures} accessibilityElementsHidden>
+              <View style={[styles.picture, styles.wherePicture]}>
+                <WherePicture {...whereFor(beat.image)!} size={124} />
+              </View>
+            </View>
+          ) : pictureFor(beat.image).length ? (
             <View style={styles.pictures} accessibilityElementsHidden>
               {pictureFor(beat.image).map((e, i) => (
                 <View key={i} style={styles.picture}>
@@ -452,6 +459,7 @@ const styles = StyleSheet.create({
   characterEmoji: { fontSize: 110 },
   characterName: { fontSize: 24, fontWeight: '900', color: colors.ink, backgroundColor: colors.white, borderWidth: 3, borderColor: colors.ink, borderRadius: 999, paddingHorizontal: 16, paddingVertical: 2, overflow: 'hidden' },
   pictures: { flexDirection: 'row', gap: 12, marginTop: 8 },
+  wherePicture: { width: 140, height: 140 },
   picture: { width: 88, height: 88, borderRadius: 18, borderWidth: 3, borderColor: colors.ink, backgroundColor: colors.cream, alignItems: 'center', justifyContent: 'center' },
   pictureText: { fontSize: 52 },
   ask: { minHeight: 60, maxWidth: 130, paddingHorizontal: 12, borderRadius: 18, backgroundColor: colors.blueTint, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },

@@ -1,0 +1,258 @@
+{
+  "$schema": "../schema/unit.schema.json",
+  "id": "unit-04",
+  "unit": 4,
+  "title": "Onde está?",
+  "titleEn": "Where is it?",
+  "stop": {"id": "porto", "name": "O Porto", "nameEn": "Porto"},
+  "characters": {
+    "rita": {"name": "Rita", "role": "uma menina do Porto", "roleEn": "a girl from Porto", "emoji": "👧", "color": "#F9D2D9"},
+    "manel": {"name": "Senhor Manel", "role": "o pescador da Ribeira", "roleEn": "the fisherman on the Ribeira", "emoji": "🧔", "color": "#D7E3C8"}
+  },
+  "phrases": [
+    {
+      "id": "P44",
+      "text": "Onde está o mapa?",
+      "en": "Where's the map?",
+      "accept": ["onde esta o mapa", "onde esta o meu mapa", "onde esta o mapa do gui", "onde e que esta o mapa", "o mapa onde esta", "onde esta o mapa por favor", "onde esta", "onde"],
+      "keywords": ["onde", "esta", "mapa"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P44.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P45",
+      "text": "Perdemos o mapa!",
+      "en": "We've lost the map!",
+      "accept": ["perdemos o mapa", "perdemos o mapa do gui", "o gui perdeu o mapa", "o gui perdeu o mapa dele", "perdeu o mapa", "perdi o mapa", "perdemos"],
+      "keywords": ["perdemos", "perdeu", "perdi", "mapa"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P45.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P46",
+      "text": "Ajudas-me?",
+      "en": "Will you help me?",
+      "accept": ["ajudas me", "ajudas me por favor", "ajuda me", "ajuda me por favor", "podes ajudar me", "podes me ajudar", "podes ajudar", "ajudas nos", "ajudas", "ajuda"],
+      "keywords": ["ajudas", "ajuda", "ajudar"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P46.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P47",
+      "text": "Está aqui!",
+      "en": "It's here!",
+      "accept": ["esta aqui", "esta aqui gui", "olha esta aqui", "aqui esta", "e aqui", "aqui"],
+      "keywords": ["aqui"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": {"dad": "P47.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P48",
+      "text": "Está ali!",
+      "en": "It's over there!",
+      "accept": ["esta ali", "esta ali gui", "olha esta ali", "olha ali", "ali esta", "e ali", "esta la", "ali", "la"],
+      "keywords": ["ali", "la"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P48.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P49",
+      "text": "Está debaixo da cadeira.",
+      "en": "It's under the chair.",
+      "accept": ["esta debaixo da cadeira", "debaixo da cadeira", "e debaixo da cadeira", "esta ali debaixo da cadeira", "esta debaixo", "la debaixo", "debaixo"],
+      "keywords": ["debaixo", "cadeira"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P49.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P50",
+      "text": "Está em cima do barco.",
+      "en": "It's on the boat.",
+      "accept": ["esta em cima do barco", "em cima do barco", "esta no barco", "no barco", "esta em cima", "la em cima", "em cima"],
+      "keywords": ["cima", "barco"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P50.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P51",
+      "text": "Está dentro do cesto.",
+      "en": "It's inside the basket.",
+      "accept": ["esta dentro do cesto", "dentro do cesto", "esta no cesto", "no cesto", "esta dentro", "la dentro", "dentro"],
+      "keywords": ["dentro", "cesto"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P51.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P52",
+      "text": "Está atrás da porta.",
+      "en": "It's behind the door.",
+      "accept": ["esta atras da porta", "atras da porta", "e atras da porta", "esta atras", "la atras", "atras"],
+      "keywords": ["atras", "porta"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P52.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P53",
+      "text": "Não sei.",
+      "en": "I don't know.",
+      "accept": ["nao sei", "eu nao sei", "nao sei onde esta", "nao faco ideia", "sei la"],
+      "keywords": ["sei", "ideia"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": {"dad": "P53.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P54",
+      "text": "Encontrei!",
+      "en": "I found it!",
+      "accept": ["encontrei", "encontrei o mapa", "eu encontrei", "ja encontrei", "encontramos", "achei", "achei o mapa", "olha encontrei"],
+      "keywords": ["encontrei", "encontramos", "achei"],
+      "ages": [6, 8],
+      "startRung": 3,
+      "audio": {"dad": "P54.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P55",
+      "text": "Vira à esquerda!",
+      "en": "Turn left!",
+      "accept": ["vira a esquerda", "vira a esquerda rita", "vamos para a esquerda", "vai para a esquerda", "para a esquerda", "a esquerda", "esquerda"],
+      "keywords": ["esquerda"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P55.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P56",
+      "text": "Vira à direita!",
+      "en": "Turn right!",
+      "accept": ["vira a direita", "vira a direita rita", "vamos para a direita", "vai para a direita", "para a direita", "a direita", "direita"],
+      "keywords": ["direita"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P56.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P57",
+      "text": "Em frente!",
+      "en": "Straight on!",
+      "accept": ["em frente", "sempre em frente", "vai em frente", "vamos em frente", "segue em frente", "anda em frente", "frente"],
+      "keywords": ["frente"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P57.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P58",
+      "text": "Obrigado pela ajuda! / Obrigada pela ajuda!",
+      "en": "Thanks for your help!",
+      "accept": ["obrigado pela ajuda", "obrigada pela ajuda", "muito obrigado pela ajuda", "muito obrigada pela ajuda", "obrigado rita", "obrigada rita", "muito obrigado", "muito obrigada", "obrigado", "obrigada"],
+      "keywords": ["obrigado", "obrigada", "ajuda"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P58.m4a", "ttsFallback": true}
+    }
+  ],
+  "vocab": [
+    {"pt": "o mapa", "en": "map"},
+    {"pt": "o rio", "en": "river"},
+    {"pt": "a ponte", "en": "bridge"},
+    {"pt": "o barco", "en": "boat"},
+    {"pt": "o pescador", "en": "fisherman"},
+    {"pt": "o cesto", "en": "basket"},
+    {"pt": "a cadeira", "en": "chair"},
+    {"pt": "a porta", "en": "door"},
+    {"pt": "a rua", "en": "street"},
+    {"pt": "a casa", "en": "house"},
+    {"pt": "debaixo", "en": "under"},
+    {"pt": "em cima", "en": "on top"},
+    {"pt": "dentro", "en": "inside"},
+    {"pt": "atrás", "en": "behind"},
+    {"pt": "à esquerda", "en": "left"},
+    {"pt": "à direita", "en": "right"},
+    {"pt": "em frente", "en": "straight on"},
+    {"pt": "aqui", "en": "here"},
+    {"pt": "ali", "en": "there"}
+  ],
+  "warmup": ["P44", "P47", "P48", "P53", "P54"],
+  "scenes": [
+    {
+      "id": "S4.1",
+      "title": "Onde está o mapa?",
+      "titleEn": "Where's the map?",
+      "setting": "porto-ribeira",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "gui", "text": "Chegámos ao Porto! Olha as casas coloridas e o rio Douro!", "en": "We've reached Porto! Look at the colourful houses and the river Douro!"}, "expect": null},
+        {"id": "b2", "say": {"speaker": "gui", "text": "Agora vou ver o mapa… Hmm… Ai, não! O mapa não está aqui!", "en": "Now let me look at the map… Hmm… Oh no! The map isn't here!"}, "expect": null},
+        {"id": "b3", "say": {"speaker": "gui", "text": "O meu mapa! Pergunta a toda a gente!", "en": "My map! Ask everyone!"}, "model": "Onde está o mapa?", "expect": "P44", "recast": "Onde está o mapa? Pois é, onde está?"},
+        {"id": "b4", "ages": [8], "say": {"speaker": "rita", "text": "Olá! Sou eu, a Rita, da praia! O que aconteceu?", "en": "Hello! It's me, Rita, from the beach! What happened?"}, "expect": "P45", "recast": "Perderam o mapa? Que chatice!"},
+        {"id": "b4y", "ages": [6], "say": {"speaker": "rita", "text": "Olá! Sou eu, a Rita, da praia! Perderam o mapa? Que chatice!", "en": "Hello! It's me, Rita, from the beach! You've lost the map? What a pain!"}, "expect": null},
+        {"id": "b5", "say": {"speaker": "rita", "text": "Eu moro aqui. Conheço o Porto muito bem!", "en": "I live here. I know Porto really well!"}, "model": "Ajudas-me?", "expect": "P46", "recast": "Claro que te ajudo! Vamos procurar!"},
+        {"id": "b6", "say": {"speaker": "rita", "text": "Olha! Ali, na esplanada. Vês um papel? Onde está?", "en": "Look! Over there, at the café tables. Can you see a piece of paper? Where is it?"}, "expect": "P49", "image": "where:map-under-chair", "recast": "Debaixo da cadeira! Ah… não é o mapa, é só um guardanapo."},
+        {"id": "b7", "say": {"speaker": "gui", "text": "Hmm… se calhar o vento levou o mapa para o rio…", "en": "Hmm… maybe the wind blew the map to the river…"}, "expect": null, "cliffhanger": true}
+      ]
+    },
+    {
+      "id": "S4.2",
+      "title": "O barco do Senhor Manel",
+      "titleEn": "Mr Manel's boat",
+      "setting": "porto-river",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "manel", "text": "Bom dia, meninos! Eu sou o Manel, pescador aqui na Ribeira.", "en": "Good morning, children! I'm Manel, a fisherman here on the Ribeira."}, "expect": null},
+        {"id": "b2", "say": {"speaker": "manel", "text": "Precisam de alguma coisa?", "en": "Do you need anything?"}, "model": "Onde está o mapa?", "expect": "P44", "recast": "O mapa? Hmm… vi um papel no meu barco!"},
+        {"id": "b3", "say": {"speaker": "manel", "text": "Olha para o meu barco. Vês o papel? Onde está?", "en": "Look at my boat. Can you see the paper? Where is it?"}, "expect": "P50", "image": "where:map-on-boat", "recast": "Em cima do barco! Ah… não, é a minha lista de compras."},
+        {"id": "b4", "ages": [8], "say": {"speaker": "manel", "text": "E aqui no cesto do peixe? Onde está o papel?", "en": "And here in the fish basket? Where's the paper?"}, "expect": "P51", "image": "where:map-in-basket", "recast": "Dentro do cesto! Ui… não, é um jornal velho. Cheira a peixe!"},
+        {"id": "b5", "say": {"speaker": "manel", "text": "Então, onde está o mapa do Gui?", "en": "So where's Gui's map?"}, "model": "Não sei.", "expect": "P53", "answers": [{"accept": ["esta ali", "ali", "olha ali", "esta la", "la"], "recast": "Ali? Vamos ver!"}], "recast": "Também não sei. Vamos procurar mais!"},
+        {"id": "b6", "say": {"speaker": "gui", "text": "Olha para a ponte! Uma coisa a voar! Vês? Onde está?", "en": "Look at the bridge! Something flying! Can you see it? Where is it?"}, "model": "Está ali!", "expect": "P48", "image": "where:map-on-bridge", "recast": "Está ali, ao pé da ponte!"},
+        {"id": "b7", "say": {"speaker": "gui", "text": "É o meu mapa! O vento leva-o pelas ruas… Vamos atrás dele!", "en": "It's my map! The wind is blowing it through the streets… After it!"}, "expect": null, "cliffhanger": true}
+      ]
+    },
+    {
+      "id": "S4.3",
+      "title": "Encontrei!",
+      "titleEn": "I found it!",
+      "setting": "porto-street-evening",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "rita", "text": "O mapa voou por esta rua! Para onde vamos?", "en": "The map flew down this street! Which way do we go?"}, "model": "Em frente!", "expect": "P57", "image": "way:straight", "answers": [{"accept": ["vira a esquerda", "a esquerda", "esquerda", "para a esquerda"], "recast": "À esquerda? Vamos!"}, {"accept": ["vira a direita", "a direita", "direita", "para a direita"], "recast": "À direita? Vamos!"}], "recast": "Em frente! Depressa!"},
+        {"id": "b2", "ages": [8], "say": {"speaker": "rita", "text": "Uma esquina! Olha a seta. Para onde vamos?", "en": "A corner! Look at the arrow. Which way?"}, "expect": "P55", "image": "way:left", "recast": "À esquerda! Por aqui!"},
+        {"id": "b3", "ages": [8], "say": {"speaker": "rita", "text": "Outra esquina! E agora?", "en": "Another corner! And now?"}, "expect": "P56", "image": "way:right", "recast": "À direita! Já falta pouco!"},
+        {"id": "b3y", "ages": [6], "say": {"speaker": "rita", "text": "Por aqui! À esquerda… e agora à direita!", "en": "This way! Left… and now right!"}, "expect": null, "image": "way:left-right"},
+        {"id": "b4", "ages": [8], "say": {"speaker": "gui", "text": "Uma porta azul! O mapa entrou aqui. Onde está?", "en": "A blue door! The map went in here. Where is it?"}, "expect": "P52", "image": "where:map-behind-door", "recast": "Atrás da porta! Espreita!"},
+        {"id": "b4y", "ages": [6], "say": {"speaker": "gui", "text": "Uma porta azul! Espreita! O mapa está ali ou aqui?", "en": "A blue door! Take a peek! Is the map there or here?"}, "model": "Está aqui!", "expect": "P47", "image": "where:map-behind-door", "answers": [{"accept": ["esta ali", "ali", "esta la", "la"], "recast": "Ali? Ah, sim! Atrás da porta!"}], "recast": "Está aqui! Atrás da porta!"},
+        {"id": "b5", "say": {"speaker": "gui", "text": "É mesmo o meu mapa? Pega nele!", "en": "Is it really my map? Pick it up!"}, "model": "Encontrei!", "expect": "P54", "image": "porto:map", "recast": "Encontraste! O meu mapa! Obrigado, obrigado!"},
+        {"id": "b6", "say": {"speaker": "rita", "text": "Pronto! O Gui tem o mapa outra vez!", "en": "There! Gui has his map again!"}, "model": "Obrigado pela ajuda!", "expect": "P58", "recast": "De nada! Foi divertido!"},
+        {"id": "b7", "say": {"speaker": "gui", "text": "Amanhã vamos para Coimbra! Mas… ai… não me sinto muito bem…", "en": "Tomorrow we're going to Coimbra! But… oh… I don't feel very well…"}, "expect": null, "cliffhanger": true}
+      ]
+    }
+  ],
+  "missions": [
+    {"id": "M1", "day": 1, "card": {"text": "Pergunta ao pai onde está uma coisa", "en": "Ask Dad where something is", "image": "m1-where.png"}, "say": {"6": "Pai, onde está o meu sapato?", "8": "Pai, onde está o meu livro? Ajudas-me?"}, "targets": {"6": ["P44"], "8": ["P44", "P46"]}, "when": "When something is lost (it always is!)"},
+    {"id": "M2", "day": 2, "card": {"text": "Esconde um brinquedo e diz ao pai onde está", "en": "Hide a toy and tell Dad where it is", "image": "m2-hide.png"}, "say": {"6": "Está debaixo da cadeira!", "8": "Está debaixo da cadeira! Não… está atrás da porta!"}, "targets": {"6": ["P49"], "8": ["P49", "P52"]}, "when": "Any time at home"},
+    {"id": "M3", "day": 3, "card": {"text": "Procura uma coisa com o pai", "en": "Look for something with Dad", "image": "m3-find.png"}, "say": {"6": "Encontrei!", "8": "Está aqui! Encontrei!"}, "targets": {"6": ["P54"], "8": ["P47", "P54"]}, "when": "When getting ready to go out"},
+    {"id": "M4", "day": 4, "card": {"text": "Dá direções ao pai", "en": "Give Dad directions", "image": "m4-directions.png"}, "say": {"6": "Em frente!", "8": "Em frente! Agora vira à esquerda!"}, "targets": {"6": ["P57"], "8": ["P57", "P55"]}, "when": "In the car or on a walk"},
+    {"id": "M5", "day": 5, "card": {"text": "O pai pergunta onde está a tua mochila", "en": "Dad asks where your school bag is", "image": "m5-bag.png"}, "say": {"6": "Está ali!", "8": "Não sei… Está ali! Em cima da cama!"}, "targets": {"6": ["P48"], "8": ["P53", "P48"]}, "when": "Before school"},
+    {"id": "M6", "day": 6, "siblings": true, "card": {"text": "Juntos! Escondam uma coisa e procurem", "en": "Together! Hide something and hunt for it", "image": "m6-hunt.png"}, "say": {"6": "Onde está? Encontrei!", "8": "Está dentro do cesto? Não sei! Encontrei!"}, "targets": {"6": ["P44", "P54"], "8": ["P51", "P53", "P54"]}, "when": "When both kids are around"},
+    {"id": "M7", "day": 7, "bonus": true, "card": {"text": "Conta à {granny} que encontraste o mapa do Gui", "en": "Tell Granny you found Gui's map", "image": "m7-call.png"}, "say": {"6": "{Granny}, encontrei o mapa!", "8": "Olá, {granny}! Perdemos o mapa do Gui, mas encontrei!"}, "targets": {"6": ["P54"], "8": ["P45", "P54"]}, "when": "Next call with Granny"}
+  ],
+  "schedule": {
+    "sessionsPerWeek": 2,
+    "sessions": [
+      {"session": 1, "scene": "S4.1"},
+      {"session": 2, "warmup": true, "review": true},
+      {"session": 3, "scene": "S4.2"},
+      {"session": 4, "warmup": true, "review": true},
+      {"session": 5, "scene": "S4.3"},
+      {"session": 6, "warmup": true, "review": true},
+      {"session": 7, "review": true, "replay": "S4.1"}
+    ],
+    "missionsPerDay": 1
+  }
+}

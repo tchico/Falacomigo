@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Describe and guess, for two children (FR-24)",
+  "type": "object",
+  "required": ["title", "rounds", "lines", "cards"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "title": { "type": "string" },
+    "titleEn": { "type": "string" },
+    "about": { "type": "string" },
+    "rounds": { "type": "integer", "minimum": 2, "description": "Rounds in a game. The children take turns giving the clues." },
+    "lines": {
+      "type": "object",
+      "description": "Gui's lines. {describer}, {guesser}, {option} and {n} are filled in.",
+      "additionalProperties": { "type": "string" }
+    },
+    "cards": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["id", "unit", "emoji", "name", "say", "accept", "clues", "clueWords"],
+        "properties": {
+          "id": { "type": "string" },
+          "unit": { "type": "integer", "minimum": 1, "description": "Used once both children have reached this unit." },
+          "emoji": { "type": "string", "description": "Stand-in picture until there's an illustration." },
+          "name": { "type": "string", "description": "With its article, pt-PT, e.g. \"o gelado\"." },
+          "say": { "type": "string", "description": "The guess as the guesser says it, e.g. \"É um gelado!\"." },
+          "accept": { "type": "array", "items": { "type": "string" }, "minItems": 1, "description": "The word itself and its other forms, normalised. \"É um…\" around it is fine." },
+          "clues": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "required": ["text", "en"],
+              "properties": { "text": { "type": "string" }, "en": { "type": "string" } }
+            }
+          },
+          "clueWords": { "type": "array", "items": { "type": "string" }, "description": "Hearing any of these, normalised, counts as a clue." }
+        }
+      }
+    }
+  }
+}
