@@ -11,7 +11,7 @@ A tablet game that gets children who understand European Portuguese to start **s
 
 | Folder | What it holds |
 | --- | --- |
-| [`docs/`](docs) | The spec: [design document](docs/design.md) (concept, game design, architecture, 47 requirements, roadmap), [Unit 1](docs/unit-1.md) and [Unit 2](docs/unit-2.md) content, and the [Parent guide](docs/parent-guide.md) with its research sources |
+| [`docs/`](docs) | The spec: [design document](docs/design.md) (concept, game design, architecture, 65 requirements, roadmap), [Unit 1](docs/unit-1.md) and [Unit 2](docs/unit-2.md) content, and the [Parent guide](docs/parent-guide.md) with its research sources |
 | [`content/`](content) | Content packs the app loads: [`units/unit-01.json`](content/units/unit-01.json) and [`units/unit-02.json`](content/units/unit-02.json) (28 phrases, 6 scenes, 14 missions), [`guide.json`](content/guide.json) and Dad's clips in `audio/`. Edit these, not app code, to change what the kids say (NFR-07) |
 | [`app/`](app) | The Expo (React Native) app: profiles, the learning engine, scenes, Missions to Dad, coins and the parent zone, all saved on the device |
 | [`proxy/`](proxy) | The speech proxy: a Cloudflare Worker between the app and Azure Speech (pt-PT). See its [README](proxy/README.md) |
@@ -75,7 +75,7 @@ app/src/parent  ── the parent zone: overview, missions, recordings, children
 
 ## Working on it
 
-- **Requirements are issues.** Each requirement in the design doc (FR-01 … FR-37, NFR-01 … NFR-10) becomes a GitHub issue with a priority label and a milestone (MVP, Phase 2, Phase 3). To create them, go to **Actions → Create issues from requirements → Run workflow**. It's safe to run again after adding requirements.
+- **Requirements are issues.** Each requirement in the design doc (FR-01 … FR-52, NFR-01 … NFR-13) becomes a GitHub issue with a priority label and a milestone (MVP, Phase 2, Phase 3). To create them, go to **Actions → Create issues from requirements → Run workflow**. It's safe to run again after adding requirements.
 - **One issue at a time.** When building with an AI assistant, hand it one issue plus the section of `docs/design.md` it belongs to.
 - **The docs are the source of truth.** After editing `docs/parent-guide.md` or the requirement tables in `docs/design.md`, regenerate:
   ```bash
