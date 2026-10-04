@@ -192,7 +192,7 @@ The players are children in Ireland, so GDPR applies to their voice recordings.
 
 ## 6. Requirements
 
-There are 37 functional and 10 non-functional requirements. The **Must** items make up the MVP. Each one is also a GitHub issue (see [`tools/issues.json`](../tools/issues.json)).
+There are 52 functional and 13 non-functional requirements. The **Must** items make up the MVP. Each one is also a GitHub issue (see [`tools/issues.json`](../tools/issues.json)). FR-38 to FR-52 and NFR-11 to NFR-13 came from a review of the game concept in October 2026: more speaking per session, more variety on replays, and more of the feel kids expect from a game.
 
 ### Functional requirements
 
@@ -235,6 +235,21 @@ There are 37 functional and 10 non-functional requirements. The **Must** items m
 | FR-35 | Parent guide | Each card shows numbered references. Tapping one opens the source in the browser, behind the parental gate. Cards are labelled "Research" or "Practical advice". | Must |
 | FR-36 | Parent guide | Guide text and sources are stored as content files, like the units, so they can be edited without changing code. | Should |
 | FR-37 | Parent guide | The weekly plan in card 5 can be ticked off week by week, and appears next to the unprompted-Portuguese counter. | Could |
+| FR-38 | Content | Scenes are built for speaking volume: each scene asks the 8-year-old for at least 6 spoken turns and the 6-year-old for at least 4, so a 12-minute session reaches 40 or more. | Should |
+| FR-39 | Gameplay | Quick-fire round with Gui between scenes: 5–8 fast picture questions drawn from phrases the child already knows, one spoken answer each. | Should |
+| FR-40 | Learning | From rung 2 up, the written phrase is hidden until after the child's attempt. Rung 2 (Pick & say) shows 2–3 picture choices with their audio instead of the written answer. | Should |
+| FR-41 | Speech | Whole-sentence nudge: at rung 4–5, when the 8-year-old gives a short version, the turn still counts and the character asks once for the whole sentence ("Boa! E a frase toda?"). Saying it earns a bonus coin. | Should |
+| FR-42 | Content | Every scene has at least one open turn with several right answers, where the child chooses what to say (what to order, which game, where to look). | Should |
+| FR-43 | Gameplay | Scenes can define slots (where something is hidden, what's on offer, which toy) that are filled at random from options in the content pack, so a replayed scene plays out differently. | Should |
+| FR-44 | Rewards | Gui's nest: a screen the child decorates with things bought in the shop by speaking. | Should |
+| FR-45 | Rewards | Each stop on the journey adds at least 3 new shop items linked to that place, so coins keep their value through the trip. | Should |
+| FR-46 | Presentation | Sound effects: a soft chime for Got it, a coin clink, Gui's squawks and giggles, and background sounds for each stop (waves, gulls, the train), under the existing volume controls. | Should |
+| FR-47 | Presentation | Speaking makes things happen: a speaking beat can name an action that plays when the turn succeeds (the ball gets kicked, Gui flies over, the door opens). | Should |
+| FR-48 | Presentation | Gui reacts with his body: he leans in and listens as soon as the child lets go of the mic, and hops or flaps on Got it, wearing what the child bought him. | Should |
+| FR-49 | Presentation | The local characters (Rita, Duarte, the ferry cook, the doctor and the rest) are drawn in Gui's style, with a few expressions each, instead of emoji. | Should |
+| FR-50 | Presentation | "Ouve-te como o Gui": after a turn, the child can play their own words back in a high seagull voice. The audio stays on the tablet and is thrown away at the end of the session unless "listen back" is on. | Could |
+| FR-51 | Rewards | A new postcard flies into the album with a short, calm animation when a scene is finished. | Could |
+| FR-52 | Parent zone | Family surprises: Dad's photo can appear in scenes, and the grandparents can record messages that play at the village stop. | Could |
 
 ### Non-functional requirements
 
@@ -250,6 +265,9 @@ There are 37 functional and 10 non-functional requirements. The **Must** items m
 | NFR-08 | Reliability | Progress is saved after every turn. Closing the app never loses more than the current turn. | Must |
 | NFR-09 | Wellbeing | Calm visuals with no flashing, no countdown timers, and no loot boxes or other manipulative mechanics. | Must |
 | NFR-10 | Accessibility | Separate volume controls for voice and music, and optional subtitles. | Should |
+| NFR-11 | Speech | Fewer than 1 in 5 correct answers from each child is rejected, checked on recordings of both children saying the phrases of the units built so far. | Must |
+| NFR-12 | Responsiveness | Something visible or audible happens within 300 ms of every tap and of the end of every spoken turn, even while the speech result is still on its way. | Should |
+| NFR-13 | Usability | Every picture renders on the target tablets: no emoji the device's font can't draw (for example 🪏 shows as a box today). Content tests check pictures against a supported set. | Must |
 
 ## 7. MVP and roadmap
 
