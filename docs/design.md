@@ -204,7 +204,7 @@ There are 37 functional and 10 non-functional requirements. The **Must** items m
 | FR-04 | Gameplay | Scenes are loaded from content packs. Each defines its characters, target phrases, accepted versions, starting rung, pictures and audio. | Must |
 | FR-05 | Gameplay | Every target phrase has a model audio clip: Dad's recording if there is one, otherwise a pt-PT text-to-speech voice. | Must |
 | FR-06 | Speech | Hold-to-talk mic button that shows clearly when it's listening. Recordings stop automatically after 6 seconds or on silence. | Must |
-| FR-07 | Speech | Audio is transcribed as pt-PT with the expected phrase as a hint. The result is Got it, Nearly or Didn't catch it. | Must |
+| FR-07 | Speech | Audio is transcribed as pt-PT and compared with the expected phrase. The result is Got it, Nearly or Didn't catch it. The expected phrase is not sent to the recogniser as a hint, because that made it hear the target phrase when the child said something else. | Must |
 | FR-08 | Speech | Fuzzy matching against the accepted versions, with a strictness setting per age band (looser for the 6-year-old). | Must |
 | FR-09 | Speech | After 2 failed attempts the model phrase plays, and the 3rd attempt is accepted if any speech is heard. | Must |
 | FR-10 | Speech | On a Nearly result, the character repeats the correct form naturally (a recast) and the game carries on. | Should |
