@@ -43,7 +43,7 @@ test('warm-up: at most 5 phrases, and only beats for the child\'s age (FR-15)', 
 test('album: each finished scene is a postcard, and only a full stop opens the next (FR-21)', () => {
   const fresh = buildAlbum(units, journey.stops, []);
   assert.equal(fresh.length, journey.stops.length);
-  assert.deepEqual(fresh.map((s) => s.state).slice(0, 5), ['current', 'locked', 'locked', 'locked', 'soon']);
+  assert.deepEqual(fresh.map((s) => s.state).slice(0, 6), ['current', 'locked', 'locked', 'locked', 'locked', 'soon']);
   assert.deepEqual(postcardCount(fresh), { got: 0, total: units.reduce((n, u) => n + u.scenes.length, 0) });
 
   const some = buildAlbum(units, journey.stops, [{ unitId: 'unit-01', sceneId: 'S1.1' }, { unitId: 'unit-01', sceneId: 'S1.2' }]);
@@ -51,7 +51,7 @@ test('album: each finished scene is a postcard, and only a full stop opens the n
   assert.deepEqual(some[0].postcards.map((p) => p.got), [true, true, false]);
 
   const full = buildAlbum(units, journey.stops, units[0].scenes.map((s) => ({ unitId: 'unit-01', sceneId: s.id })));
-  assert.deepEqual(full.map((s) => s.state).slice(0, 5), ['done', 'current', 'locked', 'locked', 'soon']);
+  assert.deepEqual(full.map((s) => s.state).slice(0, 6), ['done', 'current', 'locked', 'locked', 'locked', 'soon']);
   assert.equal(focusStop(full).stop.id, 'ferry');
 });
 

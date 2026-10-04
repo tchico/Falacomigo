@@ -15,6 +15,7 @@ import { MissionsSection } from './MissionsSection';
 import { recordingList } from './recordings';
 import { RecordingsSection } from './RecordingsSection';
 import { Panel, SmallButton, pz, styles as ui } from './ui';
+import { WeeklyPlan } from './WeeklyPlan';
 
 type Section = 'overview' | 'missions' | 'recordings' | 'children' | 'family' | 'guide';
 
@@ -120,6 +121,7 @@ export function ParentZone({ store, profiles, smartRepliesAvailable, onProfilesC
                 />
               </View>
             </Panel>
+            <WeeklyPlan store={store} profiles={profiles} version={version} />
             <View style={styles.grid}>
               {summaries.map((s) => (
                 <ChildCard key={s.profile.id} profile={s.profile} coins={s.coins} dash={s.dash} />

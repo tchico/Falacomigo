@@ -1,0 +1,617 @@
+{
+  "$schema": "./schema/stories.schema.json",
+  "title": "Uma história",
+  "titleEn": "A story together",
+  "about": "Build a story together (FR-25): Gui starts it, then the two children take turns adding a sentence out loud. Each step offers three pictures with a sentence each, but a sentence of their own counts too. keywords are normalised (lower case, no accents or punctuation).",
+  "lines": {
+    "choose": "O que vamos jogar?",
+    "chooseEn": "What shall we play?",
+    "which": "Que história vamos inventar?",
+    "whichEn": "Which story shall we make up?",
+    "button": "📖 Uma história",
+    "start": "Vamos inventar uma história! Eu começo.",
+    "startEn": "Let's make up a story! I'll start.",
+    "turn": "{name}, é a tua vez!",
+    "turnEn": "{name}, it's your turn!",
+    "help": "Escolhe uma imagem, ou inventa tu!",
+    "helpEn": "Pick a picture, or make up your own!",
+    "own": "Que ideia!",
+    "again": "Hum? Conta outra vez!",
+    "end": "E viveram felizes para sempre. Fim!",
+    "endEn": "And they lived happily ever after. The end!",
+    "read": "🔊 Ouvir a história",
+    "more": "Outra história ▶"
+  },
+  "stories": [
+    {
+      "id": "dragao",
+      "title": "O dragão pequenino",
+      "titleEn": "The tiny dragon",
+      "emoji": "🐉",
+      "start": {
+        "text": "Era uma vez um dragão pequenino.",
+        "en": "Once upon a time there was a tiny dragon."
+      },
+      "steps": [
+        {
+          "ask": "Onde morava o dragão?",
+          "askEn": "Where did the dragon live?",
+          "options": [
+            {
+              "emoji": "🏰",
+              "text": "Morava num castelo.",
+              "en": "He lived in a castle.",
+              "keywords": [
+                "castelo"
+              ]
+            },
+            {
+              "emoji": "🏖️",
+              "text": "Morava na praia.",
+              "en": "He lived on the beach.",
+              "keywords": [
+                "praia"
+              ]
+            },
+            {
+              "emoji": "🌳",
+              "text": "Morava numa árvore.",
+              "en": "He lived in a tree.",
+              "keywords": [
+                "arvore"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "E o que gostava de comer?",
+          "askEn": "And what did he like to eat?",
+          "options": [
+            {
+              "emoji": "🍦",
+              "text": "Gostava de comer gelados.",
+              "en": "He liked eating ice creams.",
+              "keywords": [
+                "gelados",
+                "gelado"
+              ]
+            },
+            {
+              "emoji": "🍞",
+              "text": "Gostava de comer pão.",
+              "en": "He liked eating bread.",
+              "keywords": [
+                "pao"
+              ]
+            },
+            {
+              "emoji": "🐟",
+              "text": "Gostava de comer peixe.",
+              "en": "He liked eating fish.",
+              "keywords": [
+                "peixe"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "Um dia, o que aconteceu?",
+          "askEn": "One day, what happened?",
+          "options": [
+            {
+              "emoji": "🗺️",
+              "text": "Um dia, perdeu o mapa.",
+              "en": "One day, he lost his map.",
+              "keywords": [
+                "perdeu",
+                "mapa"
+              ]
+            },
+            {
+              "emoji": "🐱",
+              "text": "Um dia, encontrou um gato.",
+              "en": "One day, he found a cat.",
+              "keywords": [
+                "gato",
+                "encontrou"
+              ]
+            },
+            {
+              "emoji": "🤒",
+              "text": "Um dia, ficou doente.",
+              "en": "One day, he got ill.",
+              "keywords": [
+                "doente"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "E depois?",
+          "askEn": "And then?",
+          "options": [
+            {
+              "emoji": "😢",
+              "text": "E depois, chorou muito.",
+              "en": "And then he cried a lot.",
+              "keywords": [
+                "chorou"
+              ]
+            },
+            {
+              "emoji": "👩",
+              "text": "E depois, chamou a mãe.",
+              "en": "And then he called his mum.",
+              "keywords": [
+                "chamou",
+                "mae"
+              ]
+            },
+            {
+              "emoji": "👩‍⚕️",
+              "text": "E depois, foi ao médico.",
+              "en": "And then he went to the doctor.",
+              "keywords": [
+                "medico"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "Quem o ajudou?",
+          "askEn": "Who helped him?",
+          "options": [
+            {
+              "emoji": "🐦",
+              "text": "A gaivota Gui ajudou-o.",
+              "en": "Gui the seagull helped him.",
+              "keywords": [
+                "gaivota",
+                "gui"
+              ]
+            },
+            {
+              "emoji": "👦",
+              "text": "Um menino ajudou-o.",
+              "en": "A boy helped him.",
+              "keywords": [
+                "menino"
+              ]
+            },
+            {
+              "emoji": "👧",
+              "text": "Uma menina ajudou-o.",
+              "en": "A girl helped him.",
+              "keywords": [
+                "menina"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "E no fim?",
+          "askEn": "And in the end?",
+          "options": [
+            {
+              "emoji": "🤝",
+              "text": "No fim, ficaram amigos.",
+              "en": "In the end, they became friends.",
+              "keywords": [
+                "amigos"
+              ]
+            },
+            {
+              "emoji": "🏖️",
+              "text": "No fim, foram à praia.",
+              "en": "In the end, they went to the beach.",
+              "keywords": [
+                "praia"
+              ]
+            },
+            {
+              "emoji": "🎂",
+              "text": "No fim, comeram um bolo.",
+              "en": "In the end, they ate a cake.",
+              "keywords": [
+                "bolo"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gato",
+      "title": "O gato que queria ir à lua",
+      "titleEn": "The cat who wanted to go to the moon",
+      "emoji": "🐱",
+      "start": {
+        "text": "Era uma vez um gato que queria ir à lua.",
+        "en": "Once upon a time there was a cat who wanted to go to the moon."
+      },
+      "steps": [
+        {
+          "ask": "Como é que ele foi?",
+          "askEn": "How did he get there?",
+          "options": [
+            {
+              "emoji": "🚀",
+              "text": "Foi num foguetão.",
+              "en": "He went in a rocket.",
+              "keywords": [
+                "foguetao"
+              ]
+            },
+            {
+              "emoji": "🎈",
+              "text": "Foi num balão.",
+              "en": "He went in a balloon.",
+              "keywords": [
+                "balao"
+              ]
+            },
+            {
+              "emoji": "✈️",
+              "text": "Foi num avião.",
+              "en": "He went in a plane.",
+              "keywords": [
+                "aviao"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "Quem foi com ele?",
+          "askEn": "Who went with him?",
+          "options": [
+            {
+              "emoji": "🐶",
+              "text": "Foi com o cão.",
+              "en": "He went with the dog.",
+              "keywords": [
+                "cao"
+              ]
+            },
+            {
+              "emoji": "🐟",
+              "text": "Foi com um peixe.",
+              "en": "He went with a fish.",
+              "keywords": [
+                "peixe"
+              ]
+            },
+            {
+              "emoji": "👵",
+              "text": "Foi com a avó.",
+              "en": "He went with Granny.",
+              "keywords": [
+                "avo"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "O que viram lá em cima?",
+          "askEn": "What did they see up there?",
+          "options": [
+            {
+              "emoji": "⭐",
+              "text": "Viram as estrelas.",
+              "en": "They saw the stars.",
+              "keywords": [
+                "estrelas",
+                "estrela"
+              ]
+            },
+            {
+              "emoji": "☀️",
+              "text": "Viram o sol.",
+              "en": "They saw the sun.",
+              "keywords": [
+                "sol"
+              ]
+            },
+            {
+              "emoji": "👽",
+              "text": "Viram um extraterrestre.",
+              "en": "They saw an alien.",
+              "keywords": [
+                "extraterrestre"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "E depois?",
+          "askEn": "And then?",
+          "options": [
+            {
+              "emoji": "🍕",
+              "text": "E depois, tiveram fome.",
+              "en": "And then they got hungry.",
+              "keywords": [
+                "fome"
+              ]
+            },
+            {
+              "emoji": "💃",
+              "text": "E depois, dançaram.",
+              "en": "And then they danced.",
+              "keywords": [
+                "dancaram"
+              ]
+            },
+            {
+              "emoji": "😴",
+              "text": "E depois, adormeceram.",
+              "en": "And then they fell asleep.",
+              "keywords": [
+                "adormeceram"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "O que comeram?",
+          "askEn": "What did they eat?",
+          "options": [
+            {
+              "emoji": "🧀",
+              "text": "Comeram queijo da lua.",
+              "en": "They ate moon cheese.",
+              "keywords": [
+                "queijo"
+              ]
+            },
+            {
+              "emoji": "🍪",
+              "text": "Comeram bolachas.",
+              "en": "They ate biscuits.",
+              "keywords": [
+                "bolachas",
+                "bolacha"
+              ]
+            },
+            {
+              "emoji": "🍌",
+              "text": "Comeram bananas.",
+              "en": "They ate bananas.",
+              "keywords": [
+                "bananas",
+                "banana"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "E no fim?",
+          "askEn": "And in the end?",
+          "options": [
+            {
+              "emoji": "🏠",
+              "text": "No fim, voltaram para casa.",
+              "en": "In the end, they went back home.",
+              "keywords": [
+                "casa",
+                "voltaram"
+              ]
+            },
+            {
+              "emoji": "🌙",
+              "text": "No fim, ficaram na lua.",
+              "en": "In the end, they stayed on the moon.",
+              "keywords": [
+                "lua",
+                "ficaram"
+              ]
+            },
+            {
+              "emoji": "👨",
+              "text": "No fim, contaram tudo ao pai.",
+              "en": "In the end, they told Dad everything.",
+              "keywords": [
+                "pai",
+                "contaram"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pirata",
+      "title": "O tesouro do pirata",
+      "titleEn": "The pirate's treasure",
+      "emoji": "⛵",
+      "start": {
+        "text": "Era uma vez um pirata que tinha um barco.",
+        "en": "Once upon a time there was a pirate who had a boat."
+      },
+      "steps": [
+        {
+          "ask": "O que tinha mais o pirata?",
+          "askEn": "What else did the pirate have?",
+          "options": [
+            {
+              "emoji": "🦜",
+              "text": "Tinha um papagaio.",
+              "en": "He had a parrot.",
+              "keywords": [
+                "papagaio"
+              ]
+            },
+            {
+              "emoji": "🗺️",
+              "text": "Tinha um mapa.",
+              "en": "He had a map.",
+              "keywords": [
+                "mapa"
+              ]
+            },
+            {
+              "emoji": "🎩",
+              "text": "Tinha um chapéu enorme.",
+              "en": "He had a huge hat.",
+              "keywords": [
+                "chapeu"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "Para onde foi?",
+          "askEn": "Where did he go?",
+          "options": [
+            {
+              "emoji": "🏝️",
+              "text": "Foi para uma ilha.",
+              "en": "He went to an island.",
+              "keywords": [
+                "ilha"
+              ]
+            },
+            {
+              "emoji": "🌉",
+              "text": "Foi para o Porto.",
+              "en": "He went to Porto.",
+              "keywords": [
+                "porto"
+              ]
+            },
+            {
+              "emoji": "🐠",
+              "text": "Foi para o fundo do mar.",
+              "en": "He went to the bottom of the sea.",
+              "keywords": [
+                "fundo",
+                "mar"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "O que encontrou?",
+          "askEn": "What did he find?",
+          "options": [
+            {
+              "emoji": "💎",
+              "text": "Encontrou um tesouro.",
+              "en": "He found a treasure.",
+              "keywords": [
+                "tesouro"
+              ]
+            },
+            {
+              "emoji": "🐙",
+              "text": "Encontrou um polvo.",
+              "en": "He found an octopus.",
+              "keywords": [
+                "polvo"
+              ]
+            },
+            {
+              "emoji": "🐚",
+              "text": "Encontrou uma concha.",
+              "en": "He found a shell.",
+              "keywords": [
+                "concha"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "E depois?",
+          "askEn": "And then?",
+          "options": [
+            {
+              "emoji": "⛈️",
+              "text": "E depois, veio uma tempestade.",
+              "en": "And then a storm came.",
+              "keywords": [
+                "tempestade"
+              ]
+            },
+            {
+              "emoji": "🎵",
+              "text": "E depois, cantou uma canção.",
+              "en": "And then he sang a song.",
+              "keywords": [
+                "cantou",
+                "cancao"
+              ]
+            },
+            {
+              "emoji": "😴",
+              "text": "E depois, adormeceu.",
+              "en": "And then he fell asleep.",
+              "keywords": [
+                "adormeceu"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "Quem chegou?",
+          "askEn": "Who arrived?",
+          "options": [
+            {
+              "emoji": "🐋",
+              "text": "Chegou uma baleia.",
+              "en": "A whale arrived.",
+              "keywords": [
+                "baleia"
+              ]
+            },
+            {
+              "emoji": "🐦",
+              "text": "Chegou o Gui.",
+              "en": "Gui arrived.",
+              "keywords": [
+                "gui"
+              ]
+            },
+            {
+              "emoji": "👮",
+              "text": "Chegou a polícia.",
+              "en": "The police arrived.",
+              "keywords": [
+                "policia"
+              ]
+            }
+          ]
+        },
+        {
+          "ask": "E no fim?",
+          "askEn": "And in the end?",
+          "options": [
+            {
+              "emoji": "💰",
+              "text": "No fim, partilharam o tesouro.",
+              "en": "In the end, they shared the treasure.",
+              "keywords": [
+                "partilharam",
+                "tesouro"
+              ]
+            },
+            {
+              "emoji": "🏠",
+              "text": "No fim, foram para casa.",
+              "en": "In the end, they went home.",
+              "keywords": [
+                "casa"
+              ]
+            },
+            {
+              "emoji": "🎉",
+              "text": "No fim, fizeram uma festa.",
+              "en": "In the end, they had a party.",
+              "keywords": [
+                "festa"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

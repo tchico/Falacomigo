@@ -31,6 +31,8 @@ import { MissionScreen } from './src/screens/MissionScreen';
 import { AlbumScreen } from './src/screens/AlbumScreen';
 import { DoneScreen } from './src/screens/DoneScreen';
 import { GuessScreen } from './src/screens/GuessScreen';
+import { StoryScreen } from './src/screens/StoryScreen';
+import { TogetherScreen } from './src/screens/TogetherScreen';
 import { colors } from './src/ui/theme';
 
 type Screen =
@@ -45,7 +47,9 @@ type Screen =
   | { name: 'done'; sleepy: boolean }
   | { name: 'album'; album: AlbumStop[]; back: Screen }
   | { name: 'shop'; back: Screen }
-  | { name: 'guess'; pair: [StoredProfile, StoredProfile]; reachedUnit: number };
+  | { name: 'together'; pair: [StoredProfile, StoredProfile]; reachedUnit: number }
+  | { name: 'guess'; pair: [StoredProfile, StoredProfile]; reachedUnit: number }
+  | { name: 'story'; pair: [StoredProfile, StoredProfile] };
 
 const MUSIC_SCREENS: Screen['name'][] = ['welcome', 'album', 'done'];
 
@@ -142,14 +146,14 @@ export default function App() {
     setScreen({ name: 'welcome', text: greeting(c.name, last, localDay()), unitId: next.unitId, sceneId: next.sceneId, album: buildAlbum(units, journey.stops, played) });
   };
 
-  /** "Juntos": the two children play describe and guess (FR-24), with words from units they've both reached. */
+  /** "Juntos": the two children pick a game for two (FR-24, FR-25), with words from units they've both reached. */
   const together = async (pair: [StoredProfile, StoredProfile]) => {
     if (!store) return;
     const reached = await Promise.all(pair.map(async (p) => getUnit(nextScene(units, await store.scenesPlayed(p.id)).unitId).unit));
     // Loud enough for whichever of them needs it louder (NFR-10).
     const vols = await Promise.all(pair.map(async (p) => readSettings(await store.getSetting(settingsKey(p.id)), p.age, guiLines.session.aimMinutes).voiceVolume));
     setVoiceVolume(Math.max(...vols));
-    setScreen({ name: 'guess', pair, reachedUnit: Math.min(...reached) });
+    setScreen({ name: 'together', pair, reachedUnit: Math.min(...reached) });
   };
 
   /** Into the episode: the warm-up first, if anything is due and it hasn't been done this session (FR-15). */
@@ -254,6 +258,16 @@ export default function App() {
       )}
 
       {screen.name === 'pick' && <ProfilePicker profiles={profiles} details={stops} onPick={pick} onParent={() => setScreen({ name: 'parent' })} onPair={(pair) => void together(pair)} />}
+
+      {screen.name === 'together' && (
+        <TogetherScreen
+          pair={screen.pair}
+          onChoose={(g) => setScreen(g === 'guess' ? { name: 'guess', pair: screen.pair, reachedUnit: screen.reachedUnit } : { name: 'story', pair: screen.pair })}
+          onExit={() => void backToStart()}
+        />
+      )}
+
+      {screen.name === 'story' && store && <StoryScreen store={store} pair={screen.pair} recognizer={recognizer} onExit={() => void backToStart()} />}
 
       {screen.name === 'guess' && store && (
         <GuessScreen store={store} pair={screen.pair} reachedUnit={screen.reachedUnit} recognizer={recognizer} onExit={() => void backToStart()} />

@@ -16,6 +16,8 @@ function pictureOf(p: Place): string {
   if (p.props.has('river')) return '⛵';
   if (p.props.has('street')) return '🗺️';
   if (p.kind === 'porto') return '🌉';
+  if (p.kind === 'clinic') return '🩺';
+  if (p.kind === 'coimbra') return p.evening ? '🎸' : '🎓';
   if (p.kind === 'kitchen') return '🍳';
   if (p.kind === 'ferry') return '⛴️';
   return '🌳';

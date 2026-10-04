@@ -6,7 +6,7 @@ import { placeFor, type Place } from './placeFor';
 export { placeFor, type Place };
 
 // Backgrounds for scenes, chosen from the scene's "setting" in the content pack (e.g. "garden-trampoline",
-// "ferry-kitchen-evening"): where it is (garden, kitchen, ferry, beach, porto), what's there, and whether it's evening.
+// "ferry-kitchen-evening"): where it is (garden, kitchen, ferry, beach, porto, coimbra, clinic), what's there, and whether it's evening.
 // Drawn with plain views and kept calm: slow drifting clouds and waves, nothing that flashes (NFR-09).
 
 /** Sky and ground colours, so the screen's own panels can match the scenery. */
@@ -14,6 +14,8 @@ export function paletteFor(p: Place): { sky: string; ground: string; groundEdge:
   if (p.kind === 'garden') return p.evening ? { sky: '#2E3F70', ground: '#5E8F5A', groundEdge: '#4C7A49' } : { sky: colors.sky, ground: colors.grass, groundEdge: '#7FBF6E' };
   if (p.kind === 'beach') return p.evening ? { sky: '#F4B183', ground: '#E3C08A', groundEdge: '#C9A06A' } : { sky: colors.sky, ground: '#F2D48F', groundEdge: '#E0B86A' };
   if (p.kind === 'porto') return p.evening ? { sky: '#3B4A7A', ground: '#8E8778', groundEdge: '#756F62' } : { sky: colors.sky, ground: '#CFC7B8', groundEdge: '#A99F8E' };
+  if (p.kind === 'coimbra') return p.evening ? { sky: '#2E3F70', ground: '#7E8B6A', groundEdge: '#66734F' } : { sky: colors.sky, ground: '#B9C99A', groundEdge: '#97AA74' };
+  if (p.kind === 'clinic') return { sky: '#E3F1EE', ground: '#D5D9DD', groundEdge: '#B9BEC4' };
   if (p.kind === 'kitchen') return { sky: p.evening ? '#D9C7A8' : '#F6E7CF', ground: '#C99563', groundEdge: '#B07D4D' };
   return { sky: p.evening ? '#9AA7B8' : '#E4ECF2', ground: '#B5804F', groundEdge: '#94643A' };
 }
@@ -133,6 +135,8 @@ export function Scenery({ setting }: { setting?: string }) {
       )}
 
       {place.kind === 'porto' && <Porto place={place} width={width} height={height} horizon={horizon} swell={swell} />}
+      {place.kind === 'coimbra' && <Coimbra place={place} width={width} height={height} horizon={horizon} swell={swell} />}
+      {place.kind === 'clinic' && <Clinic width={width} height={height} horizon={horizon} />}
 
       {/* The ground, where the controls sit. */}
       <View style={[styles.ground, { top: horizon, backgroundColor: pal.ground, borderColor: pal.groundEdge }]} />
@@ -235,6 +239,86 @@ function Porto({ place, width, height, horizon, swell }: { place: Place; width: 
   );
 }
 
+/**
+ * Coimbra (Unit 5): the old town climbing the hill to the university and its tower, with the Mondego below.
+ * In the evening the windows are lit and the moon is out.
+ */
+function Coimbra({ place, width, height, horizon, swell }: { place: Place; width: number; height: number; horizon: number; swell: Animated.Value }) {
+  const glass = place.evening ? '#F7D06B' : '#BFDDF0';
+  const wall = place.evening ? '#D9D3C4' : '#FBF8F0';
+  const river = horizon - 60;
+  // The hill, and the white houses stepping up it towards the tower.
+  const hillTop = height * 0.3;
+  const houses = 9;
+  const w = (width * 0.62) / houses;
+  return (
+    <>
+      {place.evening ? <View style={[styles.moon, { left: width * 0.62, top: height * 0.03 }]} /> : <View style={[styles.sun, { left: width * 0.62, top: height * 0.03 }]} />}
+      <View style={[styles.hill, { left: -width * 0.1, top: hillTop + 40, width: width * 0.9, height: height, borderRadius: width * 0.45, backgroundColor: place.evening ? '#5E6F4A' : '#A9BE86' }]} />
+      {Array.from({ length: houses }, (_, i) => {
+        // Higher up the hill towards the middle, where the university is.
+        const rise = Math.sin((i / (houses - 1)) * Math.PI) * height * 0.14;
+        const h = 60 + ((i * 37) % 40);
+        return (
+          <View key={i} style={[styles.house, { left: width * 0.02 + i * w, top: river - h - rise, width: w + 1, height: h + rise, backgroundColor: wall }]}>
+            <View style={styles.roof} />
+            <View style={styles.windowRow}>
+              {[0, 1].map((c) => (
+                <View key={c} style={[styles.houseWindow, { width: w * 0.22, height: 16, backgroundColor: glass }]} />
+              ))}
+            </View>
+          </View>
+        );
+      })}
+      {/* The university tower, with its clock, on top of the hill. */}
+      <View style={[styles.tower, { left: width * 0.33 - 30, top: river - height * 0.14 - 100 - height * 0.2, height: height * 0.2 + 40, backgroundColor: wall }]}>
+        <View style={styles.towerTop} />
+        <View style={styles.clock}>
+          <View style={styles.clockHand} />
+        </View>
+      </View>
+      {/* The Mondego. */}
+      <View style={[styles.sea, { top: river, width, height: 66, backgroundColor: place.evening ? '#24506A' : '#4E8FAE' }]} />
+      <Animated.View style={[styles.waveRow, { top: river + 26, width: width + 80 }, { transform: [{ translateX: swell.interpolate({ inputRange: [0, 1], outputRange: [0, -30] }) }] }]}>
+        {Array.from({ length: Math.ceil(width / 80) + 2 }, (_, i) => (
+          <View key={i} style={styles.wave} />
+        ))}
+      </Animated.View>
+    </>
+  );
+}
+
+/** The health centre (Unit 5): a calm room with a window, the green cross, an eye chart and the examination bed. */
+function Clinic({ width, height, horizon }: { width: number; height: number; horizon: number }) {
+  return (
+    <>
+      <View style={[styles.window, { right: width * 0.06, top: height * 0.1, width: width * 0.2, height: height * 0.28, backgroundColor: colors.sky }]}>
+        <View style={[styles.windowGrass, { backgroundColor: '#A9BE86' }]} />
+        <View style={styles.windowBarV} />
+        <View style={styles.windowBarH} />
+      </View>
+      <View style={[styles.cross, { left: width * 0.05, top: height * 0.1 }]}>
+        <View style={styles.crossV} />
+        <View style={styles.crossH} />
+      </View>
+      {/* An eye chart: rows of marks getting smaller. */}
+      <View style={[styles.chart, { left: width * 0.05, top: height * 0.3 }]}>
+        {[44, 34, 26, 18, 12].map((w2, i) => (
+          <View key={i} style={{ flexDirection: 'row', gap: 4, justifyContent: 'center' }}>
+            {Array.from({ length: i + 1 }, (_, j) => (
+              <View key={j} style={{ width: w2 / 2, height: w2 / 2.6, backgroundColor: colors.ink, borderRadius: 2 }} />
+            ))}
+          </View>
+        ))}
+      </View>
+      {/* The examination bed. */}
+      <View style={[styles.bed, { right: width * 0.04, top: horizon - 70, width: width * 0.24 }]}>
+        <View style={styles.pillow} />
+      </View>
+    </>
+  );
+}
+
 /** Gui's trampoline from Scene 1.1, drawn under him. */
 export function Trampoline({ width }: { width: number }) {
   return (
@@ -291,6 +375,16 @@ const styles = StyleSheet.create({
   arch: { position: 'absolute', borderWidth: 10, borderBottomWidth: 0, borderColor: '#4A4F57' },
   deck: { position: 'absolute', height: 12, backgroundColor: '#4A4F57', borderRadius: 3 },
   rabelo: { position: 'absolute', alignItems: 'center' },
+  tower: { position: 'absolute', width: 60, borderWidth: 2, borderColor: colors.ink, alignItems: 'center', paddingTop: 22 },
+  towerTop: { position: 'absolute', top: -26, width: 36, height: 26, backgroundColor: '#E9E2D3', borderWidth: 2, borderColor: colors.ink, borderTopLeftRadius: 18, borderTopRightRadius: 18 },
+  clock: { width: 30, height: 30, borderRadius: 15, backgroundColor: colors.white, borderWidth: 2, borderColor: colors.ink, alignItems: 'center' },
+  clockHand: { width: 2, height: 12, marginTop: 3, backgroundColor: colors.ink },
+  cross: { position: 'absolute', width: 70, height: 70, alignItems: 'center', justifyContent: 'center' },
+  crossV: { position: 'absolute', width: 24, height: 70, backgroundColor: '#2E9E5B', borderRadius: 4 },
+  crossH: { position: 'absolute', width: 70, height: 24, backgroundColor: '#2E9E5B', borderRadius: 4 },
+  chart: { position: 'absolute', width: 90, padding: 8, gap: 8, backgroundColor: colors.white, borderWidth: 3, borderColor: colors.ink, borderRadius: 6 },
+  bed: { position: 'absolute', height: 40, backgroundColor: colors.white, borderWidth: 3, borderColor: colors.ink, borderRadius: 8, borderBottomWidth: 10, borderBottomColor: '#8A939C' },
+  pillow: { position: 'absolute', left: 8, top: -16, width: 60, height: 22, backgroundColor: '#DCEFF5', borderWidth: 2, borderColor: colors.ink, borderRadius: 10 },
   sail: { width: 54, height: 46, backgroundColor: '#F4EDE1', borderWidth: 3, borderColor: colors.ink },
   mast: { width: 4, height: 12, backgroundColor: colors.ink },
   hull: { width: 120, height: 22, backgroundColor: '#7A4B2A', borderWidth: 3, borderColor: colors.ink, borderBottomLeftRadius: 40, borderBottomRightRadius: 40 },
