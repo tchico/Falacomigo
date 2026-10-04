@@ -84,6 +84,20 @@ test('store: missions wait for Dad, and stars pay out once (FR-18, FR-20)', asyn
   assert.equal((await store.missionsGiven('child1', 'unit-01')).length, 1);
 });
 
+test('store: missions stay open for 48 hours, and several can wait at once (FR-19)', async () => {
+  let now = 1_000;
+  const store = new Store(memoryDb(), () => now);
+  await store.init();
+  await store.createMission('child1', 'unit-01', 'M1');
+  now += 24 * 3600_000;
+  await store.createMission('child1', 'unit-01', 'M2');
+  assert.deepEqual((await store.openMissions('child1')).map((x) => x.missionId), ['M1', 'M2']);
+  now += 25 * 3600_000;
+  assert.deepEqual((await store.openMissions('child1')).map((x) => x.missionId), ['M2'], 'M1 is over 48 hours old');
+  assert.equal((await store.openMissions()).length, 1);
+  assert.equal((await store.missionsFor('child1')).length, 2, 'still kept for the dashboard');
+});
+
 test('store: finished scenes are counted per child', async () => {
   const { store } = await freshStore();
   await store.finishScene('child1', 'unit-01', 'S1.1', '2026-10-01');

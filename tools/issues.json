@@ -197,8 +197,8 @@
     },
     {
       "id": "FR-07",
-      "title": "FR-07 · Speech: Audio is transcribed as pt-PT with the expected phrase as a hint. The result is Got it,…",
-      "body": "**FR-07** · Speech · Priority: **Must**\n\n> Audio is transcribed as pt-PT with the expected phrase as a hint. The result is Got it, Nearly or Didn't catch it.\n\n**Already started:** Three-way result and matcher done (app/src/engine/match.ts). Real pt-PT recogniser still to add; the app uses a stub.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-07",
+      "title": "FR-07 · Speech: Audio is transcribed as pt-PT and compared with the expected phrase. The result is Got…",
+      "body": "**FR-07** · Speech · Priority: **Must**\n\n> Audio is transcribed as pt-PT and compared with the expected phrase. The result is Got it, Nearly or Didn't catch it. The expected phrase is not sent to the recogniser as a hint, because that made it hear the target phrase when the child said something else.\n\n**Already started:** Three-way result and matcher done (app/src/engine/match.ts). Real pt-PT recogniser still to add; the app uses a stub.\n\n### Done when\n- [ ] The requirement above works on a tablet in landscape\n- [ ] Engine logic (if any) has tests in `app/src/**/*.test.ts`\n- [ ] `npm test` and `npm run typecheck` pass in `app/`\n\nSpec: [docs/design.md](../blob/main/docs/design.md) · requirement FR-07",
       "labels": [
         "requirement",
         "functional",
