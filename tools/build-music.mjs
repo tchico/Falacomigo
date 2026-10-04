@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Writes Gui's background tune (NFR-10) to app/assets/music/gui-theme.m4a: a calm 16-bar waltz on a plucked
+// Writes Gui's background tune (NFR-10) to app/assets/music/gui-theme.mp3: a calm 16-bar waltz on a plucked
 // string, a little like a Portuguese guitar, with a soft bass and chords. It's generated here rather than downloaded,
 // so there's no licence to worry about, and it loops cleanly: the last bar's echo is folded back onto the first.
 //
-// Usage: node tools/build-music.mjs (needs ffmpeg on the PATH to turn the WAV into AAC).
+// Usage: node tools/build-music.mjs (needs ffmpeg on the PATH to turn the WAV into an MP3).
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -105,8 +105,8 @@ for (let i = 0; i < total; i++) pcm.writeInt16LE(Math.round((out[i] / peak) * 0.
 
 const wav = join(tmpdir(), 'gui-theme.wav');
 writeFileSync(wav, pcm);
-const dest = join(root, 'app', 'assets', 'music', 'gui-theme.m4a');
+const dest = join(root, 'app', 'assets', 'music', 'gui-theme.mp3');
 mkdirSync(dirname(dest), { recursive: true });
-execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', wav, '-c:a', 'aac', '-b:a', '64k', dest]);
+execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', wav, '-c:a', 'libmp3lame', '-b:a', '64k', dest]);
 rmSync(wav);
 console.log(`Wrote ${dest} (${(total / RATE).toFixed(1)} s)`);

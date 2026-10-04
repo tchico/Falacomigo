@@ -22,7 +22,7 @@ export function setMusicVolume(v: number): void {
 export function playMusic(): void {
   if (volume === 0 || playing) return;
   try {
-    player ??= createAudioPlayer(require('../../assets/music/gui-theme.m4a'));
+    player ??= createAudioPlayer(require('../../assets/music/gui-theme.mp3'));
     player.loop = true;
     apply();
     player.play();
