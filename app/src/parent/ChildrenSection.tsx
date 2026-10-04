@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { guiLines } from '../content';
 import type { AgeBand } from '../content/types';
-import { readSettings, SESSION_CHOICES, settingsKey, type ChildSettings } from '../settings/childSettings';
+import { MUSIC_CHOICES, readSettings, SESSION_CHOICES, settingsKey, VOICE_CHOICES, type ChildSettings } from '../settings/childSettings';
 import type { Store, StoredProfile } from '../store/store';
 import { AVATARS } from '../ui/avatars';
 import { colors, TOUCH } from '../ui/theme';
@@ -11,7 +11,7 @@ import { Panel, SmallButton, styles as ui } from './ui';
 /**
  * FR-01: each child's name, age band and avatar. Their name and sibling fill in the phrases
  * ("Chamo-me …", "Este é o meu …"). Progress stays with the profile when it's renamed.
- * FR-29: subtitles, session length and listen back, per child.
+ * FR-29: subtitles, session length and listen back, per child. NFR-10: separate voice and music volumes.
  */
 export function ChildrenSection({ store, profiles, onChanged }: { store: Store; profiles: StoredProfile[]; onChanged: () => void }) {
   const [drafts, setDrafts] = useState<StoredProfile[]>(profiles);
@@ -90,6 +90,16 @@ export function ChildrenSection({ store, profiles, onChanged }: { store: Store; 
                 <OnOff value={settings[p.id].listenBack} onChange={(listenBack) => editSettings(p.id, { listenBack })} label={`Listen back for child ${i + 1}`} />
                 <Text style={[ui.muted, { flex: 1 }]}>They hear their own turn played back. The recording is only kept long enough to play it.</Text>
               </View>
+              <View style={styles.field}>
+                <Text style={styles.label}>Voice volume</Text>
+                <Levels choices={VOICE_CHOICES} value={settings[p.id].voiceVolume} onChange={(voiceVolume) => editSettings(p.id, { voiceVolume })} label={`Voice volume for child ${i + 1}`} />
+                <Text style={ui.muted}>Gui, the characters and your recordings</Text>
+              </View>
+              <View style={styles.field}>
+                <Text style={styles.label}>Music volume</Text>
+                <Levels choices={MUSIC_CHOICES} value={settings[p.id].musicVolume} onChange={(musicVolume) => editSettings(p.id, { musicVolume })} label={`Music volume for child ${i + 1}`} />
+                <Text style={ui.muted}>On the map and album, never while they talk</Text>
+              </View>
             </>
           ) : null}
           <View style={[styles.field, { justifyContent: 'flex-end' }]}>
@@ -110,6 +120,22 @@ function OnOff({ value, onChange, label }: { value: boolean; onChange: (v: boole
           <Text style={[styles.choiceText, value === v && { color: colors.white }]}>{v ? 'On' : 'Off'}</Text>
         </Pressable>
       ))}
+    </>
+  );
+}
+
+/** Volume steps as percentages; 0 reads "Off". */
+function Levels({ choices, value, onChange, label }: { choices: readonly number[]; value: number; onChange: (v: number) => void; label: string }) {
+  return (
+    <>
+      {choices.map((v) => {
+        const text = v === 0 ? 'Off' : `${Math.round(v * 100)}%`;
+        return (
+          <Pressable key={v} accessibilityRole="radio" accessibilityLabel={`${label}: ${text}`} accessibilityState={{ checked: value === v }} onPress={() => onChange(v)} style={[styles.choice, styles.wide, value === v && styles.chosen]}>
+            <Text style={[styles.choiceText, value === v && { color: colors.white }]}>{text}</Text>
+          </Pressable>
+        );
+      })}
     </>
   );
 }

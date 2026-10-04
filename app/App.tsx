@@ -14,7 +14,8 @@ import type { PlayableBeat } from './src/engine/scene';
 import { COINS_PER_TURN, coinsForStars } from './src/engine/rewards';
 import { createRecognizer, createSmartReplies } from './src/speech';
 import { openStore } from './src/store/open';
-import { initVoice, stop as stopVoice } from './src/audio/voice';
+import { initVoice, setVoiceVolume, stop as stopVoice } from './src/audio/voice';
+import { pauseMusic, playMusic, setMusicVolume } from './src/audio/music';
 import { initRecordings } from './src/audio/recordings';
 import { SMART_REPLIES, toChildProfile, type Store, type StoredProfile } from './src/store/store';
 import { ProfilePicker } from './src/screens/ProfilePicker';
@@ -43,6 +44,8 @@ type Screen =
   | { name: 'done'; sleepy: boolean }
   | { name: 'album'; album: AlbumStop[]; back: Screen }
   | { name: 'shop'; back: Screen };
+
+const MUSIC_SCREENS: Screen['name'][] = ['welcome', 'album', 'done'];
 
 /** The postcard an episode just added (FR-21), shown when it ends. */
 type NewPostcard = { card: Postcard; stamp: string; newStop: boolean };
@@ -106,6 +109,10 @@ export default function App() {
     start();
   }, [start]);
 
+  // Gui's tune on the quiet screens only, never where a child talks to the microphone (NFR-10).
+  const musicOn = !!child && MUSIC_SCREENS.includes(screen.name);
+  useEffect(() => (musicOn ? playMusic() : pauseMusic()), [musicOn]);
+
   const pick = async (p: StoredProfile) => {
     if (!store) return;
     const c = toChildProfile(p);
@@ -117,7 +124,11 @@ export default function App() {
       store.getOutfit(c.id),
       store.getSetting(settingsKey(c.id)),
     ]);
-    setSettings(readSettings(saved, c.age, guiLines.session.aimMinutes));
+    const chosen = readSettings(saved, c.age, guiLines.session.aimMinutes);
+    setSettings(chosen);
+    // Each child's own volumes (NFR-10).
+    setVoiceVolume(chosen.voiceVolume);
+    setMusicVolume(chosen.musicVolume);
     setOutfit(worn);
     setChild(c);
     setProgress(prog);
@@ -189,6 +200,8 @@ export default function App() {
 
   const backToStart = async () => {
     void stopVoice();
+    pauseMusic();
+    setVoiceVolume(1);
     setChild(null);
     setScreen({ name: 'pick' });
     if (store) await refreshProfiles(store);
