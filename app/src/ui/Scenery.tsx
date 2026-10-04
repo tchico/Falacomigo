@@ -6,13 +6,14 @@ import { placeFor, type Place } from './placeFor';
 export { placeFor, type Place };
 
 // Backgrounds for scenes, chosen from the scene's "setting" in the content pack (e.g. "garden-trampoline",
-// "ferry-kitchen-evening"): where it is (garden, kitchen, ferry, beach), what's there, and whether it's evening.
+// "ferry-kitchen-evening"): where it is (garden, kitchen, ferry, beach, porto), what's there, and whether it's evening.
 // Drawn with plain views and kept calm: slow drifting clouds and waves, nothing that flashes (NFR-09).
 
 /** Sky and ground colours, so the screen's own panels can match the scenery. */
 export function paletteFor(p: Place): { sky: string; ground: string; groundEdge: string } {
   if (p.kind === 'garden') return p.evening ? { sky: '#2E3F70', ground: '#5E8F5A', groundEdge: '#4C7A49' } : { sky: colors.sky, ground: colors.grass, groundEdge: '#7FBF6E' };
   if (p.kind === 'beach') return p.evening ? { sky: '#F4B183', ground: '#E3C08A', groundEdge: '#C9A06A' } : { sky: colors.sky, ground: '#F2D48F', groundEdge: '#E0B86A' };
+  if (p.kind === 'porto') return p.evening ? { sky: '#3B4A7A', ground: '#8E8778', groundEdge: '#756F62' } : { sky: colors.sky, ground: '#CFC7B8', groundEdge: '#A99F8E' };
   if (p.kind === 'kitchen') return { sky: p.evening ? '#D9C7A8' : '#F6E7CF', ground: '#C99563', groundEdge: '#B07D4D' };
   return { sky: p.evening ? '#9AA7B8' : '#E4ECF2', ground: '#B5804F', groundEdge: '#94643A' };
 }
@@ -131,6 +132,8 @@ export function Scenery({ setting }: { setting?: string }) {
         </>
       )}
 
+      {place.kind === 'porto' && <Porto place={place} width={width} height={height} horizon={horizon} swell={swell} />}
+
       {/* The ground, where the controls sit. */}
       <View style={[styles.ground, { top: horizon, backgroundColor: pal.ground, borderColor: pal.groundEdge }]} />
 
@@ -161,6 +164,73 @@ export function Scenery({ setting }: { setting?: string }) {
         </>
       )}
     </View>
+  );
+}
+
+// Porto's houses, from the river up: ochre, red, yellow, blue and white, with terracotta roofs.
+const HOUSES = ['#E8A33D', '#D9534F', '#F2D16B', '#5B8DB8', '#F4EDE1', '#8FB573', '#E07A5F', '#F4EDE1', '#5B8DB8', '#F2D16B', '#D9534F', '#E8A33D'];
+const HEIGHTS = [0.9, 0.7, 1, 0.8, 0.95, 0.65, 0.85, 1, 0.75, 0.9, 0.7, 0.8];
+
+/**
+ * The Ribeira (Unit 4): tall coloured houses, the Douro and the arch of the Dom Luís bridge. "river" puts a rabelo
+ * boat on the water; "street" walks into a narrow street instead, with the houses close up and a blue door.
+ */
+function Porto({ place, width, height, horizon, swell }: { place: Place; width: number; height: number; horizon: number; swell: Animated.Value }) {
+  const street = place.props.has('street');
+  const glass = place.evening ? '#F7D06B' : '#BFDDF0';
+  const n = street ? 6 : HOUSES.length;
+  const w = width / n;
+  // Up close, the houses fill most of the sky; across the river they're a band above the water.
+  const base = street ? horizon : horizon - 70;
+  const tall = street ? horizon - height * 0.08 : height * 0.3;
+  return (
+    <>
+      {place.evening ? <View style={[styles.moon, { left: width * 0.08, top: height * 0.07 }]} /> : <View style={[styles.sun, { left: width * 0.06, top: height * 0.06 }]} />}
+      {Array.from({ length: n }, (_, i) => {
+        const h = tall * HEIGHTS[(i * 5) % HEIGHTS.length];
+        const rows = street ? 4 : 3;
+        return (
+          <View key={i} style={[styles.house, { left: i * w, top: base - h, width: w + 1, height: h, backgroundColor: HOUSES[(i * 7) % HOUSES.length] }]}>
+            <View style={styles.roof} />
+            {Array.from({ length: rows }, (_, r) => (
+              <View key={r} style={styles.windowRow}>
+                {[0, 1].map((c) => (
+                  <View key={c} style={[styles.houseWindow, { width: w * 0.22, height: Math.min(36, h / (rows * 2.2)), backgroundColor: glass }]} />
+                ))}
+              </View>
+            ))}
+            {street && i === 2 ? <View style={[styles.door, { width: w * 0.4, height: Math.min(110, h * 0.25) }]} /> : null}
+          </View>
+        );
+      })}
+      {!street && (
+        <>
+          {/* The Douro, with slow ripples. */}
+          <View style={[styles.sea, { top: horizon - 70, width, height: 76, backgroundColor: place.evening ? '#24506A' : '#2F6E8A' }]} />
+          {[0, 1].map((row) => (
+            <Animated.View
+              key={row}
+              style={[styles.waveRow, { top: horizon - 50 + row * 26, width: width + 80 }, { transform: [{ translateX: swell.interpolate({ inputRange: [0, 1], outputRange: row % 2 ? [-30, 0] : [0, -30] }) }] }]}
+            >
+              {Array.from({ length: Math.ceil(width / 80) + 2 }, (_, i) => (
+                <View key={i} style={styles.wave} />
+              ))}
+            </Animated.View>
+          ))}
+          {/* The iron arch of the bridge, with its road on top. */}
+          <View style={[styles.arch, { left: width * 0.5, top: horizon - 70 - height * 0.36, width: width * 0.42, height: height * 0.36 + 20, borderTopLeftRadius: width * 0.21, borderTopRightRadius: width * 0.21 }]} />
+          <View style={[styles.deck, { left: width * 0.46, top: horizon - 70 - height * 0.38, width: width * 0.5 }]} />
+          {place.props.has('river') && (
+            // A rabelo boat with its square sail, bobbing on the river.
+            <Animated.View style={[styles.rabelo, { left: width * 0.18, top: horizon - 118 }, { transform: [{ translateY: swell.interpolate({ inputRange: [0, 1], outputRange: [3, -3] }) }] }]}>
+              <View style={styles.sail} />
+              <View style={styles.mast} />
+              <View style={styles.hull} />
+            </Animated.View>
+          )}
+        </>
+      )}
+    </>
   );
 }
 
@@ -212,6 +282,17 @@ const styles = StyleSheet.create({
   umbrella: { position: 'absolute', alignItems: 'center' },
   umbrellaTop: { width: 130, height: 50, borderTopLeftRadius: 65, borderTopRightRadius: 65, borderWidth: 3, borderColor: colors.ink, overflow: 'hidden', flexDirection: 'row' },
   umbrellaPole: { width: 6, height: 120, backgroundColor: colors.ink },
+  house: { position: 'absolute', borderWidth: 2, borderColor: colors.ink, alignItems: 'center', paddingTop: 14, gap: 10 },
+  roof: { position: 'absolute', left: -2, right: -2, top: -8, height: 10, backgroundColor: colors.terracotta, borderWidth: 2, borderColor: colors.ink },
+  windowRow: { flexDirection: 'row', gap: 10 },
+  houseWindow: { borderWidth: 2, borderColor: colors.white, borderRadius: 3 },
+  door: { position: 'absolute', bottom: 0, backgroundColor: colors.blue, borderWidth: 3, borderColor: colors.ink, borderTopLeftRadius: 40, borderTopRightRadius: 40 },
+  arch: { position: 'absolute', borderWidth: 10, borderBottomWidth: 0, borderColor: '#4A4F57' },
+  deck: { position: 'absolute', height: 12, backgroundColor: '#4A4F57', borderRadius: 3 },
+  rabelo: { position: 'absolute', alignItems: 'center' },
+  sail: { width: 54, height: 46, backgroundColor: '#F4EDE1', borderWidth: 3, borderColor: colors.ink },
+  mast: { width: 4, height: 12, backgroundColor: colors.ink },
+  hull: { width: 120, height: 22, backgroundColor: '#7A4B2A', borderWidth: 3, borderColor: colors.ink, borderBottomLeftRadius: 40, borderBottomRightRadius: 40 },
   plank: { position: 'absolute', left: 0, height: 2 },
   trampMat: { backgroundColor: colors.blue, borderWidth: 4, borderColor: colors.ink },
   trampLegs: { flexDirection: 'row', justifyContent: 'space-between', marginTop: -4 },
