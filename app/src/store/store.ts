@@ -338,9 +338,12 @@ export class Store {
 
   /** Missions not yet approved by Dad, oldest first. `childId` narrows it to one child. */
   async openMissions(childId?: string): Promise<MissionRow[]> {
+    // Missions stay open for up to 48 hours (FR-19). Older ones quietly drop off the list: nothing is lost, there's
+    // just no star to give for them any more.
+    const since = this.now() - MISSION_OPEN_MS;
     return childId
-      ? this.db.getAllAsync<MissionRow>(`SELECT ${MISSION_COLUMNS} FROM missions WHERE approved_at IS NULL AND child_id = ? ORDER BY id`, [childId])
-      : this.db.getAllAsync<MissionRow>(`SELECT ${MISSION_COLUMNS} FROM missions WHERE approved_at IS NULL ORDER BY id`, []);
+      ? this.db.getAllAsync<MissionRow>(`SELECT ${MISSION_COLUMNS} FROM missions WHERE approved_at IS NULL AND created_at > ? AND child_id = ? ORDER BY id`, [since, childId])
+      : this.db.getAllAsync<MissionRow>(`SELECT ${MISSION_COLUMNS} FROM missions WHERE approved_at IS NULL AND created_at > ? ORDER BY id`, [since]);
   }
 
   /** Every mission this child has been given, for the parent dashboard (FR-27). */
@@ -363,6 +366,9 @@ export class Store {
     });
   }
 }
+
+/** How long a Mission to Dad waits for its stars (FR-19). */
+export const MISSION_OPEN_MS = 48 * 60 * 60 * 1000;
 
 const MISSION_COLUMNS =
   'id, child_id AS childId, unit_id AS unitId, mission_id AS missionId, created_at AS createdAt, stars, approved_at AS approvedAt';
