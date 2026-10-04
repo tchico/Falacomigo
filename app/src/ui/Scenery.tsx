@@ -185,7 +185,8 @@ function Porto({ place, width, height, horizon, swell }: { place: Place; width: 
   const tall = street ? horizon - height * 0.08 : height * 0.3;
   return (
     <>
-      {place.evening ? <View style={[styles.moon, { left: width * 0.08, top: height * 0.07 }]} /> : <View style={[styles.sun, { left: width * 0.06, top: height * 0.06 }]} />}
+      {/* Up in the sky, clear of the scene's title and the coins. */}
+      {place.evening ? <View style={[styles.moon, { left: width * 0.62, top: height * 0.03 }]} /> : <View style={[styles.sun, { left: width * 0.62, top: height * 0.03 }]} />}
       {Array.from({ length: n }, (_, i) => {
         const h = tall * HEIGHTS[(i * 5) % HEIGHTS.length];
         const rows = street ? 4 : 3;
@@ -199,7 +200,7 @@ function Porto({ place, width, height, horizon, swell }: { place: Place; width: 
                 ))}
               </View>
             ))}
-            {street && i === 2 ? <View style={[styles.door, { width: w * 0.4, height: Math.min(110, h * 0.25) }]} /> : null}
+            {street && i === n - 1 ? <View style={[styles.door, { width: w * 0.4, height: Math.min(110, h * 0.25) }]} /> : null}
           </View>
         );
       })}

@@ -289,7 +289,7 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
             onExit();
           }}
         />
-        <Text style={[styles.sceneTitle, place.evening && place.kind === 'garden' ? { color: colors.white } : null]}>{title ?? scene?.title}</Text>
+        <Text style={[styles.sceneTitle, place.evening && (place.kind === 'garden' || place.kind === 'porto') ? { color: colors.white } : null]}>{title ?? scene?.title}</Text>
         <View style={styles.dots} accessibilityLabel={`Turn ${index + 1} of ${beats.length}`}>
           {beats.map((b, i) => (
             <View key={b.id} style={[styles.dot, i < index && { backgroundColor: colors.teal }, i === index && { backgroundColor: colors.terracottaLight }]} />
