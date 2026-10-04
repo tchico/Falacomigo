@@ -11,10 +11,10 @@ import { MAX_LISTEN_MS } from '../speech/pcm';
 import { StubRecognizer } from '../speech/stub';
 import type { RecognitionResult, SpeechRecognizer } from '../speech/types';
 import { useHoldToTalk } from '../speech/useHoldToTalk';
-import { avatarFor } from '../ui/avatars';
 import { BackButton } from '../ui/BackButton';
 import { BigButton } from '../ui/BigButton';
 import { Gui } from '../ui/Gui';
+import { Kid } from '../ui/Kid';
 import { MicButton } from '../ui/MicButton';
 import { colors, radius, TOUCH } from '../ui/theme';
 
@@ -354,19 +354,6 @@ export function GuessScreen({ store, pair, reachedUnit, recognizer, onExit }: Pr
   );
 }
 
-function Kid({ p, size, coins, active, showName }: { p: StoredProfile; size: number; coins?: number; active?: boolean; showName?: boolean }) {
-  const a = avatarFor(p.avatar);
-  return (
-    <View style={{ alignItems: 'center', gap: 4 }}>
-      <View style={[styles.avatar, { width: size, height: size, borderRadius: size / 2, backgroundColor: a.color }, active && styles.avatarActive]}>
-        <Text style={{ fontSize: size * 0.55 }}>{a.emoji}</Text>
-      </View>
-      {showName ? <Text style={styles.kidName}>{p.name}</Text> : null}
-      {coins ? <Text style={styles.kidCoins}>🪙 +{coins}</Text> : null}
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: '#E8F1E4' },
   top: { flexDirection: 'row', alignItems: 'center', gap: 20, paddingHorizontal: 24, paddingTop: 16 },
@@ -397,10 +384,6 @@ const styles = StyleSheet.create({
   optionEmoji: { fontSize: 96 },
   gotEmoji: { fontSize: 130 },
   gotText: { fontSize: 40, fontWeight: '900', color: colors.teal, textAlign: 'center' },
-  avatar: { borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
-  avatarActive: { borderColor: colors.terracottaLight, borderWidth: 6 },
-  kidName: { fontSize: 20, fontWeight: '900', color: colors.ink },
-  kidCoins: { fontSize: 16, fontWeight: '900', color: colors.ink },
   bottom: { flexDirection: 'row', alignItems: 'center', gap: 24, paddingHorizontal: 32, paddingBottom: 20 },
   hint: { flex: 1, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, borderRadius: radius.lg, padding: 14 },
   hintLabel: { fontSize: 14, fontWeight: '800', color: colors.inkSoft, letterSpacing: 1 },

@@ -11,7 +11,8 @@ import journeyJson from '../../../content/journey.json';
 import guiJson from '../../../content/gui.json';
 import soundsJson from '../../../content/sounds.json';
 import guessJson from '../../../content/guess.json';
-import type { Guide, GuessGame, GuiLines, Journey, Shop, SoundGuide, Unit } from './types';
+import storiesJson from '../../../content/stories.json';
+import type { Guide, GuessGame, GuiLines, Journey, Shop, SoundGuide, StoryGame, Unit } from './types';
 import { editedAccept, emptyEdits, familyUnit, FAMILY_UNIT_ID, type FamilyEdits } from '../engine/family';
 import { setFamilyNames } from '../engine/template';
 
@@ -22,6 +23,7 @@ export const journey: Journey = journeyJson as unknown as Journey;
 export const guiLines: GuiLines = guiJson as unknown as GuiLines;
 export const sounds: SoundGuide = soundsJson as unknown as SoundGuide;
 export const guessGame: GuessGame = guessJson as unknown as GuessGame;
+export const storyGame: StoryGame = storiesJson as unknown as StoryGame;
 
 /** The packs' own accepted versions, so Dad's edits are always laid over the originals. */
 const original = new Map(units.flatMap((u) => [

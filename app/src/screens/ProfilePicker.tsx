@@ -81,11 +81,11 @@ export function ProfilePicker({ profiles, details = {}, onPick, onParent, onPair
       {onPair && profiles.length >= 2 ? (
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Play together: describe and guess"
+          accessibilityLabel="Play together"
           onPress={pairing ? () => setPairing(null) : together}
           style={({ pressed }) => [styles.together, pairing && styles.togetherOn, pressed && { transform: [{ translateY: 4 }] }]}
         >
-          <Text style={styles.togetherText}>{guessGame.lines.button} · {guessGame.title}</Text>
+          <Text style={styles.togetherText}>{guessGame.lines.button}</Text>
         </Pressable>
       ) : null}
       {/* The parental gate (design doc §5): hold for 3 seconds. */}

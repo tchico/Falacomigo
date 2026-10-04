@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Build a story together, for two children (FR-25)",
+  "type": "object",
+  "required": ["title", "lines", "stories"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "title": { "type": "string" },
+    "titleEn": { "type": "string" },
+    "about": { "type": "string" },
+    "lines": { "type": "object", "description": "Gui's lines. {name} is the child whose turn it is.", "additionalProperties": { "type": "string" } },
+    "stories": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "emoji", "start", "steps"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "titleEn": { "type": "string" },
+          "emoji": { "type": "string" },
+          "start": { "$ref": "#/$defs/sentence", "description": "Gui's opening line, \"Era uma vez…\"." },
+          "steps": {
+            "type": "array",
+            "minItems": 2,
+            "description": "One per turn, the children taking turns.",
+            "items": {
+              "type": "object",
+              "required": ["ask", "options"],
+              "properties": {
+                "ask": { "type": "string", "description": "Gui's question for this turn." },
+                "askEn": { "type": "string" },
+                "options": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "allOf": [{ "$ref": "#/$defs/sentence" }],
+                    "required": ["emoji", "keywords"],
+                    "properties": {
+                      "emoji": { "type": "string" },
+                      "keywords": { "type": "array", "items": { "type": "string" }, "minItems": 1, "description": "Normalised words that pick this option, different from the other options in the step." }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sentence": {
+      "type": "object",
+      "required": ["text", "en"],
+      "properties": { "text": { "type": "string" }, "en": { "type": "string" }, "emoji": { "type": "string" }, "keywords": { "type": "array", "items": { "type": "string" } } }
+    }
+  }
+}

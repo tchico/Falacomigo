@@ -205,3 +205,35 @@ export interface GuessGame {
   lines: Record<string, string>;
   cards: GuessCard[];
 }
+
+/** One sentence in a story (FR-25): Gui's opening, or a choice the child can say. */
+export interface StorySentence {
+  text: string;
+  en: string;
+  emoji?: string;
+  /** Normalised words that pick this choice. */
+  keywords?: string[];
+}
+
+export interface StoryStep {
+  /** Gui's question for this turn, e.g. "E depois?". */
+  ask: string;
+  askEn?: string;
+  options: (StorySentence & { emoji: string; keywords: string[] })[];
+}
+
+export interface Story {
+  id: string;
+  title: string;
+  titleEn?: string;
+  emoji: string;
+  start: StorySentence;
+  steps: StoryStep[];
+}
+
+export interface StoryGame {
+  title: string;
+  titleEn?: string;
+  lines: Record<string, string>;
+  stories: Story[];
+}
