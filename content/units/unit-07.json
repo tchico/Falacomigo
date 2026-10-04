@@ -1,0 +1,244 @@
+{
+  "$schema": "../schema/unit.schema.json",
+  "id": "unit-07",
+  "unit": 7,
+  "title": "Na aldeia dos avós",
+  "titleEn": "At the grandparents' village",
+  "stop": {"id": "village", "name": "A aldeia", "nameEn": "The grandparents' village"},
+  "characters": {
+    "granny": {"name": "{Granny}", "role": "a avó", "roleEn": "Granny", "emoji": "👵", "color": "#F2DCE4"},
+    "grandad": {"name": "{Grandad}", "role": "o avô", "roleEn": "Grandad", "emoji": "👴", "color": "#E2E8D2"}
+  },
+  "phrases": [
+    {
+      "id": "P87",
+      "text": "Olá, avó!",
+      "en": "Hello, Granny!",
+      "accept": ["ola avo", "ola avozinha", "ola avozinho", "ola avos", "ola avo e avo", "ola"],
+      "keywords": ["avo", "ola", "avozinha"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P87.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P88",
+      "text": "Que saudades!",
+      "en": "I missed you so much!",
+      "accept": ["que saudades", "tenho saudades", "tive saudades", "tantas saudades", "que saudades tuas", "saudades"],
+      "keywords": ["saudades"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P88.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P89",
+      "text": "Tive muitas saudades tuas.",
+      "en": "I missed you a lot.",
+      "accept": ["tive muitas saudades tuas", "tive saudades tuas", "tive muitas saudades", "tenho muitas saudades tuas", "tenho saudades tuas", "muitas saudades"],
+      "keywords": ["saudades"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P89.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P90",
+      "text": "Posso ir lá fora?",
+      "en": "Can I go outside?",
+      "accept": ["posso ir la fora", "posso ir brincar la fora", "posso ir la para fora", "posso sair", "posso ir"],
+      "keywords": ["fora", "posso"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P90.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P91",
+      "text": "Posso ir ver as galinhas?",
+      "en": "Can I go and see the hens?",
+      "accept": ["posso ir ver as galinhas", "posso ver as galinhas", "quero ver as galinhas", "as galinhas", "galinhas"],
+      "keywords": ["galinhas", "galinha"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P91.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P92",
+      "text": "Obrigado, avó! / Obrigada, avó!",
+      "en": "Thank you, Granny!",
+      "accept": ["obrigado avo", "obrigada avo", "muito obrigado avo", "muito obrigada avo", "obrigado", "obrigada", "muito obrigado", "muito obrigada"],
+      "keywords": ["obrigado", "obrigada"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P92.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P93",
+      "text": "Está delicioso!",
+      "en": "It's delicious!",
+      "accept": ["esta delicioso", "esta delicioso avo", "esta muito delicioso", "esta muito bom", "que delicia", "delicioso", "esta deliciosa"],
+      "keywords": ["delicioso", "deliciosa", "delicia"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P93.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P94",
+      "text": "Eu ajudo-te, avó!",
+      "en": "I'll help you, Granny!",
+      "accept": ["eu ajudo te avo", "eu ajudo te", "eu ajudo", "ajudo te", "eu ajudo avo", "deixa que eu ajudo"],
+      "keywords": ["ajudo"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P94.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P95",
+      "text": "Gosto muito de ti.",
+      "en": "I love you lots.",
+      "accept": ["gosto muito de ti", "gosto de ti", "gosto muito muito de ti", "adoro te", "gosto tanto de ti", "tambem gosto muito de ti"],
+      "keywords": ["gosto", "adoro"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P95.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P96",
+      "text": "Que cheirinho bom!",
+      "en": "What a lovely smell!",
+      "accept": ["que cheirinho bom", "que cheiro bom", "que bom cheiro", "cheira bem", "cheira tao bem", "hum que cheirinho"],
+      "keywords": ["cheirinho", "cheiro", "cheira"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P96.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P97",
+      "text": "Conta-me uma história!",
+      "en": "Tell me a story!",
+      "accept": ["conta me uma historia", "conta uma historia", "conta me uma historia avo", "conta nos uma historia", "uma historia", "historia"],
+      "keywords": ["historia"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P97.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P98",
+      "text": "Como era quando eras pequena?",
+      "en": "What was it like when you were little?",
+      "accept": ["como era quando eras pequena", "como era quando eras pequeno", "quando eras pequena", "quando eras pequeno", "como eras quando eras pequena", "como era antigamente"],
+      "keywords": ["pequena", "pequeno", "antigamente"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P98.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P99",
+      "text": "Boa noite, avó! Dorme bem!",
+      "en": "Good night, Granny! Sleep well!",
+      "accept": ["boa noite avo dorme bem", "boa noite avo", "boa noite dorme bem", "dorme bem", "dorme bem avo", "boa noite"],
+      "keywords": ["noite", "dorme"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P99.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P100",
+      "text": "Volto em breve!",
+      "en": "I'll come back soon!",
+      "accept": ["volto em breve", "volto em breve avo", "eu volto em breve", "vou voltar", "volto logo", "ate breve"],
+      "keywords": ["volto", "breve", "voltar"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P100.m4a", "ttsFallback": true}
+    }
+  ],
+  "vocab": [
+    {"pt": "a avó", "en": "granny"},
+    {"pt": "o avô", "en": "grandad"},
+    {"pt": "a aldeia", "en": "village"},
+    {"pt": "a quinta", "en": "farm"},
+    {"pt": "a galinha", "en": "hen"},
+    {"pt": "o burro", "en": "donkey"},
+    {"pt": "o cão", "en": "dog"},
+    {"pt": "o ovo", "en": "egg"},
+    {"pt": "o bolo", "en": "cake"},
+    {"pt": "a lareira", "en": "fireplace"},
+    {"pt": "a história", "en": "story"},
+    {"pt": "as saudades", "en": "missing someone"}
+  ],
+  "warmup": ["P87", "P88", "P90", "P92", "P93"],
+  "scenes": [
+    {
+      "id": "S7.1",
+      "title": "Chegámos à aldeia!",
+      "titleEn": "We've reached the village!",
+      "setting": "village",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "gui", "text": "Chegámos! {Village}! Olha as casas tão branquinhas!", "en": "We're here! {Village}! Look how white the houses are!"}, "expect": null},
+        {"id": "b2", "say": {"speaker": "granny", "text": "Ai, os meus netinhos! Finalmente!", "en": "Oh, my little grandchildren! At last!"}, "model": "Olá, {granny}!", "expect": "P87", "recast": "Olá, meu amor! Dá cá um beijinho!"},
+        {"id": "b3", "say": {"speaker": "granny", "text": "Há tanto tempo que não vos via!", "en": "It's been so long since I saw you!"}, "expect": "P88", "recast": "Eu também tive tantas saudades!"},
+        {"id": "b4", "ages": [8], "say": {"speaker": "grandad", "text": "E eu? Também tiveste saudades do teu avô?", "en": "And me? Did you miss your grandad too?"}, "expect": "P89", "recast": "Ai, que coisa boa de ouvir!"},
+        {"id": "b4y", "ages": [6], "say": {"speaker": "grandad", "text": "E eu? Olá! Sou o teu avô!", "en": "And me? Hello! I'm your grandad!"}, "model": "Olá, {grandad}!", "expect": "P87", "recast": "Olá! Que grande que estás!"},
+        {"id": "b5", "say": {"speaker": "gui", "text": "E eu sou o Gui! Sou de Lisboa, mas perdi-me numa tempestade.", "en": "And I'm Gui! I'm from Lisbon, but I got lost in a storm."}, "expect": null},
+        {"id": "b6", "say": {"speaker": "granny", "text": "Uma gaivota que fala português! Bem, eu vou fazer o almoço.", "en": "A seagull that speaks Portuguese! Well, I'm going to make lunch."}, "expect": "P90", "recast": "Podes, mas tem cuidado!"},
+        {"id": "b7", "say": {"speaker": "grandad", "text": "Lá fora temos galinhas, um burro e um cão. O que queres ver?", "en": "Outside we have hens, a donkey and a dog. What do you want to see?"}, "expect": "P91", "image": "farm:chicken-donkey-dog", "answers": [{"accept": ["posso ir ver o burro", "quero ver o burro", "ver o burro", "o burro", "burro"], "recast": "O burro? Chama-se Faísca. Anda!"}, {"accept": ["posso ir ver o cao", "quero ver o cao", "ver o cao", "o cao", "cao"], "recast": "O cão? É o Pirata. Ele adora brincar!"}], "recast": "As galinhas? Anda, vamos apanhar os ovos!"},
+        {"id": "b8", "say": {"speaker": "grandad", "text": "Olha, um ovo fresquinho! É para ti.", "en": "Look, a fresh egg! It's for you."}, "model": "Obrigado, {grandad}!", "expect": "P92", "image": "farm:egg", "recast": "De nada! Logo a {granny} faz um bolo com ele."},
+        {"id": "b9", "say": {"speaker": "granny", "text": "Meninos! O almoço está pronto!", "en": "Children! Lunch is ready!"}, "expect": null, "cliffhanger": true}
+      ]
+    },
+    {
+      "id": "S7.2",
+      "title": "O almoço da avó",
+      "titleEn": "Granny's lunch",
+      "setting": "village-kitchen",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "granny", "text": "Hoje fiz sopa, arroz de pato e bolo de laranja!", "en": "Today I made soup, duck rice and orange cake!"}, "expect": null, "image": "food:soup-cake"},
+        {"id": "b2", "say": {"speaker": "gui", "text": "Hmm! Sniff, sniff…", "en": "Mmm! Sniff, sniff…", "spoken": "Hum!"}, "expect": "P96", "recast": "Pois é! A {granny} é a melhor cozinheira!"},
+        {"id": "b3", "ages": [8], "say": {"speaker": "granny", "text": "Ajudas-me a pôr a mesa?", "en": "Will you help me set the table?"}, "model": "Eu ajudo-te, {granny}!", "expect": "P94", "recast": "Obrigada! Os pratos estão ali."},
+        {"id": "b4", "say": {"speaker": "granny", "text": "Pronto, sentem-se. Bom apetite! Então, que tal a comida?", "en": "There, sit down. Enjoy your meal! So, how's the food?"}, "expect": "P93", "answers": [{"accept": ["nao gosto", "nao gosto muito", "nao gosto disto"], "recast": "Não gostas? Não faz mal. Há pão e queijo também."}, {"accept": ["esta quente", "muito quente", "quente"], "recast": "Está quente? Sopra devagarinho!"}], "recast": "Delicioso? Ai, que bom!"},
+        {"id": "b5", "say": {"speaker": "granny", "text": "Toma, mais uma fatia de bolo.", "en": "Here, another slice of cake."}, "model": "Obrigado, {granny}!", "expect": "P92", "image": "food:cake", "recast": "De nada, meu amor!"},
+        {"id": "b6", "ages": [8], "say": {"speaker": "grandad", "text": "Sabes, quando eu era pequeno, não havia televisão aqui na aldeia!", "en": "You know, when I was little, there was no television here in the village!"}, "model": "Como era quando eras pequeno?", "expect": "P98", "recast": "Brincávamos na rua o dia todo, com uma bola de trapos!"},
+        {"id": "b7", "say": {"speaker": "granny", "text": "Depois do almoço, descansamos um bocadinho. O que queres fazer logo à noite?", "en": "After lunch, we'll rest a little. What do you want to do tonight?"}, "expect": "P97", "answers": [{"accept": ["quero brincar", "vamos brincar", "posso ir brincar", "brincar"], "recast": "Brincar? Primeiro uma sesta, depois brincamos!"}], "recast": "Uma história? Está bem, à lareira!"},
+        {"id": "b8", "say": {"speaker": "gui", "text": "Uaaah… comi tanto que tenho sono…", "en": "Yawn… I ate so much I'm sleepy…", "spoken": "Ah… comi tanto que tenho sono…"}, "expect": null, "cliffhanger": true}
+      ]
+    },
+    {
+      "id": "S7.3",
+      "title": "Uma história à lareira",
+      "titleEn": "A story by the fire",
+      "setting": "village-kitchen-evening",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "granny", "text": "Já é de noite. Venham para ao pé da lareira.", "en": "It's night now. Come and sit by the fire."}, "expect": null, "image": "home:fire"},
+        {"id": "b2", "say": {"speaker": "granny", "text": "Então, o que querem?", "en": "So, what would you like?"}, "expect": "P97", "recast": "Está bem! Era uma vez uma gaivota que se perdeu numa tempestade…"},
+        {"id": "b3", "say": {"speaker": "gui", "text": "Sou eu! Essa história é sobre mim!", "en": "That's me! That story is about me!"}, "expect": null},
+        {"id": "b4", "ages": [8], "say": {"speaker": "granny", "text": "Quando eu era pequena, também vi uma gaivota assim, aqui na aldeia…", "en": "When I was little, I saw a seagull like that too, here in the village…"}, "expect": "P98", "recast": "Era tudo diferente. Íamos buscar água ao poço!"},
+        {"id": "b5", "say": {"speaker": "granny", "text": "Ai, és um amor. Dá cá um abraço!", "en": "Oh, you're a sweetheart. Give me a hug!"}, "expect": "P95", "recast": "E eu gosto muito, muito de ti!"},
+        {"id": "b6", "ages": [8], "say": {"speaker": "grandad", "text": "Amanhã vão levar o Gui a Lisboa. Vou sentir a vossa falta…", "en": "Tomorrow you're taking Gui to Lisbon. I'll miss you…"}, "expect": "P100", "recast": "Prometes? Então está combinado!"},
+        {"id": "b7", "say": {"speaker": "grandad", "text": "Fiz-te um apito de cana. Toma!", "en": "I made you a reed whistle. Here!"}, "model": "Obrigado, {grandad}!", "expect": "P92", "recast": "De nada! Experimenta: piii!"},
+        {"id": "b8", "say": {"speaker": "granny", "text": "Já é tarde. Toca a ir para a cama!", "en": "It's late. Off to bed!"}, "model": "Boa noite, {granny}! Dorme bem!", "expect": "P99", "answers": [{"accept": ["ainda nao", "nao tenho sono", "mais uma historia", "so mais uma"], "recast": "Mais uma? Só uma pequenina, e depois cama!"}], "recast": "Boa noite, meu amor. Dorme bem também!"},
+        {"id": "b9", "say": {"speaker": "gui", "text": "Amanhã… Lisboa! Vou ver a minha família!", "en": "Tomorrow… Lisbon! I'm going to see my family!"}, "expect": null, "cliffhanger": true}
+      ]
+    }
+  ],
+  "missions": [
+    {"id": "M1", "day": 1, "card": {"text": "Liga à {granny} e diz «Que saudades!»", "en": "Call Granny and say \"I missed you!\"", "image": "m1-call.png"}, "say": {"6": "Olá, {granny}! Que saudades!", "8": "Olá, {granny}! Tive muitas saudades tuas."}, "targets": {"6": ["P87", "P88"], "8": ["P87", "P89"]}, "when": "Next call with Granny"},
+    {"id": "M2", "day": 2, "card": {"text": "Ao jantar, diz que a comida está deliciosa", "en": "At dinner, say the food is delicious", "image": "m2-dinner.png"}, "say": {"6": "Está delicioso!", "8": "Hmm, que cheirinho bom! Está delicioso!"}, "targets": {"6": ["P93"], "8": ["P96", "P93"]}, "when": "At dinner"},
+    {"id": "M3", "day": 3, "card": {"text": "Pede ao pai para ir lá fora, em português", "en": "Ask Dad to go outside, in Portuguese", "image": "m3-outside.png"}, "say": {"6": "Pai, posso ir lá fora?", "8": "Pai, posso ir lá fora brincar?"}, "targets": {"6": ["P90"], "8": ["P90"]}, "when": "Any time"},
+    {"id": "M4", "day": 4, "card": {"text": "Ajuda o pai a pôr a mesa", "en": "Help Dad set the table", "image": "m4-table.png"}, "say": {"6": "Obrigado, pai!", "8": "Pai, eu ajudo-te!"}, "targets": {"6": ["P92"], "8": ["P94"]}, "when": "Before a meal"},
+    {"id": "M5", "day": 5, "card": {"text": "À hora de deitar, pede uma história", "en": "At bedtime, ask for a story", "image": "m5-story.png"}, "say": {"6": "Pai, conta-me uma história!", "8": "Pai, conta-me uma história! Como era quando eras pequeno?"}, "targets": {"6": ["P97"], "8": ["P97", "P98"]}, "when": "At bedtime"},
+    {"id": "M6", "day": 6, "siblings": true, "card": {"text": "Juntos! Façam de avós e netos", "en": "Together! Play grandparents and grandchildren", "image": "m6-play.png"}, "say": {"6": "Olá, avó! Gosto muito de ti!", "8": "Que cheirinho bom! Obrigada, avó!"}, "targets": {"6": ["P87", "P95"], "8": ["P96", "P92"]}, "when": "When both kids are around"},
+    {"id": "M7", "day": 7, "bonus": true, "card": {"text": "Diz boa noite à {granny} numa videochamada", "en": "Say good night to Granny on a video call", "image": "m7-call.png"}, "say": {"6": "Boa noite, {granny}! Dorme bem!", "8": "Boa noite, {granny}! Gosto muito de ti. Volto em breve!"}, "targets": {"6": ["P99"], "8": ["P99", "P95", "P100"]}, "when": "An evening call with Granny"}
+  ],
+  "schedule": {
+    "sessionsPerWeek": 2,
+    "sessions": [
+      {"session": 1, "scene": "S7.1"},
+      {"session": 2, "warmup": true, "review": true},
+      {"session": 3, "scene": "S7.2"},
+      {"session": 4, "warmup": true, "review": true},
+      {"session": 5, "scene": "S7.3"},
+      {"session": 6, "warmup": true, "review": true},
+      {"session": 7, "review": true, "replay": "S7.1"}
+    ],
+    "missionsPerDay": 1
+  }
+}

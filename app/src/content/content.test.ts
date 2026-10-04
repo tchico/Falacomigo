@@ -81,6 +81,19 @@ for (const unit of units) {
   });
 }
 
+test('content: from Unit 6 on, scenes are built for speaking (FR-38, FR-42)', () => {
+  // At least 6 spoken turns per scene for the 8-year-old and 4 for the 6-year-old, and an open turn with several
+  // right answers. Units 1 to 5 were written before this rule and get revised separately.
+  const need: Record<AgeBand, number> = { 8: 6, 6: 4 };
+  for (const unit of units.filter((u) => u.unit >= 6)) for (const s of unit.scenes) {
+    for (const child of children) {
+      const spoken = buildScene(unit, s.id, child).filter((b) => b.phrase).length;
+      assert.ok(spoken >= need[child.age as AgeBand], `${s.id} has ${spoken} spoken turns for age ${child.age}`);
+    }
+    assert.ok(s.beats.some((b) => (b.answers ?? []).length > 0), `${s.id} has no open turn`);
+  }
+});
+
 test('content: phrase ids are unique across units, so progress can be keyed by phrase', () => {
   const all = units.flatMap((u) => u.phrases.map((p) => p.id));
   assert.equal(new Set(all).size, all.length);

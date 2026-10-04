@@ -6,7 +6,7 @@ import { placeFor, type Place } from './placeFor';
 export { placeFor, type Place };
 
 // Backgrounds for scenes, chosen from the scene's "setting" in the content pack (e.g. "garden-trampoline",
-// "ferry-kitchen-evening"): where it is (garden, kitchen, ferry, beach, porto, coimbra, clinic), what's there, and whether it's evening.
+// "ferry-kitchen-evening"): where it is (garden, kitchen, ferry, beach, porto, coimbra, clinic, train, village), what's there, and whether it's evening.
 // Drawn with plain views and kept calm: slow drifting clouds and waves, nothing that flashes (NFR-09).
 
 /** Sky and ground colours, so the screen's own panels can match the scenery. */
@@ -16,6 +16,11 @@ export function paletteFor(p: Place): { sky: string; ground: string; groundEdge:
   if (p.kind === 'porto') return p.evening ? { sky: '#3B4A7A', ground: '#8E8778', groundEdge: '#756F62' } : { sky: colors.sky, ground: '#CFC7B8', groundEdge: '#A99F8E' };
   if (p.kind === 'coimbra') return p.evening ? { sky: '#2E3F70', ground: '#7E8B6A', groundEdge: '#66734F' } : { sky: colors.sky, ground: '#B9C99A', groundEdge: '#97AA74' };
   if (p.kind === 'clinic') return { sky: '#E3F1EE', ground: '#D5D9DD', groundEdge: '#B9BEC4' };
+  if (p.kind === 'train') {
+    if (p.props.has('station')) return { sky: colors.sky, ground: '#BDB8AE', groundEdge: '#E8C547' };
+    return { sky: p.evening ? '#CFC4A8' : '#EDE4CC', ground: '#6E7B8B', groundEdge: '#56616F' };
+  }
+  if (p.kind === 'village') return p.evening ? { sky: '#2E3F70', ground: '#8C7A45', groundEdge: '#73633A' } : { sky: colors.sky, ground: '#E2C46A', groundEdge: '#C9A94F' };
   if (p.kind === 'kitchen') return { sky: p.evening ? '#D9C7A8' : '#F6E7CF', ground: '#C99563', groundEdge: '#B07D4D' };
   return { sky: p.evening ? '#9AA7B8' : '#E4ECF2', ground: '#B5804F', groundEdge: '#94643A' };
 }
@@ -77,9 +82,21 @@ export function Scenery({ setting }: { setting?: string }) {
             <View style={styles.windowBarV} />
             <View style={styles.windowBarH} />
           </View>
-          <View style={[styles.fridge, { left: width * 0.03, top: height * 0.16, height: horizon - height * 0.16 }]}>
-            <View style={styles.postcard} />
-          </View>
+          {place.props.has('village') ? (
+            // The avós' fireplace, with a calm glow rather than flickering flames (NFR-09).
+            <View style={[styles.fireplace, { left: width * 0.03, top: horizon - 40 - height * 0.3, width: width * 0.2, height: height * 0.3 }]}>
+              <View style={styles.mantel} />
+              <View style={[styles.hearth, { backgroundColor: place.evening ? '#3A2A22' : '#4A3A30' }]}>
+                <View style={[styles.flame, { width: 70, height: 78 }]} />
+                <View style={[styles.flame, { width: 42, height: 46, backgroundColor: '#F7D06B' }]} />
+                <View style={styles.log} />
+              </View>
+            </View>
+          ) : (
+            <View style={[styles.fridge, { left: width * 0.03, top: height * 0.16, height: horizon - height * 0.16 }]}>
+              <View style={styles.postcard} />
+            </View>
+          )}
           <View style={[styles.tiles, { top: horizon - 40, width }]}>
             {Array.from({ length: Math.ceil(width / 40) }, (_, i) => (
               <View key={i} style={[styles.tile, i % 2 ? { backgroundColor: colors.blue } : null]}>
@@ -137,6 +154,8 @@ export function Scenery({ setting }: { setting?: string }) {
       {place.kind === 'porto' && <Porto place={place} width={width} height={height} horizon={horizon} swell={swell} />}
       {place.kind === 'coimbra' && <Coimbra place={place} width={width} height={height} horizon={horizon} swell={swell} />}
       {place.kind === 'clinic' && <Clinic width={width} height={height} horizon={horizon} />}
+      {place.kind === 'train' && <Train place={place} width={width} height={height} horizon={horizon} drift={drift} />}
+      {place.kind === 'village' && <Village place={place} width={width} height={height} horizon={horizon} />}
 
       {/* The ground, where the controls sit. */}
       <View style={[styles.ground, { top: horizon, backgroundColor: pal.ground, borderColor: pal.groundEdge }]} />
@@ -319,6 +338,116 @@ function Clinic({ width, height, horizon }: { width: number; height: number; hor
   );
 }
 
+/**
+ * The train south (Unit 6). "station" is the platform at Coimbra-B with the train waiting; otherwise it's inside the
+ * carriage, with the countryside going slowly past the windows: yellow fields and cork oaks, or the moon at night.
+ */
+function Train({ place, width, height, horizon, drift }: { place: Place; width: number; height: number; horizon: number; drift: Animated.Value }) {
+  if (place.props.has('station')) {
+    const top = horizon - height * 0.26;
+    return (
+      <>
+        <View style={[styles.sun, { left: width * 0.62, top: height * 0.03 }]} />
+        {/* The station canopy on its posts, and the station clock. */}
+        <View style={[styles.canopy, { width, top: height * 0.12 }]} />
+        {[0.08, 0.5, 0.92].map((x) => (
+          <View key={x} style={[styles.canopyPost, { left: width * x, top: height * 0.12, height: top - height * 0.12 }]} />
+        ))}
+        <View style={[styles.stationClock, { left: width * 0.46, top: height * 0.17 }]}>
+          <View style={styles.clockHand} />
+        </View>
+        {/* The train waiting at the platform: white with a blue stripe, a row of windows and a door. */}
+        <View style={[styles.carriage, { left: -20, top, width: width + 40, height: height * 0.26 }]}>
+          <View style={styles.carriageStripe} />
+          <View style={styles.carriageWindows}>
+            {Array.from({ length: Math.ceil(width / 110) }, (_, i) => (i % 4 === 2 ? <View key={i} style={styles.carriageDoor} /> : <View key={i} style={styles.carriageWindow} />))}
+          </View>
+        </View>
+      </>
+    );
+  }
+  const night = place.evening;
+  const across = drift.interpolate({ inputRange: [0, 1], outputRange: [0, -width * 0.5] });
+  return (
+    <>
+      {/* Two big windows onto the countryside going by. */}
+      {[0.04, 0.52].map((x) => (
+        <View key={x} style={[styles.trainWindow, { left: width * x, top: height * 0.08, width: width * 0.44, height: height * 0.36, backgroundColor: night ? '#2E3F70' : colors.sky }]}>
+          <View style={[styles.field, { backgroundColor: night ? '#5B5636' : '#E2C46A' }]} />
+          {night ? (
+            x > 0.5 ? <View style={[styles.moon, { right: 24, top: 14, width: 44, height: 44 }]} /> : null
+          ) : (
+            <Animated.View style={[styles.treeRow, { transform: [{ translateX: across }] }]}>
+              {Array.from({ length: 8 }, (_, i) => (
+                <View key={i} style={[styles.corkOak, { marginLeft: 40 + ((i * 53) % 70) }]}>
+                  <View style={styles.corkTop} />
+                  <View style={styles.corkTrunk} />
+                </View>
+              ))}
+            </Animated.View>
+          )}
+        </View>
+      ))}
+      {/* Luggage rack above, and the tops of the seats below. */}
+      <View style={[styles.rack, { width, top: height * 0.03 }]} />
+      {[0.02, 0.36, 0.7].map((x) => (
+        <View key={x} style={[styles.seat, { left: width * x, top: horizon - 54, width: width * 0.28 }]} />
+      ))}
+    </>
+  );
+}
+
+/**
+ * The avós' village in the Alentejo (Unit 7): low white houses with blue trim and chimneys, a cork oak, and the golden
+ * plain behind. In the evening the windows glow and the stars are out.
+ */
+function Village({ place, width, height, horizon }: { place: Place; width: number; height: number; horizon: number }) {
+  const night = place.evening;
+  const glass = night ? '#F7D06B' : '#BFDDF0';
+  const wall = night ? '#D9D3C4' : '#FBF8F0';
+  const houses = [
+    { x: 0.02, w: 0.2, h: 0.17, trim: '#2F6DB5' },
+    { x: 0.22, w: 0.15, h: 0.14, trim: '#E2B93B' },
+    { x: 0.74, w: 0.24, h: 0.18, trim: '#2F6DB5' },
+  ];
+  return (
+    <>
+      {night ? (
+        <>
+          <View style={[styles.moon, { left: width * 0.62, top: height * 0.05 }]} />
+          {[[0.1, 0.08], [0.3, 0.16], [0.45, 0.05], [0.8, 0.12], [0.92, 0.04]].map(([x, y], i) => (
+            <View key={i} style={[styles.star, { left: width * x, top: height * y }]} />
+          ))}
+        </>
+      ) : (
+        <View style={[styles.sun, { left: width * 0.62, top: height * 0.04 }]} />
+      )}
+      {/* The plain, rolling away to the horizon. */}
+      <View style={[styles.hill, { left: -width * 0.2, top: horizon - 50, width: width * 1.4, height: 140, borderRadius: width, backgroundColor: place.kind === 'village' && night ? '#73633A' : '#D4B45A' }]} />
+      {houses.map((h, i) => {
+        const hh = height * h.h;
+        return (
+          <View key={i} style={[styles.villageHouse, { left: width * h.x, top: horizon - hh, width: width * h.w, height: hh, backgroundColor: wall }]}>
+            <View style={[styles.chimney, { backgroundColor: wall }]} />
+            <View style={[styles.trimTop, { backgroundColor: h.trim }]} />
+            <View style={styles.villageRow}>
+              <View style={[styles.villageWindow, { backgroundColor: glass, borderColor: h.trim }]} />
+              <View style={[styles.villageDoor, { backgroundColor: h.trim }]} />
+              <View style={[styles.villageWindow, { backgroundColor: glass, borderColor: h.trim }]} />
+            </View>
+            <View style={[styles.trimBottom, { backgroundColor: h.trim }]} />
+          </View>
+        );
+      })}
+      {/* A cork oak, wide and low. */}
+      <View style={[styles.bigOak, { left: width * 0.42, top: horizon - height * 0.22 }]}>
+        <View style={[styles.bigOakTop, { backgroundColor: night ? '#3F5A3A' : '#5F8A4E' }]} />
+        <View style={styles.bigOakTrunk} />
+      </View>
+    </>
+  );
+}
+
 /** Gui's trampoline from Scene 1.1, drawn under him. */
 export function Trampoline({ width }: { width: number }) {
   return (
@@ -334,6 +463,37 @@ export function Trampoline({ width }: { width: number }) {
 }
 
 const styles = StyleSheet.create({
+  fireplace: { position: 'absolute', alignItems: 'center' },
+  mantel: { alignSelf: 'stretch', height: 18, backgroundColor: '#F4EDE1', borderWidth: 3, borderColor: colors.ink, borderRadius: 4 },
+  hearth: { flex: 1, width: '82%', borderWidth: 3, borderTopWidth: 0, borderColor: colors.ink, alignItems: 'center', justifyContent: 'flex-end', paddingBottom: 6 },
+  flame: { position: 'absolute', bottom: 16, borderRadius: 30, borderBottomLeftRadius: 8, borderBottomRightRadius: 8, backgroundColor: '#E8833A' },
+  log: { width: '70%', height: 12, borderRadius: 6, backgroundColor: '#7A4E2D', borderWidth: 2, borderColor: colors.ink },
+  canopy: { position: 'absolute', left: 0, height: 26, backgroundColor: '#8A94A3', borderBottomWidth: 4, borderColor: colors.ink },
+  canopyPost: { position: 'absolute', width: 10, marginLeft: -5, backgroundColor: '#6B7480', borderLeftWidth: 2, borderRightWidth: 2, borderColor: colors.ink },
+  stationClock: { position: 'absolute', width: 54, height: 54, borderRadius: 27, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, alignItems: 'center' },
+  carriage: { position: 'absolute', backgroundColor: '#F4F2EC', borderWidth: 4, borderColor: colors.ink, borderRadius: 18, overflow: 'hidden' },
+  carriageStripe: { position: 'absolute', left: 0, right: 0, bottom: 22, height: 16, backgroundColor: colors.blue },
+  carriageWindows: { flexDirection: 'row', gap: 26, paddingHorizontal: 40, paddingTop: 18 },
+  carriageWindow: { width: 84, height: 54, borderRadius: 10, backgroundColor: '#BFDDF0', borderWidth: 3, borderColor: colors.ink },
+  carriageDoor: { width: 60, height: 110, borderRadius: 8, backgroundColor: '#D9D3C4', borderWidth: 3, borderColor: colors.ink },
+  trainWindow: { position: 'absolute', borderWidth: 6, borderColor: '#56616F', borderRadius: 26, overflow: 'hidden' },
+  field: { position: 'absolute', left: 0, right: 0, bottom: 0, height: '38%' },
+  treeRow: { position: 'absolute', bottom: '30%', left: 0, flexDirection: 'row', alignItems: 'flex-end', width: 2000 },
+  corkOak: { alignItems: 'center' },
+  corkTop: { width: 64, height: 34, borderRadius: 30, backgroundColor: '#5F8A4E', borderWidth: 2, borderColor: colors.ink },
+  corkTrunk: { width: 8, height: 18, backgroundColor: '#8A5A3C', borderWidth: 2, borderColor: colors.ink, borderTopWidth: 0 },
+  rack: { position: 'absolute', left: 0, height: 10, backgroundColor: '#8A94A3', borderTopWidth: 2, borderBottomWidth: 2, borderColor: colors.ink },
+  seat: { position: 'absolute', height: 70, backgroundColor: '#2F6DB5', borderWidth: 4, borderColor: colors.ink, borderTopLeftRadius: 24, borderTopRightRadius: 24 },
+  villageHouse: { position: 'absolute', borderWidth: 3, borderColor: colors.ink, justifyContent: 'space-between' },
+  chimney: { position: 'absolute', right: '14%', top: -30, width: 26, height: 30, borderWidth: 3, borderBottomWidth: 0, borderColor: colors.ink },
+  trimTop: { height: 10 },
+  trimBottom: { height: 14 },
+  villageRow: { flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'flex-end' },
+  villageWindow: { width: 28, height: 28, borderWidth: 4 },
+  villageDoor: { width: 30, height: 52, borderWidth: 2, borderColor: colors.ink, borderTopLeftRadius: 14, borderTopRightRadius: 14 },
+  bigOak: { position: 'absolute', alignItems: 'center' },
+  bigOakTop: { width: 190, height: 96, borderRadius: 90, borderWidth: 3, borderColor: colors.ink },
+  bigOakTrunk: { width: 22, height: 70, marginTop: -6, backgroundColor: '#8A5A3C', borderWidth: 3, borderColor: colors.ink, borderTopWidth: 0 },
   sun: { position: 'absolute', width: 70, height: 70, borderRadius: 35, backgroundColor: colors.sun, borderWidth: 3, borderColor: colors.ink },
   moon: { position: 'absolute', width: 60, height: 60, borderRadius: 30, backgroundColor: '#F4EBC6', borderWidth: 3, borderColor: colors.ink },
   star: { position: 'absolute', width: 5, height: 5, borderRadius: 3, backgroundColor: '#F4EBC6' },
