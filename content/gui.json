@@ -41,5 +41,10 @@
   "truque": {
     "title": "Truque!",
     "go": "Agora tu! ▶"
+  },
+  "family": {
+    "say": "Esta frase é do pai! Diz comigo.",
+    "sayEn": "This phrase is from Dad! Say it with me.",
+    "recast": "Boa! O pai vai ficar contente!"
   }
 }

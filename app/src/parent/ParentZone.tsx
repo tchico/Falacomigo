@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { guide, units } from '../content';
+import { familyPhrases, guide, units } from '../content';
 import { addDays } from '../engine/ladder';
 import { localDay } from '../engine/episode';
 import { hasRecording } from '../audio/recordings';
@@ -9,19 +9,21 @@ import { colors, TOUCH } from '../ui/theme';
 import { ChildCard } from './ChildCard';
 import { ChildrenSection } from './ChildrenSection';
 import { childDashboard, tipOfWeek, type ChildDashboard } from './dashboard';
+import { FamilySection } from './FamilySection';
 import { GuideSection } from './GuideSection';
 import { MissionsSection } from './MissionsSection';
 import { recordingList } from './recordings';
 import { RecordingsSection } from './RecordingsSection';
 import { Panel, SmallButton, pz, styles as ui } from './ui';
 
-type Section = 'overview' | 'missions' | 'recordings' | 'children' | 'guide';
+type Section = 'overview' | 'missions' | 'recordings' | 'children' | 'family' | 'guide';
 
 const SECTIONS: { id: Section; label: string; icon: string }[] = [
   { id: 'overview', label: 'Overview', icon: '📊' },
   { id: 'missions', label: 'Missions', icon: '✉️' },
   { id: 'recordings', label: 'My recordings', icon: '🎙️' },
   { id: 'children', label: 'Children', icon: '👧' },
+  { id: 'family', label: 'Family words', icon: '🏡' },
   { id: 'guide', label: 'Guide', icon: '📖' },
 ];
 
@@ -48,7 +50,9 @@ export function ParentZone({ store, profiles, smartRepliesAvailable, onProfilesC
     setSmartOn(!smartOn);
   };
   const kids = useMemo(() => profiles.map(toChildProfile), [profiles]);
-  const slots = useMemo(() => recordingList(units, kids), [kids]);
+  // Dad's own phrases (FR-28) can be recorded too.
+  const recordable = useMemo(() => (familyPhrases().phrases.length ? [...units, familyPhrases()] : units), [version]);
+  const slots = useMemo(() => recordingList(recordable, kids), [recordable, kids]);
 
   useEffect(() => {
     void (async () => {
@@ -152,7 +156,8 @@ export function ParentZone({ store, profiles, smartRepliesAvailable, onProfilesC
           </ScrollView>
         )}
         {section === 'missions' && <MissionsSection store={store} profiles={profiles} onChanged={changed} />}
-        {section === 'recordings' && <RecordingsSection units={units} kids={kids} />}
+        {section === 'recordings' && <RecordingsSection units={recordable} kids={kids} />}
+        {section === 'family' && <FamilySection store={store} onChanged={changed} />}
         {section === 'children' && <ChildrenSection store={store} profiles={profiles} onChanged={changed} />}
         {section === 'guide' && <GuideSection start={guideCard} />}
       </View>

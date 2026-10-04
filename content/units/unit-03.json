@@ -236,7 +236,7 @@
     {"id": "M4", "day": 4, "card": {"text": "Pede ao pai para brincar outra vez", "en": "Ask Dad to play again", "image": "m4-again.png"}, "say": {"6": "Outra vez!", "8": "Outra vez! Que divertido!"}, "targets": {"6": ["P40"], "8": ["P40", "P41"]}, "when": "When a game ends"},
     {"id": "M5", "day": 5, "card": {"text": "Uma corrida com o pai!", "en": "A race with Dad!", "image": "m5-race.png"}, "say": {"6": "Espera por mim! Ganhei!", "8": "Espera por mim, pai! Ganhei!"}, "targets": {"6": ["P38", "P39"], "8": ["P38", "P39"]}, "when": "Outside, in the garden or the park"},
     {"id": "M6", "day": 6, "siblings": true, "card": {"text": "Juntos! Partilhem um lanche", "en": "Together! Share a snack", "image": "m6-share.png"}, "say": {"6": "Toma, é para ti!", "8": "Vamos partilhar! Toma, é para ti."}, "targets": {"6": ["P35"], "8": ["P36", "P35"]}, "when": "At snack time, when both kids are around"},
-    {"id": "M7", "day": 7, "bonus": true, "card": {"text": "Conta à avó a que jogaste", "en": "Tell Granny what you played", "image": "m7-call.png"}, "say": {"6": "Avó, vamos jogar à bola!", "8": "Olá, avó! Vamos jogar à bola? Que divertido!"}, "targets": {"6": ["P31"], "8": ["P31", "P41"]}, "when": "Next call with Granny"}
+    {"id": "M7", "day": 7, "bonus": true, "card": {"text": "Conta à {granny} a que jogaste", "en": "Tell Granny what you played", "image": "m7-call.png"}, "say": {"6": "{Granny}, vamos jogar à bola!", "8": "Olá, {granny}! Vamos jogar à bola? Que divertido!"}, "targets": {"6": ["P31"], "8": ["P31", "P41"]}, "when": "Next call with Granny"}
   ],
   "schedule": {
     "sessionsPerWeek": 2,

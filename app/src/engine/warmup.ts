@@ -6,6 +6,8 @@ import { dueForReview, type PhraseProgress } from './ladder';
 import { buildScene, type PlayableBeat } from './scene';
 
 export const WARMUP_SIZE = 5;
+/** How many of Dad's new phrases (FR-28) come in one warm-up. */
+export const NEW_FAMILY_PHRASES = 2;
 
 /** The beat that first asks for a phrase in its unit, for this child's age. */
 function firstBeatFor(unit: Unit, phraseId: string, child: ChildProfile): PlayableBeat | null {
@@ -17,10 +19,11 @@ function firstBeatFor(unit: Unit, phraseId: string, child: ChildProfile): Playab
 }
 
 /**
- * The warm-up beats for today: Gui's opening line, then one beat per phrase due for review, most overdue first.
+ * The warm-up beats for today: Gui's opening line, then one beat per phrase due for review, most overdue first,
+ * then up to two of Dad's own phrases the child hasn't tried yet (`fresh`, FR-28).
  * Empty when nothing is due (a first session, or everything reviewed), so the episode goes straight to its scene.
  */
-export function buildWarmup(units: Unit[], progress: Record<string, PhraseProgress>, day: string, child: ChildProfile, intro: string, introEn?: string): PlayableBeat[] {
+export function buildWarmup(units: Unit[], progress: Record<string, PhraseProgress>, day: string, child: ChildProfile, intro: string, introEn?: string, fresh?: Unit): PlayableBeat[] {
   const beats: PlayableBeat[] = [];
   // Look further than 5 in case some due phrases have no beat for this child's age.
   for (const due of dueForReview(Object.values(progress), day, Number.MAX_SAFE_INTEGER)) {
@@ -28,6 +31,13 @@ export function buildWarmup(units: Unit[], progress: Record<string, PhraseProgre
     const unit = units.find((u) => u.phrases.some((p) => p.id === due.phraseId));
     const beat = unit && firstBeatFor(unit, due.phraseId, child);
     if (beat) beats.push({ ...beat, id: `warmup-${beat.id}-${due.phraseId}`, cliffhanger: false });
+  }
+  if (fresh) {
+    const untried = fresh.phrases.filter((p) => !progress[p.id]).slice(0, Math.min(NEW_FAMILY_PHRASES, WARMUP_SIZE - beats.length));
+    for (const p of untried) {
+      const beat = firstBeatFor(fresh, p.id, child);
+      if (beat) beats.push({ ...beat, id: `warmup-${beat.id}-${p.id}`, cliffhanger: false });
+    }
   }
   if (!beats.length) return [];
   const opening: PlayableBeat = {

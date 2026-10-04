@@ -2,10 +2,11 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Gui's own lines outside the scenes: warm-up (FR-15), end of session (FR-16), album (FR-21), Como se diz (FR-11)",
   "type": "object",
-  "required": ["warmup", "session", "album", "comoSeDiz", "truque"],
+  "required": ["warmup", "family", "session", "album", "comoSeDiz", "truque"],
   "properties": {
     "$schema": { "type": "string" },
     "warmup": { "type": "object", "additionalProperties": { "type": "string" } },
+    "family": { "type": "object", "description": "Gui's line before one of Dad's own phrases in the warm-up (FR-28).", "additionalProperties": { "type": "string" } },
     "session": {
       "type": "object",
       "required": ["aimMinutes"],
