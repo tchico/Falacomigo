@@ -167,6 +167,8 @@ export interface Journey {
 /** Gui's own lines outside the scenes. See content/gui.json. */
 export interface GuiLines {
   warmup: { title: string; intro: string; introEn: string };
+  /** Gui's line before one of Dad's own phrases (FR-28). */
+  family: { say: string; sayEn: string; recast: string };
   session: { aimMinutes: number; listenBack: string; more: string; moreEn: string; moreButton: string; sleepy: string; sleepyEn: string; bye: string };
   album: { title: string; titleEn: string; button: string; newPostcard: string; newPostcardEn: string; newStop: string; newStopEn: string; soon: string; locked: string };
   truque: { title: string; go: string };

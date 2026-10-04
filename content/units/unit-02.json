@@ -245,7 +245,7 @@
     {"id": "M4", "day": 4, "card": {"text": "Bom apetite, pai!", "en": "Enjoy your meal, Dad!", "image": "m4-table.png"}, "say": {"6": "Bom apetite, pai!", "8": "Bom apetite, pai! Está bom!"}, "targets": {"6": ["P24"], "8": ["P24", "P18"]}, "when": "At the start of a meal"},
     {"id": "M5", "day": 5, "card": {"text": "Pede mais ao pai", "en": "Ask Dad for more", "image": "m5-more.png"}, "say": {"6": "Mais, por favor!", "8": "Pai, posso ter mais, por favor?"}, "targets": {"6": ["P21"], "8": ["P21", "P16"]}, "when": "At dinner"},
     {"id": "M6", "day": 6, "siblings": true, "card": {"text": "Juntos! Ponham a mesa com o pai", "en": "Together! Set the table with Dad", "image": "m6-table.png"}, "say": {"6": "Aqui está!", "8": "Posso ajudar? Aqui está o garfo."}, "targets": {"6": ["P28"], "8": ["P25", "P28"]}, "when": "Before dinner, when both kids are around"},
-    {"id": "M7", "day": 7, "bonus": true, "card": {"text": "Diz à avó do que gostas de comer", "en": "Tell Granny what you like to eat", "image": "m7-call.png"}, "say": {"6": "Avó, eu gosto de sopa!", "8": "Olá, avó! Eu gosto de peixe. Está bom!"}, "targets": {"6": ["P19"], "8": ["P19", "P18"]}, "when": "Next call with Granny"}
+    {"id": "M7", "day": 7, "bonus": true, "card": {"text": "Diz à {granny} do que gostas de comer", "en": "Tell Granny what you like to eat", "image": "m7-call.png"}, "say": {"6": "{Granny}, eu gosto de sopa!", "8": "Olá, {granny}! Eu gosto de peixe. Está bom!"}, "targets": {"6": ["P19"], "8": ["P19", "P18"]}, "when": "Next call with Granny"}
   ],
   "schedule": {
     "sessionsPerWeek": 2,

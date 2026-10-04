@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { getUnit, guiLines, journey, units } from './src/content';
+import { applyFamilyEdits, familyPhrases, getUnit, guiLines, journey, units } from './src/content';
+import { FAMILY_SETTING, readEdits } from './src/engine/family';
 import type { ChildProfile, Mission } from './src/content/types';
 import type { PhraseProgress } from './src/engine/ladder';
 import { greeting, localDay, nextMission, nextScene } from './src/engine/episode';
@@ -81,6 +82,8 @@ export default function App() {
     setProfiles(ps);
     setStops(labels);
     setSmartOn((await s.getSetting(SMART_REPLIES)) === 'on');
+    // Dad's names, accepted versions and phrases (FR-28), laid over the content.
+    applyFamilyEdits(readEdits(await s.getSetting(FAMILY_SETTING)));
   }, []);
 
   const start = useCallback(() => {
@@ -129,7 +132,7 @@ export default function App() {
   /** Into the episode: the warm-up first, if anything is due and it hasn't been done this session (FR-15). */
   const startEpisode = (unitId: string, sceneId: string) => {
     if (!child) return;
-    const beats = warmedUp.current ? [] : buildWarmup(units, progress, localDay(), child, guiLines.warmup.intro, guiLines.warmup.introEn);
+    const beats = warmedUp.current ? [] : buildWarmup([...units, familyPhrases()], progress, localDay(), child, guiLines.warmup.intro, guiLines.warmup.introEn, familyPhrases());
     warmedUp.current = true;
     setScreen(beats.length ? { name: 'warmup', unitId, sceneId, beats } : { name: 'scene', unitId, sceneId });
   };

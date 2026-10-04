@@ -31,10 +31,10 @@ const wordCount = (c: GuideCard) =>
 /**
  * FR-33, FR-35: eight short cards for Dad, bundled with the app so they work offline. Each card is labelled
  * Research or Practical advice and lists its numbered sources, which open in the browser. The whole parent
- * zone sits behind the parental gate, so a child can't follow the links.
+ * zone sits behind the parental gate, so a child can't follow the links. `start` opens a card, e.g. the tip of the week.
  */
-export function GuideSection() {
-  const [index, setIndex] = useState(0);
+export function GuideSection({ start = 0 }: { start?: number }) {
+  const [index, setIndex] = useState(start);
   const card = guide.cards[index];
   const sources = guide.sources.filter((s) => card.refs.includes(s.id));
 

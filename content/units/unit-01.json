@@ -198,7 +198,7 @@
     { "id": "M4", "day": 4, "card": { "text": "Pergunta ao pai quantos anos ele tem", "en": "Ask Dad how old he is", "image": "m4-age.png" }, "say": { "6": "Tenho {age} anos!", "8": "Quantos anos tens, pai?" }, "targets": { "6": ["P05"], "8": ["P06"] }, "when": "Any time" },
     { "id": "M5", "day": 5, "card": { "text": "Boa noite, pai!", "en": "Good night, Dad!", "image": "m5-bed.png" }, "say": { "6": "Boa noite, pai!", "8": "Boa noite, pai! Até amanhã!" }, "targets": { "6": ["P02"], "8": ["P02", "P12"] }, "when": "Bedtime" },
     { "id": "M6", "day": 6, "card": { "text": "Juntos! Apresentem-se ao pai", "en": "Together! Introduce each other to Dad", "image": "m6-together.png" }, "say": { "6": "Este é o meu {sibling}!", "8": "Esta é a minha {sibling}. Tem … anos." }, "targets": { "6": ["P07"], "8": ["P07", "P05"] }, "when": "When both kids are around", "siblings": true },
-    { "id": "M7", "day": 7, "bonus": true, "card": { "text": "Liga à avó!", "en": "Video call with Granny", "image": "m7-call.png" }, "say": { "6": "Olá, avó!", "8": "Olá, avó! Como estás? Eu estou bem." }, "targets": { "6": ["P01"], "8": ["P01", "P10"] }, "when": "Whenever a call is planned" }
+    { "id": "M7", "day": 7, "bonus": true, "card": { "text": "Liga à {granny}!", "en": "Video call with Granny", "image": "m7-call.png" }, "say": { "6": "Olá, {granny}!", "8": "Olá, {granny}! Como estás? Eu estou bem." }, "targets": { "6": ["P01"], "8": ["P01", "P10"] }, "when": "Whenever a call is planned" }
   ],
   "schedule": {
     "sessionsPerWeek": 2,

@@ -343,6 +343,11 @@ export class Store {
       : this.db.getAllAsync<MissionRow>(`SELECT ${MISSION_COLUMNS} FROM missions WHERE approved_at IS NULL ORDER BY id`, []);
   }
 
+  /** Every mission this child has been given, for the parent dashboard (FR-27). */
+  async missionsFor(childId: string): Promise<MissionRow[]> {
+    return this.db.getAllAsync<MissionRow>(`SELECT ${MISSION_COLUMNS} FROM missions WHERE child_id = ? ORDER BY id`, [childId]);
+  }
+
   /** Missions this child has been given for a unit, so the next one can be picked. */
   async missionsGiven(childId: string, unitId: string): Promise<MissionRow[]> {
     return this.db.getAllAsync<MissionRow>(`SELECT ${MISSION_COLUMNS} FROM missions WHERE child_id = ? AND unit_id = ? ORDER BY id`, [childId, unitId]);
