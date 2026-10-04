@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { units } from '../content';
+import { guide, units } from '../content';
 import { addDays } from '../engine/ladder';
 import { localDay } from '../engine/episode';
 import { hasRecording } from '../audio/recordings';
 import { SMART_REPLIES, toChildProfile, type Store, type StoredProfile } from '../store/store';
-import { avatarFor } from '../ui/avatars';
 import { colors, TOUCH } from '../ui/theme';
+import { ChildCard } from './ChildCard';
 import { ChildrenSection } from './ChildrenSection';
+import { childDashboard, tipOfWeek, type ChildDashboard } from './dashboard';
 import { GuideSection } from './GuideSection';
 import { MissionsSection } from './MissionsSection';
 import { recordingList } from './recordings';
@@ -27,8 +28,7 @@ const SECTIONS: { id: Section; label: string; icon: string }[] = [
 interface ChildSummary {
   profile: StoredProfile;
   coins: number;
-  turnsThisWeek: number;
-  phrases: number;
+  dash: ChildDashboard;
 }
 
 /** The parent zone, reached through the hold gate on the profile screen. In English, for Dad. */
@@ -37,6 +37,8 @@ export function ParentZone({ store, profiles, smartRepliesAvailable, onProfilesC
   const [openMissions, setOpenMissions] = useState(0);
   const [summaries, setSummaries] = useState<ChildSummary[]>([]);
   const [version, setVersion] = useState(0);
+  const [guideCard, setGuideCard] = useState(0);
+  const tip = guide.cards[tipOfWeek(guide.cards.length, localDay())];
   const [smartOn, setSmartOn] = useState(false);
   useEffect(() => {
     void store.getSetting(SMART_REPLIES).then((v) => setSmartOn(v === 'on'));
@@ -51,14 +53,19 @@ export function ParentZone({ store, profiles, smartRepliesAvailable, onProfilesC
   useEffect(() => {
     void (async () => {
       setOpenMissions((await store.openMissions()).length);
-      const weekAgo = addDays(localDay(), -6);
+      const today = localDay();
       setSummaries(
         await Promise.all(
           profiles.map(async (profile) => ({
             profile,
             coins: await store.getCoins(profile.id),
-            turnsThisWeek: (await store.turnsPerDay(profile.id, weekAgo)).reduce((n, d) => n + d.turns, 0),
-            phrases: Object.keys(await store.getProgress(profile.id)).length,
+            dash: childDashboard({
+              progress: await store.getProgress(profile.id),
+              units,
+              turnsPerDay: await store.turnsPerDay(profile.id, addDays(today, -13)),
+              missions: await store.missionsFor(profile.id),
+              today,
+            }),
           })),
         ),
       );
@@ -96,27 +103,23 @@ export function ParentZone({ store, profiles, smartRepliesAvailable, onProfilesC
         {section === 'overview' && (
           <ScrollView contentContainerStyle={{ gap: 16 }}>
             <Text style={ui.h1}>This week</Text>
+            <Panel title={`💡 Tip of the week · ${tip.title}`}>
+              <Text style={ui.body}>{tip.tryThisWeek.charAt(0).toUpperCase() + tip.tryThisWeek.slice(1)}</Text>
+              <View style={{ alignItems: 'flex-start' }}>
+                <SmallButton
+                  label="Read the card"
+                  kind="plain"
+                  onPress={() => {
+                    setGuideCard(guide.cards.indexOf(tip));
+                    setSection('guide');
+                  }}
+                />
+              </View>
+            </Panel>
             <View style={styles.grid}>
-              {summaries.map((s) => {
-                const avatar = avatarFor(s.profile.avatar);
-                return (
-                  <Panel key={s.profile.id} style={styles.cell}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                      <View style={[styles.avatar, { backgroundColor: avatar.color }]}>
-                        <Text style={{ fontSize: 28 }}>{avatar.emoji}</Text>
-                      </View>
-                      <Text style={ui.panelTitle}>
-                        {s.profile.name}, {s.profile.age}
-                      </Text>
-                    </View>
-                    <Text style={styles.big}>{s.turnsThisWeek}</Text>
-                    <Text style={ui.muted}>spoken turns in the last 7 days</Text>
-                    <Text style={ui.body}>
-                      {s.phrases} phrases practised · {s.coins} moedas
-                    </Text>
-                  </Panel>
-                );
-              })}
+              {summaries.map((s) => (
+                <ChildCard key={s.profile.id} profile={s.profile} coins={s.coins} dash={s.dash} />
+              ))}
             </View>
             <View style={styles.grid}>
               <Panel title="Missions to Dad" style={styles.cell}>
@@ -151,7 +154,7 @@ export function ParentZone({ store, profiles, smartRepliesAvailable, onProfilesC
         {section === 'missions' && <MissionsSection store={store} profiles={profiles} onChanged={changed} />}
         {section === 'recordings' && <RecordingsSection units={units} kids={kids} />}
         {section === 'children' && <ChildrenSection store={store} profiles={profiles} onChanged={changed} />}
-        {section === 'guide' && <GuideSection />}
+        {section === 'guide' && <GuideSection start={guideCard} />}
       </View>
     </View>
   );
@@ -171,8 +174,6 @@ const styles = StyleSheet.create({
   main: { flex: 1, padding: 28 },
   grid: { flexDirection: 'row', gap: 16 },
   cell: { flex: 1 },
-  avatar: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
-  big: { fontSize: 44, fontWeight: '900', color: colors.ink },
   track: { height: 10, borderRadius: 5, backgroundColor: '#E9E2D3', overflow: 'hidden' },
   fill: { height: 10, backgroundColor: colors.teal },
 });
