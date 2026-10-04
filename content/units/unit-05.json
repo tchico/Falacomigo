@@ -1,0 +1,245 @@
+{
+  "$schema": "../schema/unit.schema.json",
+  "id": "unit-05",
+  "unit": 5,
+  "title": "Como te sentes?",
+  "titleEn": "How do you feel?",
+  "stop": {"id": "coimbra", "name": "Coimbra", "nameEn": "Coimbra"},
+  "characters": {
+    "ines": {"name": "Doutora Inês", "role": "a médica", "roleEn": "the doctor", "emoji": "👩‍⚕️", "color": "#D6ECEA"},
+    "beatriz": {"name": "Beatriz", "role": "uma estudante de Coimbra", "roleEn": "a student in Coimbra", "emoji": "👩‍🎓", "color": "#E4DDF2"}
+  },
+  "phrases": [
+    {
+      "id": "P59",
+      "text": "Estou contente!",
+      "en": "I'm happy!",
+      "accept": ["estou contente", "estou muito contente", "estou tao contente", "hoje estou contente", "estou feliz", "estou muito feliz", "contente", "feliz"],
+      "keywords": ["contente", "feliz"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P59.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P60",
+      "text": "Estou triste.",
+      "en": "I'm sad.",
+      "accept": ["estou triste", "estou um bocadinho triste", "estou muito triste", "fico triste", "eu tambem estou triste", "triste"],
+      "keywords": ["triste"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P60.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P61",
+      "text": "Tenho sono.",
+      "en": "I'm sleepy.",
+      "accept": ["tenho sono", "tenho muito sono", "ja tenho sono", "estou com sono", "estou com muito sono", "sono"],
+      "keywords": ["sono"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P61.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P62",
+      "text": "O que tens?",
+      "en": "What's wrong?",
+      "accept": ["o que tens", "o que tens gui", "o que e que tens", "que tens", "o que e que se passa", "o que se passa", "estas bem"],
+      "keywords": ["tens", "passa"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P62.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P63",
+      "text": "Dói-me a cabeça.",
+      "en": "My head hurts.",
+      "accept": ["doi me a cabeca", "doi me muito a cabeca", "doi a cabeca", "tenho dores de cabeca", "a cabeca", "cabeca"],
+      "keywords": ["cabeca", "doi"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P63.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P64",
+      "text": "Dói-me a barriga.",
+      "en": "My tummy hurts.",
+      "accept": ["doi me a barriga", "doi me muito a barriga", "doi a barriga", "tenho dores de barriga", "a barriga", "barriga"],
+      "keywords": ["barriga", "doi"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P64.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P65",
+      "text": "Dói-me o pé.",
+      "en": "My foot hurts.",
+      "accept": ["doi me o pe", "doi me muito o pe", "doi o pe", "o pe", "pe"],
+      "keywords": ["pe", "doi"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P65.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P66",
+      "text": "Coitadinho!",
+      "en": "Poor thing!",
+      "accept": ["coitadinho", "coitadinho do gui", "ai coitadinho", "oh coitadinho", "coitado", "coitadinha"],
+      "keywords": ["coitadinho", "coitado"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P66.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P67",
+      "text": "Vamos ao médico!",
+      "en": "Let's go to the doctor!",
+      "accept": ["vamos ao medico", "vamos ao medico gui", "vamos a medica", "vamos a doutora", "temos de ir ao medico", "ao medico", "medico", "medica"],
+      "keywords": ["medico", "medica", "doutora"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P67.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P68",
+      "text": "Estás melhor?",
+      "en": "Are you feeling better?",
+      "accept": ["estas melhor", "ja estas melhor", "estas melhor gui", "estas mais ou menos", "ja estas bem", "estas bem"],
+      "keywords": ["melhor"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P68.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P69",
+      "text": "Não tenhas medo!",
+      "en": "Don't be scared!",
+      "accept": ["nao tenhas medo", "nao tenhas medo gui", "nao tens de ter medo", "nao faz mal", "calma", "calma gui", "eu vou contigo"],
+      "keywords": ["medo", "calma"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P69.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P70",
+      "text": "Melhoras!",
+      "en": "Get well soon!",
+      "accept": ["melhoras", "as melhoras", "boas melhoras", "melhoras gui", "as melhoras gui"],
+      "keywords": ["melhoras"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P70.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P71",
+      "text": "Toma um abraço!",
+      "en": "Here's a hug!",
+      "accept": ["toma um abraco", "toma um abraco gui", "um abraco", "um abracinho", "toma um abracinho", "da ca um abraco", "abraco"],
+      "keywords": ["abraco", "abracinho"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P71.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P72",
+      "text": "O Gui está doente.",
+      "en": "Gui is ill.",
+      "accept": ["o gui esta doente", "o gui esta doente doutora", "ele esta doente", "o gui esta mal", "esta doente", "doente"],
+      "keywords": ["doente", "gui"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P72.m4a", "ttsFallback": true}
+    }
+  ],
+  "vocab": [
+    {"pt": "a cabeça", "en": "head"},
+    {"pt": "a barriga", "en": "tummy"},
+    {"pt": "o pé", "en": "foot"},
+    {"pt": "a mão", "en": "hand"},
+    {"pt": "o braço", "en": "arm"},
+    {"pt": "a perna", "en": "leg"},
+    {"pt": "o dente", "en": "tooth"},
+    {"pt": "o nariz", "en": "nose"},
+    {"pt": "a boca", "en": "mouth"},
+    {"pt": "o médico", "en": "doctor"},
+    {"pt": "contente", "en": "happy"},
+    {"pt": "triste", "en": "sad"},
+    {"pt": "doente", "en": "ill"},
+    {"pt": "o medo", "en": "fear"},
+    {"pt": "o abraço", "en": "hug"}
+  ],
+  "warmup": ["P59", "P60", "P63", "P64", "P66"],
+  "scenes": [
+    {
+      "id": "S5.1",
+      "title": "Ai, que dor!",
+      "titleEn": "Ouch, it hurts!",
+      "setting": "coimbra-river",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "gui", "text": "Chegámos a Coimbra! Olha a torre da universidade lá em cima!", "en": "We've reached Coimbra! Look at the university tower up there!"}, "expect": null},
+        {"id": "b2", "say": {"speaker": "gui", "text": "Ai… ai… não me sinto nada bem…", "en": "Oh… oh… I don't feel well at all…"}, "expect": null},
+        {"id": "b3", "ages": [8], "say": {"speaker": "gui", "text": "Ai, ai, ai…", "spoken": "Ai, ai, ai.", "en": "Ow, ow, ow…"}, "model": "O que tens?", "expect": "P62", "recast": "Dói-me a barriga! Ai!"},
+        {"id": "b3y", "ages": [6], "say": {"speaker": "gui", "text": "Ai… dói-me a barriga!", "en": "Ow… my tummy hurts!"}, "expect": null, "image": "body:tummy"},
+        {"id": "b4", "say": {"speaker": "gui", "text": "Ai, a minha barriga… Ai, ai…", "en": "Oh, my tummy… Ow, ow…"}, "model": "Coitadinho!", "expect": "P66", "recast": "Obrigado… Ai, ai…"},
+        {"id": "b5", "say": {"speaker": "gui", "text": "Estou doente. O que fazemos?", "en": "I'm ill. What shall we do?"}, "model": "Vamos ao médico!", "expect": "P67", "recast": "Ao médico? Hmm… está bem."},
+        {"id": "b6", "ages": [8], "say": {"speaker": "gui", "text": "Mas… tenho um bocadinho de medo do médico…", "en": "But… I'm a little bit scared of the doctor…"}, "expect": "P69", "recast": "Está bem. Se tu vens comigo, não tenho medo."},
+        {"id": "b7", "say": {"speaker": "gui", "text": "Ai… preciso de um abraço…", "en": "Oh… I need a hug…"}, "model": "Toma um abraço!", "expect": "P71", "recast": "Que abraço tão bom! Já me sinto um bocadinho melhor."},
+        {"id": "b8", "say": {"speaker": "gui", "text": "Olha, ali! Um centro de saúde! Vamos!", "en": "Look, over there! A health centre! Let's go!"}, "expect": null, "cliffhanger": true}
+      ]
+    },
+    {
+      "id": "S5.2",
+      "title": "Na médica",
+      "titleEn": "At the doctor's",
+      "setting": "clinic",
+      "beats": [
+        {"id": "b1", "ages": [8], "say": {"speaker": "ines", "text": "Bom dia! Eu sou a Doutora Inês. Então, quem está doente?", "en": "Good morning! I'm Doctor Inês. So, who's ill?"}, "expect": "P72", "recast": "O Gui? Abre o bico, Gui. Diz «aaa»!"},
+        {"id": "b1y", "ages": [6], "say": {"speaker": "ines", "text": "Bom dia! Eu sou a Doutora Inês. Ah, o Gui está doente! Abre o bico, Gui!", "en": "Good morning! I'm Doctor Inês. Ah, Gui is ill! Open your beak, Gui!"}, "expect": null},
+        {"id": "b2", "say": {"speaker": "ines", "text": "Hmm… comeste muitos gelados no Porto, Gui? Não é nada de grave.", "en": "Hmm… did you eat lots of ice creams in Porto, Gui? It's nothing serious."}, "expect": null},
+        {"id": "b3", "say": {"speaker": "ines", "text": "E tu? Vamos fazer de conta. Olha o desenho: o que te dói?", "en": "And you? Let's pretend. Look at the picture: what hurts?"}, "expect": "P63", "image": "body:head", "recast": "A cabeça? Um beijinho na cabeça e já passa!"},
+        {"id": "b4", "say": {"speaker": "ines", "text": "E agora? O que te dói?", "en": "And now? What hurts?"}, "expect": "P64", "image": "body:tummy", "recast": "A barriga? Também comeste muitos gelados!"},
+        {"id": "b5", "ages": [8], "say": {"speaker": "ines", "text": "E agora?", "en": "And now?"}, "expect": "P65", "image": "body:foot", "recast": "O pé? Foi da corrida na praia!"},
+        {"id": "b6", "say": {"speaker": "ines", "text": "Gui, toma este xarope. Uma colher… pronto!", "en": "Gui, take this syrup. One spoonful… there!"}, "expect": null, "image": "body:medicine"},
+        {"id": "b7", "ages": [8], "say": {"speaker": "gui", "text": "Hmm! Já me sinto diferente…", "en": "Hmm! I feel different already…"}, "model": "Estás melhor?", "expect": "P68", "recast": "Estou! Muito melhor, obrigado!"},
+        {"id": "b8", "say": {"speaker": "gui", "text": "A doutora diz que eu tenho de descansar…", "en": "The doctor says I have to rest…"}, "model": "Melhoras!", "expect": "P70", "recast": "Obrigado! Vou dormir um bocadinho."},
+        {"id": "b9", "say": {"speaker": "gui", "text": "Zzz… Zzz… Hã? Que música é esta? Uma guitarra?", "spoken": "Hã? Que música é esta? Uma guitarra?", "en": "Zzz… Zzz… Huh? What's that music? A guitar?"}, "expect": null, "cliffhanger": true}
+      ]
+    },
+    {
+      "id": "S5.3",
+      "title": "Uma canção em Coimbra",
+      "titleEn": "A song in Coimbra",
+      "setting": "coimbra-evening",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "beatriz", "text": "Boa noite! Sou a Beatriz, estudante aqui em Coimbra. Então, como estás?", "en": "Good evening! I'm Beatriz, a student here in Coimbra. So, how are you?"}, "model": "Estou contente!", "expect": "P59", "answers": [{"accept": ["estou triste", "triste", "estou um bocadinho triste"], "recast": "Estás triste? Então vou tocar uma canção para ti."}, {"accept": ["tenho sono", "estou com sono", "sono"], "recast": "Tens sono? Uma canção para adormecer, então."}], "recast": "Estás contente? Que bom!"},
+        {"id": "b2", "say": {"speaker": "beatriz", "text": "Esta canção é sobre a saudade. É um bocadinho triste. E tu, como te sentes?", "en": "This song is about missing someone. It's a little sad. How do you feel?"}, "model": "Estou triste.", "expect": "P60", "image": "feeling:sad", "answers": [{"accept": ["estou contente", "contente", "estou feliz", "feliz"], "recast": "Contente? Ainda bem! Então toco uma mais alegre."}], "recast": "Pois… eu também fico triste com esta canção."},
+        {"id": "b3", "say": {"speaker": "gui", "text": "Ai, que canção bonita… Tenho saudades da minha família em Lisboa.", "en": "Oh, what a beautiful song… I miss my family in Lisbon."}, "expect": null, "image": "feeling:guitar"},
+        {"id": "b4", "say": {"speaker": "gui", "text": "Snif… snif…", "spoken": "Ai, ai.", "en": "Sniff… sniff…"}, "model": "Toma um abraço!", "expect": "P71", "recast": "Obrigado! Contigo já não estou triste."},
+        {"id": "b5", "say": {"speaker": "beatriz", "text": "Uaaah… Já é tarde. E tu? Como estás?", "spoken": "Ah… Já é tarde. E tu? Como estás?", "en": "Yawn… It's late. And you? How are you?"}, "model": "Tenho sono.", "expect": "P61", "image": "feeling:sleepy", "answers": [{"accept": ["nao tenho sono", "ainda nao tenho sono", "ainda nao", "estou bem"], "recast": "Ainda não tens sono? Então mais uma canção!"}], "recast": "Eu também tenho sono! Boa noite!"},
+        {"id": "b6", "say": {"speaker": "gui", "text": "Boa noite, Coimbra! Amanhã apanhamos o comboio para sul!", "en": "Good night, Coimbra! Tomorrow we catch the train south!"}, "expect": null, "cliffhanger": true}
+      ]
+    }
+  ],
+  "missions": [
+    {"id": "M1", "day": 1, "card": {"text": "Diz ao pai como te sentes", "en": "Tell Dad how you feel", "image": "m1-feel.png"}, "say": {"6": "Pai, estou contente!", "8": "Pai, hoje estou contente! E tu?"}, "targets": {"6": ["P59"], "8": ["P59"]}, "when": "Any time, good or bad days"},
+    {"id": "M2", "day": 2, "card": {"text": "Quando te doer alguma coisa, diz ao pai em português", "en": "Next time something hurts, tell Dad in Portuguese", "image": "m2-hurt.png"}, "say": {"6": "Pai, dói-me a barriga!", "8": "Pai, dói-me a cabeça!"}, "targets": {"6": ["P64"], "8": ["P63"]}, "when": "Whenever it happens (pretending counts too)"},
+    {"id": "M3", "day": 3, "card": {"text": "Diz ao pai quando tiveres sono", "en": "Tell Dad when you're sleepy", "image": "m3-sleepy.png"}, "say": {"6": "Pai, tenho sono!", "8": "Pai, tenho sono. Boa noite!"}, "targets": {"6": ["P61"], "8": ["P61"]}, "when": "At bedtime"},
+    {"id": "M4", "day": 4, "card": {"text": "Dá um abraço ao pai", "en": "Give Dad a hug", "image": "m4-hug.png"}, "say": {"6": "Toma um abraço!", "8": "Pai, toma um abraço!"}, "targets": {"6": ["P71"], "8": ["P71"]}, "when": "Any time"},
+    {"id": "M5", "day": 5, "card": {"text": "Faz de médico! O pai é o doente", "en": "Play doctor! Dad is the patient", "image": "m5-doctor.png"}, "say": {"6": "Coitadinho! Vamos ao médico!", "8": "O que tens, pai? Melhoras!"}, "targets": {"6": ["P66", "P67"], "8": ["P62", "P70"]}, "when": "When Dad pretends to be ill"},
+    {"id": "M6", "day": 6, "siblings": true, "card": {"text": "Juntos! Brinquem aos médicos", "en": "Together! Play doctors", "image": "m6-doctors.png"}, "say": {"6": "Dói-me a barriga!", "8": "O que tens? Não tenhas medo!"}, "targets": {"6": ["P64"], "8": ["P62", "P69"]}, "when": "When both kids are around"},
+    {"id": "M7", "day": 7, "bonus": true, "card": {"text": "Diz à {granny} como estás", "en": "Tell Granny how you are", "image": "m7-call.png"}, "say": {"6": "{Granny}, estou contente!", "8": "Olá, {granny}! Estou contente! E tu, estás melhor?"}, "targets": {"6": ["P59"], "8": ["P59", "P68"]}, "when": "Next call with Granny"}
+  ],
+  "schedule": {
+    "sessionsPerWeek": 2,
+    "sessions": [
+      {"session": 1, "scene": "S5.1"},
+      {"session": 2, "warmup": true, "review": true},
+      {"session": 3, "scene": "S5.2"},
+      {"session": 4, "warmup": true, "review": true},
+      {"session": 5, "scene": "S5.3"},
+      {"session": 6, "warmup": true, "review": true},
+      {"session": 7, "review": true, "replay": "S5.1"}
+    ],
+    "missionsPerDay": 1
+  }
+}

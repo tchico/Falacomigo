@@ -6,6 +6,7 @@ const EMOJI: Record<string, string> = {
   ball: '⚽', bucket: '🪣', icecream: '🍦',
   map: '🗺️', chair: '🪑', boat: '⛵', basket: '🧺', door: '🚪', bridge: '🌉',
   left: '⬅️', right: '➡️', straight: '⬆️',
+  head: '🤕', tummy: '🤢', foot: '🦶', medicine: '🥄', happy: '😊', sad: '😢', sleepy: '😴', guitar: '🎸',
   dad: '👨', mum: '👩', sibling: '🧒', child: '🙂',
 };
 

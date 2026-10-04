@@ -12,11 +12,13 @@ test('scenery: settings in the content map to a place, its props and the time of
   assert.deepEqual({ ...placeFor('beach-evening'), props: undefined }, { kind: 'beach', evening: true, props: undefined });
   assert.equal(placeFor('porto-street-evening').kind, 'porto');
   assert.ok(placeFor('porto-river').props.has('river'));
+  assert.equal(placeFor('coimbra-evening').kind, 'coimbra');
+  assert.equal(placeFor('clinic').kind, 'clinic');
 });
 
 test('scenery: every scene in the content has a setting the app can draw', () => {
   for (const u of units) for (const s of u.scenes) {
     assert.ok(s.setting, `${u.id} ${s.id} has no setting`);
-    assert.ok(['garden', 'kitchen', 'ferry', 'beach', 'porto'].includes(placeFor(s.setting).kind));
+    assert.ok(['garden', 'kitchen', 'ferry', 'beach', 'porto', 'coimbra', 'clinic'].includes(placeFor(s.setting).kind));
   }
 });
