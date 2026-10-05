@@ -20,6 +20,8 @@ export interface RecognitionResult {
   offline?: boolean;
   /** The child's turn as a 16 kHz WAV, only when the request asked to keep it. */
   audio?: Uint8Array;
+  /** How long the answer took to come back after the child stopped talking, in ms, when it was sent (NFR-01). */
+  waitMs?: number;
 }
 
 export interface Listening {
@@ -27,6 +29,8 @@ export interface Listening {
   result: Promise<RecognitionResult>;
   /** The child let go of the button. */
   release(): void;
+  /** Resolves the moment listening stops, before the answer is back, so the screen can show it's thinking (NFR-12). */
+  ended: Promise<void>;
 }
 
 export interface SpeechRecognizer {

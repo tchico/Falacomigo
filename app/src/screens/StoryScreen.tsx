@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Tap } from '../ui/Tap';
+import { Lean } from '../ui/Thinking';
 import { storyGame } from '../content';
 import type { Story } from '../content/types';
 import { fillGuess } from '../engine/guess';
@@ -181,18 +183,20 @@ export function StoryScreen({ store, pair, recognizer, onExit }: Props) {
           <View style={styles.bubble}>
             <Text style={styles.line}>{line}</Text>
           </View>
-          <Gui size={180} talking={talking} happy={phase === 'end'} />
+          <Lean on={mic === 'thinking'}>
+            <Gui size={180} talking={talking} happy={phase === 'end'} />
+          </Lean>
         </View>
 
         <View style={styles.play}>
           {phase === 'pick' && (
             <View style={styles.picks}>
               {storyGame.stories.map((s) => (
-                <Pressable key={s.id} accessibilityRole="button" accessibilityLabel={s.titleEn ?? s.title} onPress={() => void begin(s)} style={({ pressed }) => [styles.pickCard, pressed && { transform: [{ translateY: 4 }] }]}>
+                <Tap key={s.id} accessibilityRole="button" accessibilityLabel={s.titleEn ?? s.title} onPress={() => void begin(s)} style={({ pressed }) => [styles.pickCard, pressed && { transform: [{ translateY: 4 }] }]}>
                   <Text style={styles.pickEmoji}>{s.emoji}</Text>
                   <Text style={styles.pickTitle}>{s.title}</Text>
                   {s.titleEn ? <Text style={styles.pickEn}>{s.titleEn}</Text> : null}
-                </Pressable>
+                </Tap>
               ))}
             </View>
           )}
@@ -202,13 +206,13 @@ export function StoryScreen({ store, pair, recognizer, onExit }: Props) {
               {lines.map((l, i) => {
                 const by = kidFor(l.by);
                 return (
-                  <Pressable key={i} accessibilityRole="button" accessibilityLabel="Hear this sentence" disabled={!l.text} onPress={() => void say(l.text)} style={styles.sentence}>
+                  <Tap key={i} accessibilityRole="button" accessibilityLabel="Hear this sentence" disabled={!l.text} onPress={() => void say(l.text)} style={styles.sentence}>
                     {by ? <Kid p={by} size={34} /> : <Text style={styles.sentenceMark}>🐦</Text>}
                     <Text style={styles.sentenceText}>
                       {l.emoji ? `${l.emoji} ` : ''}
                       {l.text || '🎤 …'}
                     </Text>
-                  </Pressable>
+                  </Tap>
                 );
               })}
               {phase === 'end' ? <Text style={styles.fim}>{L.end}</Text> : null}
@@ -218,7 +222,7 @@ export function StoryScreen({ store, pair, recognizer, onExit }: Props) {
           {current && (
             <View style={styles.options}>
               {current.options.map((o) => (
-                <Pressable
+                <Tap
                   key={o.text}
                   accessibilityRole="button"
                   accessibilityLabel={`Hear: ${o.en}`}
@@ -232,7 +236,7 @@ export function StoryScreen({ store, pair, recognizer, onExit }: Props) {
                   <Text style={styles.optionEmoji}>{o.emoji}</Text>
                   <Text style={styles.optionText}>{o.text}</Text>
                   {teller.age === 8 ? <Text style={styles.optionEn}>{o.en}</Text> : null}
-                </Pressable>
+                </Tap>
               ))}
             </View>
           )}

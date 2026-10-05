@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Tap } from '../ui/Tap';
+import { Lean } from '../ui/Thinking';
 import { shop } from '../content';
 import type { ChildProfile, ShopItem } from '../content/types';
 import { matchAttempt } from '../engine/match';
@@ -138,7 +140,9 @@ export function ShopScreen({ store, child, coins, outfit, recognizer, onCoins, o
           <View style={styles.bubble}>
             <Text style={styles.line}>{line}</Text>
           </View>
-          <Gui size={230} happy={happy} talking={talking} wear={wearFor(outfit, shop.items)} />
+          <Lean on={mic === 'thinking'}>
+            <Gui size={230} happy={happy} talking={talking} wear={wearFor(outfit, shop.items)} />
+          </Lean>
         </View>
 
         <ScrollView contentContainerStyle={styles.shelf}>
@@ -146,7 +150,7 @@ export function ShopScreen({ store, child, coins, outfit, recognizer, onCoins, o
             const has = owned.includes(item.id);
             const wearing = outfit[item.slot] === item.id;
             return (
-              <Pressable
+              <Tap
                 key={item.id}
                 accessibilityRole="button"
                 accessibilityLabel={`${item.en}, ${has ? (wearing ? 'wearing' : 'owned') : `${item.price} coins`}`}
@@ -160,7 +164,7 @@ export function ShopScreen({ store, child, coins, outfit, recognizer, onCoins, o
                 ) : (
                   <Text style={[styles.price, coinsShort(coins, item) > 0 && { opacity: 0.5 }]}>🪙 {item.price}</Text>
                 )}
-              </Pressable>
+              </Tap>
             );
           })}
         </ScrollView>

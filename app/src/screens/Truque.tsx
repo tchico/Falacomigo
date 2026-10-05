@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { Tap } from '../ui/Tap';
 import { guiLines } from '../content';
 import { sayAsGui, saySlowly, stop } from '../audio/voice';
 import type { WordHelp } from '../engine/pronounce';
@@ -72,9 +73,9 @@ export function Truque({ help, wear, onDone }: { help: WordHelp; wear?: Wear; on
           </View>
         ) : null}
         <View style={styles.buttons}>
-          <Pressable accessibilityRole="button" accessibilityLabel="Again, slowly" onPress={() => void show(false)} style={styles.slow}>
+          <Tap accessibilityRole="button" accessibilityLabel="Again, slowly" onPress={() => void show(false)} style={styles.slow}>
             <Text style={styles.slowText}>🐢</Text>
-          </Pressable>
+          </Tap>
           <BigButton
             label={guiLines.truque.go}
             variant="blue"

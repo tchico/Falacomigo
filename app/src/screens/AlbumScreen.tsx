@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Tap } from '../ui/Tap';
 import { guiLines } from '../content';
 import { sayAsGui } from '../audio/voice';
 import { focusStop, postcardCount, type AlbumStop } from '../engine/album';
@@ -32,7 +33,7 @@ export function AlbumScreen({ album, onExit }: { album: AlbumStop[]; onExit: () 
       <View style={styles.map}>
         <View style={styles.road} />
         {album.map((s) => (
-          <Pressable
+          <Tap
             key={s.stop.id}
             accessibilityRole="button"
             accessibilityLabel={`${s.stop.nameEn ?? s.stop.name}: ${s.state}`}
@@ -53,7 +54,7 @@ export function AlbumScreen({ album, onExit }: { album: AlbumStop[]; onExit: () 
             <Text style={[styles.stopName, s.state === 'soon' && { color: colors.inkSoft }]} numberOfLines={2}>
               {s.number}. {s.stop.name}
             </Text>
-          </Pressable>
+          </Tap>
         ))}
       </View>
 

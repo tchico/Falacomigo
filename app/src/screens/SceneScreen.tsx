@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Easing, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Animated, Easing, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { ChildProfile, Unit } from '../content/types';
 import { getUnit, guiLines, sounds, units } from '../content';
 import { troubleWord, type WordHelp } from '../engine/pronounce';
@@ -23,6 +23,9 @@ import type { Wear } from '../engine/shop';
 import { StubRecognizer } from '../speech/stub';
 import { BigButton } from '../ui/BigButton';
 import { Gui } from '../ui/Gui';
+import { MicButton } from '../ui/MicButton';
+import { Tap } from '../ui/Tap';
+import { Lean } from '../ui/Thinking';
 import { BackButton } from '../ui/BackButton';
 import { Character } from '../ui/Character';
 import { placeFor, Scenery, Trampoline } from '../ui/Scenery';
@@ -188,6 +191,8 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
     const l = recognizer.listen({ locale: 'pt-PT', expectedText: beat.modelText, maxDurationMs: MAX_LISTEN_MS, keepAudio: settings?.listenBack }, setLevel);
     listening.current = l;
     setMic('listening');
+    // The character leans in from the moment the child stops, while the answer is on its way (NFR-12).
+    void l.ended.then(() => setMic((m) => (m === 'listening' ? 'thinking' : m)));
     let heard: RecognitionResult;
     try {
       heard = await l.result;
@@ -279,7 +284,11 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
     await stop();
     const l = recognizer.listen({ locale: 'pt-PT', expectedText: beat.modelText, maxDurationMs: MAX_LISTEN_MS });
     l.release();
-    await onHeard(await l.result);
+    // Thinking while the stub "sends", as with a real microphone.
+    setMic('thinking');
+    const heard = await l.result;
+    setMic('idle');
+    await onHeard(heard);
   };
 
   return (
@@ -302,16 +311,20 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
 
       <View style={styles.stage}>
         {/* Hidden parent override (FR-12): long-press Gui. */}
-        <Pressable onLongPress={override} delayLongPress={1200} accessibilityLabel={character?.name ?? 'Gui'}>
+        <Tap onLongPress={override} delayLongPress={1200} accessibilityLabel={character?.name ?? 'Gui'}>
           {character ? (
-            <Character info={character} talking={talker === beat.speaker} />
+            <Lean on={mic === 'thinking'}>
+              <Character info={character} talking={talker === beat.speaker} />
+            </Lean>
           ) : (
             <View style={{ alignItems: 'center' }}>
-              <Gui size={240} happy={turn.done} talking={talker === 'gui'} wear={wear} />
+              <Lean on={mic === 'thinking'}>
+                <Gui size={240} happy={turn.done} talking={talker === 'gui'} wear={wear} />
+              </Lean>
               {place.props.has('trampoline') ? <View style={{ marginTop: -36 }}><Trampoline width={260} /></View> : null}
             </View>
           )}
-        </Pressable>
+        </Tap>
         <Animated.View style={[styles.bubble, { opacity: lineIn, transform: [{ translateY: lineIn.interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) }] }]}>
           <Text style={styles.line}>{turn.done && feedback ? feedback : beat.line}</Text>
           {(settings ? settings.subtitles : child.age === 8) && beat.lineEn && !turn.done ? <Text style={styles.lineEn}>{beat.lineEn}</Text> : null}
@@ -350,35 +363,20 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
               <Text style={styles.hintLabel}>DIZ ASSIM</Text>
               <Text style={styles.hintText}>{hintFor(beat.modelText ?? '', rung, turn.playModel)}</Text>
             </View>
-            <Pressable accessibilityRole="button" accessibilityLabel="How do you say it?" onPress={() => { void stop(); setAsking({ word: null }); }} style={styles.ask} disabled={mic !== 'idle'}>
+            <Tap accessibilityRole="button" accessibilityLabel="How do you say it?" onPress={() => { void stop(); setAsking({ word: null }); }} style={styles.ask} disabled={mic !== 'idle'}>
               <Text style={styles.askText}>{guiLines.comoSeDiz.button}</Text>
-            </Pressable>
+            </Tap>
             {rung <= 3 || turn.playModel ? (
               <>
-                <Pressable accessibilityRole="button" accessibilityLabel="Listen" onPress={() => void playModel()} style={styles.listen}>
+                <Tap accessibilityRole="button" accessibilityLabel="Listen" onPress={() => void playModel()} style={styles.listen}>
                   <Text style={styles.listenText}>🔊</Text>
-                </Pressable>
-                <Pressable accessibilityRole="button" accessibilityLabel="Listen slowly" onPress={() => void saySlowly(beat.modelText ?? '')} style={styles.listen}>
+                </Tap>
+                <Tap accessibilityRole="button" accessibilityLabel="Listen slowly" onPress={() => void saySlowly(beat.modelText ?? '')} style={styles.listen}>
                   <Text style={styles.listenText}>🐢</Text>
-                </Pressable>
+                </Tap>
               </>
             ) : null}
-            <View style={styles.micWrap}>
-              {/* A calm ring that grows with the child's voice while listening: no flashing (NFR-09). */}
-              {mic === 'listening' ? <View style={[styles.micRing, { transform: [{ scale: 1 + Math.min(0.35, level * 4) }] }]} /> : null}
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Hold to talk"
-                accessibilityState={{ busy: mic !== 'idle' }}
-                disabled={isStub || mic === 'thinking'}
-                onPressIn={() => void startListening()}
-                onPressOut={releaseMic}
-                style={[styles.mic, mic === 'listening' && { backgroundColor: colors.terracottaLight }]}
-              >
-                <Text style={styles.micIcon}>🎤</Text>
-                <Text style={styles.micText}>{mic === 'listening' ? 'A ouvir…' : mic === 'thinking' ? '…' : 'Fala!'}</Text>
-              </Pressable>
-            </View>
+            <MicButton mic={mic} level={level} disabled={isStub} onPressIn={() => void startListening()} onPressOut={releaseMic} />
           </>
         ) : (
           <BigButton label={index + 1 >= beats.length ? 'Fim! ★' : 'Continuar ▶'} variant="blue" onPress={advance} />
@@ -469,11 +467,6 @@ const styles = StyleSheet.create({
   askText: { fontSize: 18, fontWeight: '900', color: colors.blueDark, textAlign: 'center' },
   listen: { width: 84, height: 84, borderRadius: 42, backgroundColor: colors.white, borderWidth: 4, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   listenText: { fontSize: 36 },
-  mic: { width: 130, height: 130, borderRadius: 65, backgroundColor: colors.terracotta, borderWidth: 5, borderColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
-  micWrap: { width: 150, height: 150, alignItems: 'center', justifyContent: 'center' },
-  micRing: { position: 'absolute', width: 150, height: 150, borderRadius: 75, backgroundColor: colors.terracottaLight, opacity: 0.35 },
-  micIcon: { fontSize: 34 },
-  micText: { color: colors.white, fontSize: 22, fontWeight: '900' },
   dev: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, backgroundColor: '#FFF3CD', borderTopWidth: 2, borderColor: colors.ink },
   devLabel: { fontSize: 12, fontWeight: '800', color: colors.ink },
   devInput: { flex: 1, minHeight: 48, borderWidth: 2, borderColor: colors.ink, borderRadius: 10, paddingHorizontal: 12, backgroundColor: colors.white },

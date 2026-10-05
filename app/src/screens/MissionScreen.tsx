@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { Tap } from '../ui/Tap';
 import type { ChildProfile, Mission } from '../content/types';
 import { fill } from '../engine/template';
 import { coinsForStars } from '../engine/rewards';
@@ -71,9 +72,9 @@ export function MissionScreen({ unitId, mission, child, onApproved, onLater, wea
           </View>
           <Text style={styles.en}>Go and find Dad and say:</Text>
           <View style={styles.say}>
-            <Pressable accessibilityRole="button" accessibilityLabel="Play" onPress={() => void playPhrase()} style={styles.play}>
+            <Tap accessibilityRole="button" accessibilityLabel="Play" onPress={() => void playPhrase()} style={styles.play}>
               <Text style={styles.playText}>▶</Text>
-            </Pressable>
+            </Tap>
             <Text style={styles.sayText}>{phrase}</Text>
           </View>
           {stars === 0 ? (
