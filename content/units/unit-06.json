@@ -1,0 +1,247 @@
+{
+  "$schema": "../schema/unit.schema.json",
+  "id": "unit-06",
+  "unit": 6,
+  "title": "O meu dia",
+  "titleEn": "My day",
+  "stop": {"id": "train", "name": "O comboio", "nameEn": "A train south"},
+  "characters": {
+    "rui": {"name": "Senhor Rui", "role": "o revisor", "roleEn": "the ticket inspector", "emoji": "👨‍✈️", "color": "#DCE6F2"},
+    "tiago": {"name": "Tiago", "role": "um menino no comboio", "roleEn": "a boy on the train", "emoji": "👦", "color": "#F6E3C6"}
+  },
+  "phrases": [
+    {
+      "id": "P73",
+      "text": "Aqui está o bilhete.",
+      "en": "Here's the ticket.",
+      "accept": ["aqui esta o bilhete", "aqui esta o meu bilhete", "aqui esta", "o bilhete", "toma o bilhete", "esta aqui o bilhete", "bilhete"],
+      "keywords": ["bilhete"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P73.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P74",
+      "text": "Eu fui à praia.",
+      "en": "I went to the beach.",
+      "accept": ["eu fui a praia", "fui a praia", "hoje eu fui a praia", "ontem eu fui a praia", "eu fui a praia com o gui", "a praia", "praia"],
+      "keywords": ["praia", "fui"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P74.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P75",
+      "text": "Eu comi um gelado.",
+      "en": "I ate an ice cream.",
+      "accept": ["eu comi um gelado", "comi um gelado", "eu comi gelado", "comi gelados", "eu comi um gelado de morango", "um gelado", "gelado"],
+      "keywords": ["gelado", "comi"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P75.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P76",
+      "text": "Eu vi um barco.",
+      "en": "I saw a boat.",
+      "accept": ["eu vi um barco", "vi um barco", "eu vi um barco grande", "vi barcos", "um barco", "barco"],
+      "keywords": ["barco", "vi"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P76.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P77",
+      "text": "Eu brinquei com o Gui.",
+      "en": "I played with Gui.",
+      "accept": ["eu brinquei com o gui", "brinquei com o gui", "eu brinquei com a gaivota", "brinquei com o gui na praia", "eu brinquei", "brinquei"],
+      "keywords": ["brinquei"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P77.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P78",
+      "text": "Foi divertido!",
+      "en": "It was fun!",
+      "accept": ["foi divertido", "foi muito divertido", "foi tao divertido", "foi fixe", "foi bom", "divertido"],
+      "keywords": ["divertido", "fixe"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P78.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P79",
+      "text": "O Gui esteve doente.",
+      "en": "Gui was ill.",
+      "accept": ["o gui esteve doente", "o gui esteve muito doente", "ele esteve doente", "esteve doente", "o gui ficou doente", "doente"],
+      "keywords": ["doente", "esteve"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P79.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P80",
+      "text": "Eu dormi bem.",
+      "en": "I slept well.",
+      "accept": ["eu dormi bem", "dormi bem", "eu dormi muito bem", "dormi muito bem", "dormi"],
+      "keywords": ["dormi"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P80.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P81",
+      "text": "Gostei muito!",
+      "en": "I liked it a lot!",
+      "accept": ["gostei muito", "gostei", "eu gostei muito", "gostei imenso", "adorei", "gostei muito muito"],
+      "keywords": ["gostei", "adorei"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P81.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P82",
+      "text": "E tu, o que fizeste?",
+      "en": "And you, what did you do?",
+      "accept": ["e tu o que fizeste", "o que fizeste", "e tu o que fizeste hoje", "o que e que fizeste", "e o senhor o que fez", "o que fez"],
+      "keywords": ["fizeste", "fez"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P82.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P83",
+      "text": "Eu nadei no mar.",
+      "en": "I swam in the sea.",
+      "accept": ["eu nadei no mar", "nadei no mar", "eu nadei", "nadei", "eu nadei na praia", "no mar"],
+      "keywords": ["nadei"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P83.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P84",
+      "text": "Quanto falta?",
+      "en": "How much longer?",
+      "accept": ["quanto falta", "quanto tempo falta", "ainda falta muito", "falta muito", "quanto e que falta"],
+      "keywords": ["falta"],
+      "ages": [8],
+      "startRung": 1,
+      "audio": {"dad": "P84.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P85",
+      "text": "Já chegámos?",
+      "en": "Are we there yet?",
+      "accept": ["ja chegamos", "ainda nao chegamos", "ja chegamos senhor rui", "chegamos", "ja esta"],
+      "keywords": ["chegamos"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P85.m4a", "ttsFallback": true}
+    },
+    {
+      "id": "P86",
+      "text": "Olha pela janela!",
+      "en": "Look out of the window!",
+      "accept": ["olha pela janela", "olha a janela", "olha la fora", "olha", "olha gui"],
+      "keywords": ["janela", "olha"],
+      "ages": [6, 8],
+      "startRung": 2,
+      "audio": {"dad": "P86.m4a", "ttsFallback": true}
+    }
+  ],
+  "vocab": [
+    {"pt": "o comboio", "en": "train"},
+    {"pt": "o bilhete", "en": "ticket"},
+    {"pt": "a janela", "en": "window"},
+    {"pt": "a estação", "en": "station"},
+    {"pt": "o revisor", "en": "ticket inspector"},
+    {"pt": "a viagem", "en": "trip"},
+    {"pt": "hoje", "en": "today"},
+    {"pt": "ontem", "en": "yesterday"},
+    {"pt": "o mar", "en": "sea"},
+    {"pt": "o barco", "en": "boat"},
+    {"pt": "a vaca", "en": "cow"},
+    {"pt": "o cavalo", "en": "horse"}
+  ],
+  "warmup": ["P73", "P75", "P76", "P78", "P85"],
+  "scenes": [
+    {
+      "id": "S6.1",
+      "title": "Na estação",
+      "titleEn": "At the station",
+      "setting": "train-station",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "gui", "text": "Olha, a estação! E ali está o comboio para sul!", "en": "Look, the station! And there's the train south!"}, "expect": null, "image": "trip:train"},
+        {"id": "b2", "say": {"speaker": "rui", "text": "Bom dia, meninos! Bilhetes, por favor!", "en": "Good morning, children! Tickets, please!"}, "expect": "P73", "image": "trip:ticket", "recast": "Obrigado! Podem entrar. Boa viagem!"},
+        {"id": "b3", "say": {"speaker": "gui", "text": "Uau! Que comboio tão comprido! E tem tantas janelas…", "en": "Wow! What a long train! And it has so many windows…"}, "expect": "P86", "recast": "Olha! Lá fora está o rio Mondego!"},
+        {"id": "b4", "ages": [8], "say": {"speaker": "tiago", "text": "Olá! Eu sou o Tiago. Vou para casa da minha avó. E tu, onde foste esta semana?", "en": "Hi! I'm Tiago. I'm going to my granny's house. And you, where did you go this week?"}, "expect": "P74", "answers": [{"accept": ["eu fui ao porto", "fui ao porto", "ao porto", "porto"], "recast": "Ao Porto? Que sorte! Eu nunca fui ao Porto."}, {"accept": ["eu fui a coimbra", "fui a coimbra", "a coimbra", "coimbra"], "recast": "A Coimbra? A minha tia mora em Coimbra!"}], "recast": "À praia? Que inveja! Eu gosto muito da praia."},
+        {"id": "b4y", "ages": [6], "say": {"speaker": "tiago", "text": "Olá! Eu sou o Tiago. Eu fui à praia esta semana. E tu?", "en": "Hi! I'm Tiago. I went to the beach this week. And you?"}, "expect": "P74", "recast": "Também foste? Que fixe!"},
+        {"id": "b5", "say": {"speaker": "tiago", "text": "Eu comi um gelado ontem. E tu? O que comeste?", "en": "I ate an ice cream yesterday. And you? What did you eat?"}, "expect": "P75", "image": "food:icecream-fish-bread", "answers": [{"accept": ["eu comi peixe", "comi peixe", "peixe"], "recast": "Peixe? Hmm, que bom!"}, {"accept": ["eu comi pao", "comi pao", "pao"], "recast": "Pão? Eu também gosto de pão!"}], "recast": "Um gelado? Como eu!"},
+        {"id": "b6", "say": {"speaker": "gui", "text": "Pii-pii! O comboio vai partir! Depressa, para dentro!", "en": "Toot-toot! The train is leaving! Quick, get on!", "spoken": "Piii! O comboio vai partir! Depressa, para dentro!"}, "expect": null},
+        {"id": "b7", "say": {"speaker": "tiago", "text": "Na praia, eu nadei no mar. E tu, também nadaste?", "en": "At the beach, I swam in the sea. Did you swim too?"}, "expect": "P83", "answers": [{"accept": ["nao nadei", "eu nao nadei", "nao", "estava frio"], "recast": "Não? Pois, a água estava muito fria!"}], "recast": "Nadaste? Brrr, a água estava fria!"},
+        {"id": "b8", "say": {"speaker": "tiago", "text": "E o Porto? Gostaste?", "en": "And Porto? Did you like it?"}, "expect": "P81", "answers": [{"accept": ["nao gostei", "nao gostei muito", "mais ou menos"], "recast": "Não gostaste? Pois, perderam o mapa lá!"}], "recast": "Gostaste? Eu também quero ir!"},
+        {"id": "b9", "say": {"speaker": "gui", "text": "Estamos a andar! Lá vamos nós para sul!", "en": "We're moving! Off we go, south!"}, "expect": null, "cliffhanger": true}
+      ]
+    },
+    {
+      "id": "S6.2",
+      "title": "Bilhetes, por favor!",
+      "titleEn": "Tickets, please!",
+      "setting": "train",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "rui", "text": "Então, meninos! Vocês vêm de muito longe? Contem-me a vossa viagem!", "en": "So, children! Have you come a long way? Tell me about your trip!"}, "expect": null},
+        {"id": "b2", "say": {"speaker": "rui", "text": "Primeiro vieram de ferry, não foi? O que viram no mar?", "en": "First you came by ferry, didn't you? What did you see at sea?"}, "expect": "P76", "image": "trip:boat-fish-seagull", "answers": [{"accept": ["eu vi um peixe", "vi um peixe", "um peixe", "peixe"], "recast": "Um peixe? No mar há tantos peixes!"}, {"accept": ["eu vi uma gaivota", "vi uma gaivota", "uma gaivota", "gaivota"], "recast": "Uma gaivota? Pois, como o Gui!"}], "recast": "Um barco? Grande ou pequenino?"},
+        {"id": "b3", "ages": [8], "say": {"speaker": "rui", "text": "E na praia, o que fizeste?", "en": "And at the beach, what did you do?"}, "expect": "P77", "answers": [{"accept": ["eu nadei no mar", "nadei no mar", "nadei"], "recast": "Nadaste? Que coragem, a água é fria!"}], "recast": "Com o Gui? Que bons amigos!"},
+        {"id": "b3y", "ages": [6], "say": {"speaker": "rui", "text": "E na praia, o que fizeste?", "en": "And at the beach, what did you do?"}, "expect": "P83", "recast": "Nadaste? Brrr, que frio!"},
+        {"id": "b4", "ages": [8], "say": {"speaker": "rui", "text": "E em Coimbra? O que aconteceu?", "en": "And in Coimbra? What happened?"}, "expect": "P79", "recast": "Doente? Coitado! Mas agora está ótimo."},
+        {"id": "b5", "say": {"speaker": "gui", "text": "Pois foi! Mas a Doutora Inês ajudou-me. E depois dormi muito!", "en": "That's right! But Doctor Inês helped me. And then I slept a lot!"}, "expect": null},
+        {"id": "b6", "say": {"speaker": "rui", "text": "E tu? Dormiste bem esta noite?", "en": "And you? Did you sleep well last night?"}, "expect": "P80", "answers": [{"accept": ["nao dormi bem", "dormi mal", "nao dormi", "mal"], "recast": "Não? Então podes dormir um bocadinho no comboio."}], "recast": "Ainda bem!"},
+        {"id": "b7", "say": {"speaker": "rui", "text": "Que viagem! E então, foi divertido?", "en": "What a trip! So, was it fun?"}, "expect": "P78", "recast": "Que bom! Eu também gosto de viajar."},
+        {"id": "b8", "ages": [8], "say": {"speaker": "rui", "text": "Ufa! Estou tão cansado…", "en": "Phew! I'm so tired…"}, "expect": "P82", "recast": "Eu? Piquei cem bilhetes e bebi três cafés!"},
+        {"id": "b9", "say": {"speaker": "gui", "text": "Hmm… o comboio anda, anda, anda…", "en": "Hmm… the train goes on and on and on…"}, "expect": "P85", "recast": "Ainda não! Mas falta pouco."},
+        {"id": "b10", "ages": [8], "say": {"speaker": "rui", "text": "Ainda não chegámos, Gui. Paciência!", "en": "We're not there yet, Gui. Patience!"}, "expect": "P84", "recast": "Falta meia hora. Olhem pela janela!"},
+        {"id": "b11", "say": {"speaker": "gui", "text": "Olhem! Campos amarelos e sobreiros! Estamos quase no Alentejo!", "en": "Look! Yellow fields and cork oaks! We're nearly in the Alentejo!"}, "expect": null, "cliffhanger": true}
+      ]
+    },
+    {
+      "id": "S6.3",
+      "title": "Um postal para a mãe",
+      "titleEn": "A postcard for Mum",
+      "setting": "train-evening",
+      "beats": [
+        {"id": "b1", "say": {"speaker": "gui", "text": "Já é de noite. Vou escrever um postal à minha mãe, em Lisboa. Ajudas-me?", "en": "It's night already. I'm going to write a postcard to my mum in Lisbon. Will you help me?"}, "expect": null},
+        {"id": "b2", "say": {"speaker": "gui", "text": "Escrevo: «Apanhámos o comboio.» E depois, o que comeste?", "en": "I'll write: \"We caught the train.\" And then, what did you eat?"}, "expect": "P75", "image": "food:icecream-sandwich-biscuit", "answers": [{"accept": ["eu comi uma sandes", "comi uma sandes", "uma sandes", "sandes"], "recast": "Uma sandes! Escrevo: comemos sandes no comboio."}, {"accept": ["eu comi bolachas", "comi bolachas", "comi uma bolacha", "bolachas", "bolacha"], "recast": "Bolachas! Hmm, escrevo isso."}], "recast": "Um gelado! Escrevo: comemos gelados."},
+        {"id": "b3", "say": {"speaker": "gui", "text": "E o que viste pela janela?", "en": "And what did you see out of the window?"}, "expect": "P76", "image": "trip:boat-cow-horse", "answers": [{"accept": ["eu vi uma vaca", "vi uma vaca", "uma vaca", "vacas", "vaca"], "recast": "Uma vaca! Muuu! Escrevo isso."}, {"accept": ["eu vi um cavalo", "vi um cavalo", "um cavalo", "cavalos", "cavalo"], "recast": "Um cavalo! Que giro."}], "recast": "Um barco no rio! Escrevo isso."},
+        {"id": "b4", "say": {"speaker": "gui", "text": "E tu, gostaste da viagem?", "en": "And you, did you like the trip?"}, "expect": "P81", "answers": [{"accept": ["nao gostei", "nao gostei muito", "mais ou menos"], "recast": "Não muito? Pois, foi muito comprida!"}], "recast": "Escrevo: «Gostámos muito!»"},
+        {"id": "b5", "ages": [8], "say": {"speaker": "gui", "text": "Agora escrevo os sítios onde fomos. Tu, aonde foste?", "en": "Now I'll write the places we went. You, where did you go?"}, "expect": "P74", "answers": [{"accept": ["eu fui ao porto", "fui ao porto", "ao porto", "porto"], "recast": "Ao Porto! Onde perdemos o mapa."}, {"accept": ["eu fui a coimbra", "fui a coimbra", "a coimbra", "coimbra"], "recast": "A Coimbra! Onde eu estive doente."}], "recast": "À praia! Escrevo isso."},
+        {"id": "b6", "say": {"speaker": "gui", "text": "E no fim escrevo: «A viagem foi…» Foi o quê?", "en": "And at the end I'll write: \"The trip was…\" Was what?"}, "expect": "P78", "recast": "Divertido! Pronto, o postal está feito!"},
+        {"id": "b7", "ages": [8], "say": {"speaker": "tiago", "text": "Olá outra vez! Vocês fizeram tantas coisas!", "en": "Hello again! You did so many things!"}, "expect": "P82", "recast": "Eu? Li um livro, comi uma maçã e dormi!"},
+        {"id": "b8", "say": {"speaker": "rui", "text": "Próxima paragem: a aldeia! Preparem as malas!", "en": "Next stop: the village! Get your bags ready!"}, "expect": null, "cliffhanger": true}
+      ]
+    }
+  ],
+  "missions": [
+    {"id": "M1", "day": 1, "card": {"text": "Ao jantar, conta ao pai o que comeste hoje", "en": "At dinner, tell Dad what you ate today", "image": "m1-ate.png"}, "say": {"6": "Pai, eu comi um gelado!", "8": "Pai, hoje eu comi peixe. Gostei muito!"}, "targets": {"6": ["P75"], "8": ["P75", "P81"]}, "when": "At dinner"},
+    {"id": "M2", "day": 2, "card": {"text": "Conta ao pai o que fizeste hoje", "en": "Tell Dad what you did today", "image": "m2-day.png"}, "say": {"6": "Pai, foi divertido!", "8": "Pai, hoje eu fui à escola. Foi divertido!"}, "targets": {"6": ["P78"], "8": ["P74", "P78"]}, "when": "After school"},
+    {"id": "M3", "day": 3, "card": {"text": "De manhã, diz ao pai como dormiste", "en": "In the morning, tell Dad how you slept", "image": "m3-slept.png"}, "say": {"6": "Pai, eu dormi bem!", "8": "Bom dia, pai! Eu dormi bem. E tu?"}, "targets": {"6": ["P80"], "8": ["P80"]}, "when": "At breakfast"},
+    {"id": "M4", "day": 4, "card": {"text": "Pergunta ao pai o que ele fez hoje", "en": "Ask Dad what he did today", "image": "m4-ask.png"}, "say": {"6": "Pai, eu vi um barco!", "8": "Pai, e tu, o que fizeste hoje?"}, "targets": {"6": ["P76"], "8": ["P82"]}, "when": "When Dad gets home"},
+    {"id": "M5", "day": 5, "card": {"text": "No carro, pergunta «Já chegámos?»", "en": "In the car, ask \"Are we there yet?\"", "image": "m5-car.png"}, "say": {"6": "Pai, já chegámos?", "8": "Pai, quanto falta? Já chegámos?"}, "targets": {"6": ["P85"], "8": ["P84", "P85"]}, "when": "On the next car trip (Dad may groan)"},
+    {"id": "M6", "day": 6, "siblings": true, "card": {"text": "Juntos! Contem ao pai o vosso dia, uma frase cada um", "en": "Together! Tell Dad about your day, one sentence each", "image": "m6-day.png"}, "say": {"6": "Eu comi um gelado!", "8": "Eu brinquei com o Gui. Foi divertido!"}, "targets": {"6": ["P75"], "8": ["P77", "P78"]}, "when": "When both kids are around"},
+    {"id": "M7", "day": 7, "bonus": true, "card": {"text": "Conta à {granny} o que fizeste esta semana", "en": "Tell Granny what you did this week", "image": "m7-call.png"}, "say": {"6": "{Granny}, eu fui à praia!", "8": "Olá, {granny}! Esta semana eu fui à praia. Gostei muito!"}, "targets": {"6": ["P74"], "8": ["P74", "P81"]}, "when": "Next call with Granny"}
+  ],
+  "schedule": {
+    "sessionsPerWeek": 2,
+    "sessions": [
+      {"session": 1, "scene": "S6.1"},
+      {"session": 2, "warmup": true, "review": true},
+      {"session": 3, "scene": "S6.2"},
+      {"session": 4, "warmup": true, "review": true},
+      {"session": 5, "scene": "S6.3"},
+      {"session": 6, "warmup": true, "review": true},
+      {"session": 7, "review": true, "replay": "S6.1"}
+    ],
+    "missionsPerDay": 1
+  }
+}

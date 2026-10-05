@@ -9,6 +9,7 @@ import type { ChildSettings } from '../settings/childSettings';
 import { saidInEnglish, wordsUpTo, type Word } from '../engine/comoSeDiz';
 import { ComoSeDiz } from './ComoSeDiz';
 import { buildScene, type PlayableBeat } from '../engine/scene';
+import { fill } from '../engine/template';
 import { matchAnswer } from '../engine/match';
 import type { SmartReplies } from '../speech/smartReply';
 import { applyAttempt, applyOfflineAttempt, ladderOutcome, newTurn, parentOverride, type TurnState } from '../engine/turn';
@@ -151,7 +152,9 @@ export function SceneScreen({ unit, sceneId, beats: given, title, child, recogni
     setFeedback(text);
     void talk(beat.speaker, text);
   };
-  const character = beat.speaker === 'gui' ? null : beatUnit.characters?.[beat.speaker];
+  const known = beat.speaker === 'gui' ? null : beatUnit.characters?.[beat.speaker];
+  // A character can be the family's own granny or grandad (FR-28): "{Granny}" becomes "Avó Rosa".
+  const character = known ? { ...known, name: fill(known.name, child), role: known.role && fill(known.role, child) } : null;
 
   const advance = () => {
     void stop();

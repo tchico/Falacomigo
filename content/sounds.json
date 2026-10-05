@@ -82,6 +82,32 @@
         "muh"
       ]
     },
+    "ajudo-te": {
+      "pt": [
+        "a",
+        "ju",
+        "do",
+        "te"
+      ],
+      "en": [
+        "uh",
+        "ZHOO",
+        "doo",
+        "tuh"
+      ]
+    },
+    "aldeia": {
+      "pt": [
+        "al",
+        "dei",
+        "a"
+      ],
+      "en": [
+        "al",
+        "DAY",
+        "uh"
+      ]
+    },
     "ali": {
       "pt": [
         "a",
@@ -310,6 +336,18 @@
         "BAYNG"
       ]
     },
+    "bilhete": {
+      "pt": [
+        "bi",
+        "lhe",
+        "te"
+      ],
+      "en": [
+        "bee",
+        "LYAYT",
+        "uh"
+      ]
+    },
     "boa": {
       "pt": [
         "bo",
@@ -390,6 +428,16 @@
         "soo"
       ]
     },
+    "breve": {
+      "pt": [
+        "bre",
+        "ve"
+      ],
+      "en": [
+        "BREH",
+        "vuh"
+      ]
+    },
     "brincar": {
       "pt": [
         "brin",
@@ -398,6 +446,26 @@
       "en": [
         "breeng",
         "KAR"
+      ]
+    },
+    "brinquei": {
+      "pt": [
+        "brin",
+        "quei"
+      ],
+      "en": [
+        "breeng",
+        "KAY"
+      ]
+    },
+    "burro": {
+      "pt": [
+        "bur",
+        "ro"
+      ],
+      "en": [
+        "BOO",
+        "rroo"
       ]
     },
     "cabeça": {
@@ -496,6 +564,18 @@
         "loo"
       ]
     },
+    "cavalo": {
+      "pt": [
+        "ca",
+        "va",
+        "lo"
+      ],
+      "en": [
+        "kuh",
+        "VAH",
+        "loo"
+      ]
+    },
     "cesto": {
       "pt": [
         "ces",
@@ -548,6 +628,30 @@
         "guh"
       ]
     },
+    "chegámos": {
+      "pt": [
+        "che",
+        "gá",
+        "mos"
+      ],
+      "en": [
+        "shuh",
+        "GAH",
+        "moosh"
+      ]
+    },
+    "cheirinho": {
+      "pt": [
+        "chei",
+        "ri",
+        "nho"
+      ],
+      "en": [
+        "shay",
+        "REE",
+        "nyoo"
+      ]
+    },
     "cima": {
       "pt": [
         "ci",
@@ -582,6 +686,36 @@
         "LYEHR"
       ]
     },
+    "com": {
+      "pt": [
+        "com"
+      ],
+      "en": [
+        "KONG"
+      ]
+    },
+    "comboio": {
+      "pt": [
+        "com",
+        "boi",
+        "o"
+      ],
+      "en": [
+        "kong",
+        "BOY",
+        "oo"
+      ]
+    },
+    "comi": {
+      "pt": [
+        "co",
+        "mi"
+      ],
+      "en": [
+        "koo",
+        "MEE"
+      ]
+    },
     "comigo": {
       "pt": [
         "co",
@@ -612,6 +746,18 @@
       "en": [
         "KONG",
         "shuh"
+      ]
+    },
+    "conta-me": {
+      "pt": [
+        "con",
+        "ta",
+        "me"
+      ],
+      "en": [
+        "KONG",
+        "tuh",
+        "muh"
       ]
     },
     "contente": {
@@ -702,6 +848,22 @@
         "shoo"
       ]
     },
+    "delicioso": {
+      "pt": [
+        "de",
+        "li",
+        "ci",
+        "o",
+        "so"
+      ],
+      "en": [
+        "duh",
+        "lee",
+        "see",
+        "OH",
+        "zoo"
+      ]
+    },
     "dente": {
       "pt": [
         "den",
@@ -790,6 +952,26 @@
         "uh"
       ]
     },
+    "dorme": {
+      "pt": [
+        "dor",
+        "me"
+      ],
+      "en": [
+        "DOR",
+        "muh"
+      ]
+    },
+    "dormi": {
+      "pt": [
+        "dor",
+        "mi"
+      ],
+      "en": [
+        "door",
+        "MEE"
+      ]
+    },
     "dói-me": {
       "pt": [
         "dói",
@@ -798,6 +980,14 @@
       "en": [
         "DOY",
         "muh"
+      ]
+    },
+    "e": {
+      "pt": [
+        "e"
+      ],
+      "en": [
+        "ee"
       ]
     },
     "em": {
@@ -818,6 +1008,26 @@
         "ayn",
         "kon",
         "TRAY"
+      ]
+    },
+    "era": {
+      "pt": [
+        "e",
+        "ra"
+      ],
+      "en": [
+        "EH",
+        "ruh"
+      ]
+    },
+    "eras": {
+      "pt": [
+        "e",
+        "ras"
+      ],
+      "en": [
+        "EH",
+        "rush"
       ]
     },
     "espera": {
@@ -854,6 +1064,18 @@
         "tuh"
       ]
     },
+    "estação": {
+      "pt": [
+        "es",
+        "ta",
+        "ção"
+      ],
+      "en": [
+        "ish",
+        "tuh",
+        "SOWNG"
+      ]
+    },
     "este": {
       "pt": [
         "es",
@@ -862,6 +1084,18 @@
       "en": [
         "ESH",
         "tuh"
+      ]
+    },
+    "esteve": {
+      "pt": [
+        "es",
+        "te",
+        "ve"
+      ],
+      "en": [
+        "ish",
+        "TAY",
+        "vuh"
       ]
     },
     "estou": {
@@ -902,6 +1136,16 @@
         "EH·oo"
       ]
     },
+    "falta": {
+      "pt": [
+        "fal",
+        "ta"
+      ],
+      "en": [
+        "FAHL",
+        "tuh"
+      ]
+    },
     "favor": {
       "pt": [
         "fa",
@@ -912,12 +1156,32 @@
         "VOR"
       ]
     },
+    "fizeste": {
+      "pt": [
+        "fi",
+        "zes",
+        "te"
+      ],
+      "en": [
+        "fee",
+        "ZESHT",
+        "uh"
+      ]
+    },
     "flor": {
       "pt": [
         "flor"
       ],
       "en": [
         "FLOR"
+      ]
+    },
+    "foi": {
+      "pt": [
+        "foi"
+      ],
+      "en": [
+        "FOY"
       ]
     },
     "fome": {
@@ -930,6 +1194,16 @@
         "muh"
       ]
     },
+    "fora": {
+      "pt": [
+        "fo",
+        "ra"
+      ],
+      "en": [
+        "FAW",
+        "ruh"
+      ]
+    },
     "frente": {
       "pt": [
         "fren",
@@ -938,6 +1212,14 @@
       "en": [
         "FRAYN",
         "tuh"
+      ]
+    },
+    "fui": {
+      "pt": [
+        "fui"
+      ],
+      "en": [
+        "FWEE"
       ]
     },
     "gaivota": {
@@ -950,6 +1232,30 @@
         "guy",
         "VAW",
         "tuh"
+      ]
+    },
+    "galinha": {
+      "pt": [
+        "ga",
+        "li",
+        "nha"
+      ],
+      "en": [
+        "guh",
+        "LEE",
+        "nyuh"
+      ]
+    },
+    "galinhas": {
+      "pt": [
+        "ga",
+        "li",
+        "nhas"
+      ],
+      "en": [
+        "guh",
+        "LEE",
+        "nyush"
       ]
     },
     "ganhei": {
@@ -994,6 +1300,16 @@
         "doo"
       ]
     },
+    "gostei": {
+      "pt": [
+        "gos",
+        "tei"
+      ],
+      "en": [
+        "goosh",
+        "TAY"
+      ]
+    },
     "gosto": {
       "pt": [
         "gos",
@@ -1010,6 +1326,38 @@
       ],
       "en": [
         "GHEE"
+      ]
+    },
+    "história": {
+      "pt": [
+        "his",
+        "tó",
+        "ri",
+        "a"
+      ],
+      "en": [
+        "eesh",
+        "TAW",
+        "ree",
+        "uh"
+      ]
+    },
+    "hoje": {
+      "pt": [
+        "ho",
+        "je"
+      ],
+      "en": [
+        "OH",
+        "zhuh"
+      ]
+    },
+    "ir": {
+      "pt": [
+        "ir"
+      ],
+      "en": [
+        "EER"
       ]
     },
     "irlanda": {
@@ -1054,6 +1402,18 @@
         "too"
       ]
     },
+    "janela": {
+      "pt": [
+        "ja",
+        "ne",
+        "la"
+      ],
+      "en": [
+        "zhuh",
+        "NEH",
+        "luh"
+      ]
+    },
     "jantar": {
       "pt": [
         "jan",
@@ -1094,6 +1454,18 @@
         "zhuh"
       ]
     },
+    "lareira": {
+      "pt": [
+        "la",
+        "rei",
+        "ra"
+      ],
+      "en": [
+        "luh",
+        "RAY",
+        "ruh"
+      ]
+    },
     "laço": {
       "pt": [
         "la",
@@ -1112,6 +1484,14 @@
       "en": [
         "LAY",
         "tuh"
+      ]
+    },
+    "lá": {
+      "pt": [
+        "lá"
+      ],
+      "en": [
+        "LAH"
       ]
     },
     "mais": {
@@ -1218,6 +1598,26 @@
         "roo"
       ]
     },
+    "muitas": {
+      "pt": [
+        "mui",
+        "tas"
+      ],
+      "en": [
+        "MWEENG",
+        "tush"
+      ]
+    },
+    "muito": {
+      "pt": [
+        "mui",
+        "to"
+      ],
+      "en": [
+        "MWEENG",
+        "too"
+      ]
+    },
     "mãe": {
       "pt": [
         "mãe"
@@ -1264,6 +1664,16 @@
         "DAR"
       ]
     },
+    "nadei": {
+      "pt": [
+        "na",
+        "dei"
+      ],
+      "en": [
+        "nuh",
+        "DAY"
+      ]
+    },
     "nariz": {
       "pt": [
         "na",
@@ -1272,6 +1682,14 @@
       "en": [
         "nuh",
         "REESH"
+      ]
+    },
+    "no": {
+      "pt": [
+        "no"
+      ],
+      "en": [
+        "noo"
       ]
     },
     "noite": {
@@ -1348,6 +1766,16 @@
         "too"
       ]
     },
+    "olha": {
+      "pt": [
+        "o",
+        "lha"
+      ],
+      "en": [
+        "AW",
+        "lyuh"
+      ]
+    },
     "olá": {
       "pt": [
         "o",
@@ -1378,6 +1806,16 @@
         "duh"
       ]
     },
+    "ontem": {
+      "pt": [
+        "on",
+        "tem"
+      ],
+      "en": [
+        "ONG",
+        "tayng"
+      ]
+    },
     "os": {
       "pt": [
         "os"
@@ -1394,6 +1832,16 @@
       "en": [
         "OH",
         "truh"
+      ]
+    },
+    "ovo": {
+      "pt": [
+        "o",
+        "vo"
+      ],
+      "en": [
+        "OH",
+        "voo"
       ]
     },
     "pai": {
@@ -1444,6 +1892,30 @@
       "en": [
         "PEH",
         "luh"
+      ]
+    },
+    "pequena": {
+      "pt": [
+        "pe",
+        "que",
+        "na"
+      ],
+      "en": [
+        "puh",
+        "KAY",
+        "nuh"
+      ]
+    },
+    "pequeno": {
+      "pt": [
+        "pe",
+        "que",
+        "no"
+      ],
+      "en": [
+        "puh",
+        "KAY",
+        "noo"
       ]
     },
     "pequeno-almoço": {
@@ -1580,6 +2052,26 @@
         "PEH"
       ]
     },
+    "quando": {
+      "pt": [
+        "quan",
+        "do"
+      ],
+      "en": [
+        "KWAHN",
+        "doo"
+      ]
+    },
+    "quanto": {
+      "pt": [
+        "quan",
+        "to"
+      ],
+      "en": [
+        "KWAHN",
+        "too"
+      ]
+    },
     "quantos": {
       "pt": [
         "quan",
@@ -1628,6 +2120,28 @@
         "roo"
       ]
     },
+    "quinta": {
+      "pt": [
+        "quin",
+        "ta"
+      ],
+      "en": [
+        "KEEN",
+        "tuh"
+      ]
+    },
+    "revisor": {
+      "pt": [
+        "re",
+        "vi",
+        "sor"
+      ],
+      "en": [
+        "ruh",
+        "vee",
+        "ZOR"
+      ]
+    },
     "rio": {
       "pt": [
         "ri",
@@ -1646,6 +2160,18 @@
       "en": [
         "ROO",
         "uh"
+      ]
+    },
+    "saudades": {
+      "pt": [
+        "sau",
+        "da",
+        "des"
+      ],
+      "en": [
+        "sow",
+        "DAH",
+        "dush"
       ]
     },
     "sede": {
@@ -1800,6 +2326,16 @@
         "TEE"
       ]
     },
+    "tive": {
+      "pt": [
+        "ti",
+        "ve"
+      ],
+      "en": [
+        "TEE",
+        "vuh"
+      ]
+    },
     "toalha": {
       "pt": [
         "to",
@@ -1832,6 +2368,14 @@
         "tuh"
       ]
     },
+    "tu": {
+      "pt": [
+        "tu"
+      ],
+      "en": [
+        "TOO"
+      ]
+    },
     "tua": {
       "pt": [
         "tu",
@@ -1840,6 +2384,16 @@
       "en": [
         "TOO",
         "uh"
+      ]
+    },
+    "tuas": {
+      "pt": [
+        "tu",
+        "as"
+      ],
+      "en": [
+        "TOO",
+        "ush"
       ]
     },
     "um": {
@@ -1870,6 +2424,16 @@
         "ZAR"
       ]
     },
+    "vaca": {
+      "pt": [
+        "va",
+        "ca"
+      ],
+      "en": [
+        "VAH",
+        "kuh"
+      ]
+    },
     "vamos": {
       "pt": [
         "va",
@@ -1878,6 +2442,14 @@
       "en": [
         "VAH",
         "moosh"
+      ]
+    },
+    "ver": {
+      "pt": [
+        "ver"
+      ],
+      "en": [
+        "VEHR"
       ]
     },
     "vermelho": {
@@ -1900,6 +2472,26 @@
         "VESH"
       ]
     },
+    "vi": {
+      "pt": [
+        "vi"
+      ],
+      "en": [
+        "VEE"
+      ]
+    },
+    "viagem": {
+      "pt": [
+        "vi",
+        "a",
+        "gem"
+      ],
+      "en": [
+        "vee",
+        "AH",
+        "zhayng"
+      ]
+    },
     "vira": {
       "pt": [
         "vi",
@@ -1908,6 +2500,16 @@
       "en": [
         "VEE",
         "ruh"
+      ]
+    },
+    "volto": {
+      "pt": [
+        "vol",
+        "to"
+      ],
+      "en": [
+        "VOL",
+        "too"
       ]
     },
     "à": {
