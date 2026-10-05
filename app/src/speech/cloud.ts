@@ -30,6 +30,7 @@ export class CloudRecognizer implements SpeechRecognizer {
     private readonly mic: MicSource,
     // Wrapped so fetch isn't called as a method of this object: browsers reject that ("Illegal invocation").
     private readonly fetchFn: typeof fetch = (input, init) => fetch(input, init),
+    private readonly now: () => number = () => Date.now(),
   ) {}
 
   listen(request: RecognitionRequest, onLevel?: (level: number) => void): Listening {
@@ -37,6 +38,9 @@ export class CloudRecognizer implements SpeechRecognizer {
     const endpointer = new Endpointer({ ...DEFAULT_ENDPOINTER, maxMs: request.maxDurationMs });
     let finish!: () => void;
     const ended = new Promise<void>((r) => (finish = r));
+    // NFR-01 is timed from the moment the child stops, which is also when the screen starts showing it's thinking.
+    let stoppedAt = 0;
+    void ended.then(() => (stoppedAt = this.now()));
 
     const session = this.mic.start((raw, rate) => {
       const samples = resample(raw, rate, SAMPLE_RATE);
@@ -57,16 +61,16 @@ export class CloudRecognizer implements SpeechRecognizer {
       const audio = request.keepAudio ? { audio: wav } : {};
       try {
         const transcript = await this.send(wav, request);
-        return { transcript, voicedMs, ...audio };
+        return { transcript, voicedMs, waitMs: this.now() - stoppedAt, ...audio };
       } catch (e) {
         console.warn('Speech service not reached, using the offline fallback', e);
-        return { transcript: '', voicedMs, offline: true, ...audio };
+        return { transcript: '', voicedMs, offline: true, waitMs: this.now() - stoppedAt, ...audio };
       }
     })();
 
     // If the mic never started, don't leave anyone waiting on the release.
     session.catch(() => finish());
-    return { result, release: finish };
+    return { result, release: finish, ended };
   }
 
   private async send(wav: Uint8Array, request: RecognitionRequest): Promise<string> {

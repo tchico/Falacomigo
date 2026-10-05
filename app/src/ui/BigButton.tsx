@@ -1,17 +1,18 @@
-import { Pressable, StyleSheet, Text, type PressableProps } from 'react-native';
+import { StyleSheet, Text, type PressableProps } from 'react-native';
+import { Tap } from './Tap';
 import { colors, radius, TOUCH } from './theme';
 
 type Variant = 'primary' | 'secondary' | 'blue';
 
 export function BigButton({ label, variant = 'primary', ...rest }: PressableProps & { label: string; variant?: Variant }) {
   return (
-    <Pressable
+    <Tap
       accessibilityRole="button"
       style={({ pressed }) => [styles.base, styles[variant], pressed && styles.pressed]}
       {...rest}
     >
       <Text style={[styles.label, variant === 'secondary' && { color: colors.ink }]}>{label}</Text>
-    </Pressable>
+    </Tap>
   );
 }
 

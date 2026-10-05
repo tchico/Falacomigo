@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Tap } from '../ui/Tap';
+import { Lean } from '../ui/Thinking';
 import { guessGame } from '../content';
 import type { GuessCard } from '../content/types';
 import { cardsFor, fillGuess, GUESS_BONUS, judgeClue, judgeGuess, newRound, type GuessRound } from '../engine/guess';
@@ -206,7 +208,9 @@ export function GuessScreen({ store, pair, reachedUnit, recognizer, onExit }: Pr
           <View style={styles.bubble}>
             <Text style={styles.line}>{line}</Text>
           </View>
-          <Gui size={190} talking={talking} happy={phase === 'got' || phase === 'end' || clueDone} />
+          <Lean on={mic === 'thinking'}>
+            <Gui size={190} talking={talking} happy={phase === 'got' || phase === 'end' || clueDone} />
+          </Lean>
         </View>
 
         <View style={styles.play}>
@@ -247,10 +251,10 @@ export function GuessScreen({ store, pair, reachedUnit, recognizer, onExit }: Pr
               </View>
               <View style={styles.clues}>
                 {round.secret.clues.map((c) => (
-                  <Pressable key={c.text} accessibilityRole="button" accessibilityLabel={`Hear: ${c.en}`} onPress={() => void say(c.text)} style={({ pressed }) => [styles.clue, pressed && { opacity: 0.7 }]}>
+                  <Tap key={c.text} accessibilityRole="button" accessibilityLabel={`Hear: ${c.en}`} onPress={() => void say(c.text)} style={({ pressed }) => [styles.clue, pressed && { opacity: 0.7 }]}>
                     <Text style={styles.clueText}>🔊 {c.text}</Text>
                     {describer.age === 8 ? <Text style={styles.clueEn}>{c.en}</Text> : null}
-                  </Pressable>
+                  </Tap>
                 ))}
               </View>
             </View>
@@ -261,7 +265,7 @@ export function GuessScreen({ store, pair, reachedUnit, recognizer, onExit }: Pr
               {round.options.map((o) => {
                 const out = tried.includes(o.id);
                 return (
-                  <Pressable
+                  <Tap
                     key={o.id}
                     disabled={out}
                     accessibilityRole="button"
@@ -273,7 +277,7 @@ export function GuessScreen({ store, pair, reachedUnit, recognizer, onExit }: Pr
                     style={[styles.option, out && styles.optionOut, tapped?.id === o.id && styles.optionTapped]}
                   >
                     <Text style={styles.optionEmoji}>{o.emoji}</Text>
-                  </Pressable>
+                  </Tap>
                 );
               })}
             </View>

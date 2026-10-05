@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { Tap } from '../ui/Tap';
 import { sayAsGui } from '../audio/voice';
 import { guessGame } from '../content';
 import type { StoredProfile } from '../store/store';
@@ -54,7 +55,7 @@ export function ProfilePicker({ profiles, details = {}, onPick, onParent, onPair
         {profiles.map((p) => {
           const avatar = avatarFor(p.avatar);
           return (
-            <Pressable
+            <Tap
               key={p.id}
               accessibilityRole="button"
               accessibilityLabel={`${p.name}, ${p.age}`}
@@ -68,7 +69,7 @@ export function ProfilePicker({ profiles, details = {}, onPick, onParent, onPair
               <Text style={styles.age}>
                 {p.age} anos{details[p.id] ? ` · ${details[p.id]}` : ''}
               </Text>
-            </Pressable>
+            </Tap>
           );
         })}
         <View style={styles.gui}>
@@ -79,14 +80,14 @@ export function ProfilePicker({ profiles, details = {}, onPick, onParent, onPair
         </View>
       </View>
       {onPair && profiles.length >= 2 ? (
-        <Pressable
+        <Tap
           accessibilityRole="button"
           accessibilityLabel="Play together"
           onPress={pairing ? () => setPairing(null) : together}
           style={({ pressed }) => [styles.together, pairing && styles.togetherOn, pressed && { transform: [{ translateY: 4 }] }]}
         >
           <Text style={styles.togetherText}>{guessGame.lines.button}</Text>
-        </Pressable>
+        </Tap>
       ) : null}
       {/* The parental gate (design doc §5): hold for 3 seconds. */}
       <HoldButton holdMs={PARENT_HOLD_MS} onHeld={onParent} accessibilityLabel="Parent zone" style={styles.parent}>

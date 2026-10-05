@@ -13,6 +13,8 @@ import { defaultSettings, readSettings, settingsKey, type ChildSettings } from '
 import type { PlayableBeat } from './src/engine/scene';
 import { COINS_PER_TURN, coinsForStars } from './src/engine/rewards';
 import { createRecognizer, createSmartReplies } from './src/speech';
+import { StubRecognizer } from './src/speech/stub';
+import { saveTiming, withTimingLog } from './src/speech/timing';
 import { openStore } from './src/store/open';
 import { initVoice, setVoiceVolume, stop as stopVoice } from './src/audio/voice';
 import { pauseMusic, playMusic, setMusicVolume } from './src/audio/music';
@@ -57,7 +59,12 @@ const MUSIC_SCREENS: Screen['name'][] = ['welcome', 'album', 'done'];
 type NewPostcard = { card: Postcard; stamp: string; newStop: boolean };
 
 export default function App() {
-  const recognizer = useMemo(() => createRecognizer(), []);
+  const storeRef = useRef<Store | null>(null);
+  // Each answer's wait is logged for the parent zone (NFR-01). The developer stub has nothing to time.
+  const recognizer = useMemo(() => {
+    const base = createRecognizer();
+    return base instanceof StubRecognizer ? base : withTimingLog(base, (t) => void (storeRef.current && saveTiming(storeRef.current, t)));
+  }, []);
   const smartReplies = useMemo(() => createSmartReplies(), []);
   /** Dad's switch for Gui's smart replies, in the parent zone. Off by default. */
   const [smartOn, setSmartOn] = useState(false);
@@ -100,6 +107,7 @@ export default function App() {
     Promise.all([openStore(), initRecordings()])
       .then(([s]) => s)
       .then(async (s) => {
+        storeRef.current = s;
         setStore(s);
         await refreshProfiles(s);
         setScreen({ name: 'pick' });
@@ -274,7 +282,7 @@ export default function App() {
       )}
 
       {screen.name === 'parent' && store && (
-        <ParentZone store={store} profiles={profiles} smartRepliesAvailable={!!smartReplies} onProfilesChanged={() => void refreshProfiles(store)} onExit={() => void backToStart()} />
+        <ParentZone store={store} profiles={profiles} recognizer={recognizer} smartRepliesAvailable={!!smartReplies} onProfilesChanged={() => void refreshProfiles(store)} onExit={() => void backToStart()} />
       )}
 
       {screen.name === 'welcome' && (
