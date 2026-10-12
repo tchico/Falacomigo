@@ -19,6 +19,7 @@ export class StubRecognizer implements SpeechRecognizer {
     const released = new Promise<void>((r) => (release = r));
     return {
       release,
+      ended: released,
       result: released.then(() => new Promise<RecognitionResult>((r) => setTimeout(() => r(heard), 250))),
     };
   }

@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
+import { Tap } from './Tap';
 import { colors, TOUCH } from './theme';
 
 /**
@@ -7,9 +8,9 @@ import { colors, TOUCH } from './theme';
  */
 export function BackButton({ onPress }: { onPress: () => void }) {
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel="Back to the start" onPress={onPress} hitSlop={8} style={({ pressed }) => [styles.btn, pressed && { transform: [{ translateY: 2 }] }]}>
+    <Tap accessibilityRole="button" accessibilityLabel="Back to the start" onPress={onPress} hitSlop={8} style={({ pressed }) => [styles.btn, pressed && { transform: [{ translateY: 2 }] }]}>
       <Text style={styles.icon}>‹</Text>
-    </Pressable>
+    </Tap>
   );
 }
 

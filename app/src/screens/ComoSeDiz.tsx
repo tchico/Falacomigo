@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Tap } from '../ui/Tap';
+import { Lean } from '../ui/Thinking';
 import { guiLines } from '../content';
 import type { AgeBand } from '../content/types';
 import { sayAsGui, stop } from '../audio/voice';
@@ -114,11 +116,13 @@ export function ComoSeDiz({ recognizer, words, age, word: given, wear, onLearned
   return (
     <View style={styles.backdrop}>
       <View style={styles.panel} accessibilityViewIsModal>
-        <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={onClose} style={styles.close}>
+        <Tap accessibilityRole="button" accessibilityLabel="Close" onPress={onClose} style={styles.close}>
           <Text style={styles.closeText}>✕</Text>
-        </Pressable>
+        </Tap>
         <View style={styles.row}>
-          <Gui size={170} talking={talking} happy={stage === 'learned'} wear={wear} />
+          <Lean on={mic === 'thinking'}>
+            <Gui size={170} talking={talking} happy={stage === 'learned'} wear={wear} />
+          </Lean>
           <View style={styles.words}>
             <Text style={styles.line}>{line}</Text>
             {lineEn ? <Text style={styles.en}>{lineEn}</Text> : null}
@@ -136,9 +140,9 @@ export function ComoSeDiz({ recognizer, words, age, word: given, wear, onLearned
           ) : (
             <>
               {stage === 'say' && word ? (
-                <Pressable accessibilityRole="button" accessibilityLabel="Listen" onPress={() => void say(word.pt)} style={styles.listen}>
+                <Tap accessibilityRole="button" accessibilityLabel="Listen" onPress={() => void say(word.pt)} style={styles.listen}>
                   <Text style={styles.listenText}>🔊</Text>
-                </Pressable>
+                </Tap>
               ) : null}
               <MicButton mic={mic} level={level} disabled={isStub} onPressIn={() => void press(request())} onPressOut={release} />
             </>

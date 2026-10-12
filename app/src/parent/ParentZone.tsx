@@ -14,10 +14,12 @@ import { GuideSection } from './GuideSection';
 import { MissionsSection } from './MissionsSection';
 import { recordingList } from './recordings';
 import { RecordingsSection } from './RecordingsSection';
+import { SpeechSection } from './SpeechSection';
+import type { SpeechRecognizer } from '../speech/types';
 import { Panel, SmallButton, pz, styles as ui } from './ui';
 import { WeeklyPlan } from './WeeklyPlan';
 
-type Section = 'overview' | 'missions' | 'recordings' | 'children' | 'family' | 'guide';
+type Section = 'overview' | 'missions' | 'recordings' | 'children' | 'family' | 'speech' | 'guide';
 
 const SECTIONS: { id: Section; label: string; icon: string }[] = [
   { id: 'overview', label: 'Overview', icon: '📊' },
@@ -25,6 +27,7 @@ const SECTIONS: { id: Section; label: string; icon: string }[] = [
   { id: 'recordings', label: 'My recordings', icon: '🎙️' },
   { id: 'children', label: 'Children', icon: '👧' },
   { id: 'family', label: 'Family words', icon: '🏡' },
+  { id: 'speech', label: 'Speech', icon: '🎧' },
   { id: 'guide', label: 'Guide', icon: '📖' },
 ];
 
@@ -35,7 +38,7 @@ interface ChildSummary {
 }
 
 /** The parent zone, reached through the hold gate on the profile screen. In English, for Dad. */
-export function ParentZone({ store, profiles, smartRepliesAvailable, onProfilesChanged, onExit }: { store: Store; profiles: StoredProfile[]; smartRepliesAvailable: boolean; onProfilesChanged: () => void; onExit: () => void }) {
+export function ParentZone({ store, profiles, recognizer, smartRepliesAvailable, onProfilesChanged, onExit }: { store: Store; profiles: StoredProfile[]; recognizer: SpeechRecognizer; smartRepliesAvailable: boolean; onProfilesChanged: () => void; onExit: () => void }) {
   const [section, setSection] = useState<Section>('overview');
   const [openMissions, setOpenMissions] = useState(0);
   const [summaries, setSummaries] = useState<ChildSummary[]>([]);
@@ -161,6 +164,7 @@ export function ParentZone({ store, profiles, smartRepliesAvailable, onProfilesC
         {section === 'recordings' && <RecordingsSection units={recordable} kids={kids} />}
         {section === 'family' && <FamilySection store={store} onChanged={changed} />}
         {section === 'children' && <ChildrenSection store={store} profiles={profiles} onChanged={changed} />}
+        {section === 'speech' && <SpeechSection store={store} profiles={profiles} recognizer={recognizer} />}
         {section === 'guide' && <GuideSection start={guideCard} />}
       </View>
     </View>

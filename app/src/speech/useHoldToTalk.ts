@@ -25,6 +25,8 @@ export function useHoldToTalk(
     const l = recognizer.listen(request, setLevel);
     listening.current = l;
     setMic('listening');
+    // Thinking from the moment listening stops, whether the child let go or paused (NFR-12).
+    void l.ended.then(() => setMic((m) => (m === 'listening' ? 'thinking' : m)));
     let heard: RecognitionResult | null;
     try {
       heard = await l.result;

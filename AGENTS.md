@@ -5,6 +5,7 @@
 - All Portuguese is **European Portuguese** (pt-PT): pequeno-almoço, autocarro, "tu" forms. Never Brazilian forms.
 - Accepted answers in content packs are written normalised: lower case, no accents or punctuation (`app/src/engine/normalize.ts`). The content tests enforce this.
 - Lines can have sounds like "Hmm…" and "Brrr…": the voice says "hum" and skips sound effects automatically (`app/src/audio/spoken.ts`). When a line still won't read aloud well, give it a `spoken` version in the content pack.
+- Speech check reports from the parent zone go in `content/speech-checks/` (see its README). The tests judge them again, so a change to accepted answers can't make the game miss real children's answers (NFR-11).
 - Keep the game generous: never tell a child they're wrong. Near misses get a recast, not a correction (design doc §3 and §5).
 - No accounts, ads, tracking or in-app purchases. Children's audio is not stored by default (NFR-05).
 - App-specific Expo guidance is in `app/AGENTS.md`. Before finishing: `cd app && npm run typecheck && npm test`.

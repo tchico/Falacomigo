@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Tap } from './Tap';
 import { colors } from './theme';
 
 interface Props {
@@ -42,14 +43,14 @@ export function HoldButton({ holdMs, onHeld, accessibilityLabel, style, children
   };
 
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={accessibilityLabel} accessibilityHint="Press and hold" onPressIn={start} onPressOut={cancel} style={style}>
+    <Tap accessibilityRole="button" accessibilityLabel={accessibilityLabel} accessibilityHint="Press and hold" onPressIn={start} onPressOut={cancel} style={style}>
       {children}
       {progress > 0 ? (
         <View style={styles.track}>
           <View style={[styles.fill, { width: `${Math.round(progress * 100)}%` }]} />
         </View>
       ) : null}
-    </Pressable>
+    </Tap>
   );
 }
 

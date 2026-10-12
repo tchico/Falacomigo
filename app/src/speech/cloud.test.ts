@@ -29,11 +29,28 @@ test('cloud: stops on a pause after speech and returns the transcript', async ()
   const seen: { expected: string; audio: string }[] = [];
   const mic = fakeMic([...Array(10)].map(loud).concat([...Array(12)].map(quiet)));
   const r = new CloudRecognizer({ url: 'https://proxy', appKey: 'k' }, mic, okFetch('olá gui', seen));
-  const result = await r.listen(request).result;
+  const { waitMs, ...result } = await r.listen(request).result;
   assert.deepEqual(result, { transcript: 'olá gui', voicedMs: 1000 });
+  assert.equal(typeof waitMs, 'number');
   assert.equal(mic.stopped, true);
   assert.equal(seen[0].expected, 'Olá!');
   assert.ok(seen[0].audio.startsWith('UklGR'), 'sends a base64 WAV');
+});
+
+test('cloud: says when listening ends, then times the wait for the answer from there (NFR-01, NFR-12)', async () => {
+  let clock = 1000;
+  let answer!: () => void;
+  const fetchFn = (() => new Promise<Response>((r) => (answer = () => r(new Response(JSON.stringify({ transcript: 'ola' })))))) as unknown as typeof fetch;
+  const r = new CloudRecognizer({ url: 'https://proxy', appKey: 'k' }, fakeMic([...Array(5)].map(loud).concat([...Array(12)].map(quiet))), fetchFn, () => clock);
+  const l = r.listen(request);
+  let done = false;
+  void l.result.then(() => (done = true));
+  await l.ended;
+  assert.equal(done, false, 'ended comes before the answer');
+  await new Promise((t) => setTimeout(t, 5));
+  clock += 1400;
+  answer();
+  assert.equal((await l.result).waitMs, 1400);
 });
 
 test('cloud: letting go of the button stops listening', async () => {
@@ -57,7 +74,9 @@ test('cloud: silence is not sent to the service', async () => {
 test('cloud: no connection falls back with the length of the voice (NFR-02)', async () => {
   const fetchFn = (async () => { throw new TypeError('Network request failed'); }) as unknown as typeof fetch;
   const r = new CloudRecognizer({ url: 'https://proxy', appKey: 'k' }, fakeMic([...Array(12)].map(loud).concat([...Array(12)].map(quiet))), fetchFn);
-  assert.deepEqual(await r.listen(request).result, { transcript: '', voicedMs: 1200, offline: true });
+  const { waitMs, ...result } = await r.listen(request).result;
+  assert.deepEqual(result, { transcript: '', voicedMs: 1200, offline: true });
+  assert.equal(typeof waitMs, 'number', 'a failed wait is timed too');
 });
 
 test('cloud: a slow proxy counts as offline', async () => {
